@@ -16,22 +16,9 @@ var (
 	Logger *zap.Logger
 	// Orm gorm
 	Orm *gorm.DB
+	// Redis redisClient
+	Redis RedisClient
 )
-
-// 初始化配置
-func init() {
-	// 读取配置
-	initConfig()
-
-	// 初始化日志
-	Logger = initZap()
-
-	// 初始化ORM
-
-	// 初始化Redis
-
-	// 初始化DB
-}
 
 // 读取配置
 func initConfig() {
@@ -47,7 +34,19 @@ func initConfig() {
 	}
 }
 
+// 初始化配置
+func init() {
+	// 读取配置
+	initConfig()
+	// 初始化日志
+	Logger = initZap()
+	// 初始化ORM
+	Orm = initGorm()
+	// 初始化Redis
+	Redis = NewRedisCache()
+}
+
 // 启动服务
 func run() {
-
+	// 中间件，路由，启动服务
 }
