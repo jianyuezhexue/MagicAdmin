@@ -92,7 +92,7 @@ func getEncoderCore(fileName string, level zapcore.LevelEnabler) (core zapcore.C
 	return zapcore.NewCore(getEncoder(), writer, level)
 }
 
-// GetWriteSyncer 配置日志文件
+// GetWriteSyncer 配置输出到日志文件
 func GetWriteSyncer(file string) zapcore.WriteSyncer {
 	lumberJackLogger := &lumberjack.Logger{
 		Filename:   file, //日志文件的位置

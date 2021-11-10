@@ -10,11 +10,11 @@ import (
 )
 
 var (
-	// Config 全局配置变量
+	// Config 配置
 	Config config.Config
 	// Logger 日志
 	Logger *zap.Logger
-	// Orm gorm
+	// Orm ORM
 	Orm *gorm.DB
 	// Redis redisClient
 	Redis RedisClient
