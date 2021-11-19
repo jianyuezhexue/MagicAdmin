@@ -2,21 +2,37 @@ package main
 
 import (
 	"fmt"
+	"net/http"
+	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
+	"github.com/jianyuezhexue/MagicAdmin/router"
+	"go.uber.org/zap"
 )
 
-func main() {
-	magic.Logger.Info("测试测试测试")
-	// sql := `CREATE TABLE datareport (
-	// 	openId varchar(64) NOT NULL COMMENT '用户id',
-	// 	accType char(2) NOT NULL COMMENT '登录类型',
-	// 	createTime datetime DEFAULT NULL COMMENT '创建小屋时间',
-	// 	shareTime datetime DEFAULT NULL COMMENT '分享时间',
-	// 	PRIMARY KEY (openId,accType) USING BTREE
-	//   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`
+type server interface {
+	ListenAndServe() error
+}
 
-	// magic.Orm.Exec(sql)
-	// magic.Orm.Exec(sql)
-	fmt.Print(magic.Redis)
+func initServer(address string, router *gin.Engine) server {
+	return &http.Server{
+		Addr:           address,
+		Handler:        router,
+		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   10 * time.Second,
+		MaxHeaderBytes: 1 << 20,
+	}
+}
+
+func main() {
+	// 初始化所有路由
+	router := router.Routers()
+
+	// 启动服务
+	address := fmt.Sprintf(":%d", magic.Config.System.Addr)
+	s := initServer(address, router)
+	time.Sleep(10 * time.Microsecond)
+	magic.Logger.Info("server run success on ", zap.String("address", address))
+	magic.Logger.Error(s.ListenAndServe().Error())
 }
