@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	api "github.com/jianyuezhexue/MagicAdmin/api/system"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/middle"
 )
@@ -18,6 +19,7 @@ func Routers() *gin.Engine {
 			c.JSON(200, "ok")
 		})
 		// 系统-用户登录
+		PublicGroup.POST("/system/login", api.Login)
 	}
 
 	// 私有路由组

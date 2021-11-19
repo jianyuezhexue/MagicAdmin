@@ -1,6 +1,8 @@
 package magic
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -68,4 +70,11 @@ func Deserialization(byt []byte, ptr interface{}) (err error) {
 	}
 	err = json.Unmarshal(byt, &ptr)
 	return
+}
+
+// MD5V md5加密
+func MD5V(str []byte, b ...byte) string {
+	h := md5.New()
+	h.Write(str)
+	return hex.EncodeToString(h.Sum(b))
 }
