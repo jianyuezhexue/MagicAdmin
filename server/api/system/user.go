@@ -47,7 +47,7 @@ func Test(c *gin.Context) {
 func Login(c *gin.Context) {
 	var l LoginBind
 	_ = c.ShouldBindJSON(&l)
-	if err := request.Verify(l, utils.LoginVerify); err != nil {
+	if err := request.Verify(l, request.LoginVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
