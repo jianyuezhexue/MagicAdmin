@@ -3,7 +3,7 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
-	"github.com/jianyuezhexue/MagicAdmin/middleware"
+	"github.com/jianyuezhexue/MagicAdmin/middle"
 )
 
 // Routers 初始化总路由
@@ -22,7 +22,7 @@ func Routers() *gin.Engine {
 
 	// 私有路由组
 	PrivateGroup := Router.Group("")
-	PrivateGroup.Use(middleware.JWTAuth())
+	PrivateGroup.Use(middle.JWTAuth())
 	{
 		// 系统-查询所有菜单
 	}
