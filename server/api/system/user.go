@@ -21,11 +21,6 @@ type LoginBind struct {
 	Password string `json:"password"` // 密码
 }
 
-// Test 基础测试
-func Test(c *gin.Context) {
-	c.JSON(200, "ok")
-}
-
 // // Login 用户登录
 // func (u *User) Login(c *gin.Context) {
 // 	var l LoginBind
@@ -45,12 +40,14 @@ func Test(c *gin.Context) {
 
 // Login 用户登录
 func Login(c *gin.Context) {
+	// 参数校验
 	var l LoginBind
 	_ = c.ShouldBindJSON(&l)
 	if err := request.Verify(l, request.LoginVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	// 逻辑实现
 	u := &system.SysUser{Username: l.Username, Password: l.Password}
 	if err, user := userService.Login(u); err != nil {
 		magic.Logger.Error("登陆失败! 用户名不存在或者密码错误!", zap.Any("err", err))
@@ -66,7 +63,7 @@ func (u *User) tokenNext(c *gin.Context, user system.SysUser) {
 		ID:          user.ID,
 		NickName:    user.NickName,
 		Username:    user.Username,
-		AuthorityId: user.AuthorityId,
+		AuthorityId: user.AuthorityID,
 	})
 	token, err := j.CreateToken(claims)
 	if err != nil {
