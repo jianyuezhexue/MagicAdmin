@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/jianyuezhexue/MagicAdmin/model/system/request"
+	"github.com/jianyuezhexue/MagicAdmin/request"
 )
 
 // JWT jwt结构体
