@@ -1,4 +1,4 @@
-package api
+package system
 
 import (
 	"strconv"
@@ -7,6 +7,7 @@ import (
 	"github.com/go-redis/redis"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
+	"github.com/jianyuezhexue/MagicAdmin/request"
 	"go.uber.org/zap"
 )
 
@@ -46,7 +47,7 @@ func Test(c *gin.Context) {
 func Login(c *gin.Context) {
 	var l LoginBind
 	_ = c.ShouldBindJSON(&l)
-	if err := utils.Verify(l, utils.LoginVerify); err != nil {
+	if err := reqeest.Verify(l, utils.LoginVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
