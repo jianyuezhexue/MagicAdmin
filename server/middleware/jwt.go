@@ -5,14 +5,13 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/flipped-aurora/gva-plugins/email/service"
 	"github.com/gin-gonic/gin"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
 	"go.uber.org/zap"
 )
 
-var jwtService = service.ServiceGroupApp.SystemServiceGroup.JwtService
+var jwtService = magic.JwtService{}
 
 // JWTAuth jwt鉴权
 func JWTAuth() gin.HandlerFunc {
@@ -48,7 +47,7 @@ func JWTAuth() gin.HandlerFunc {
 		}
 		// 用户被删除的逻辑 需要优化 此处比较消耗性能 如果需要 请自行打开
 		//if err, _ = userService.FindUserByUuid(claims.UUID.String()); err != nil {
-		//	_ = jwtService.JsonInBlacklist(system.JwtBlacklist{Jwt: token})
+		//	_ = jwtService.JSONInBlacklist(system.JwtBlacklist{Jwt: token})
 		//	response.FailWithDetailed(gin.H{"reload": true}, err.Error(), c)
 		//	c.Abort()
 		//}
@@ -59,11 +58,11 @@ func JWTAuth() gin.HandlerFunc {
 			c.Header("new-token", newToken)
 			c.Header("new-expires-at", strconv.FormatInt(newClaims.ExpiresAt, 10))
 			if magic.Config.System.UseMultipoint {
-				err, RedisJwtToken := jwtService.GetRedisJWT(newClaims.Username)
+				RedisJwtToken, err := jwtService.GetRedisJWT(newClaims.Username)
 				if err != nil {
 					magic.Logger.Error("get redis jwt failed", zap.Any("err", err))
 				} else { // 当之前的取成功时才进行拉黑操作
-					_ = jwtService.JsonInBlacklist(system.JwtBlacklist{Jwt: RedisJwtToken})
+					_ = jwtService.JSONInBlacklist(system.JwtBlacklist{Jwt: RedisJwtToken})
 				}
 				// 无论如何都要记录当前的活跃状态
 				_ = jwtService.SetRedisJWT(newToken, newClaims.Username)
