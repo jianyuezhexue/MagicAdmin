@@ -5,12 +5,28 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/jianyuezhexue/MagicAdmin/request"
+	uuid "github.com/satori/go.uuid"
 )
 
 // JWT jwt结构体
 type JWT struct {
 	SigningKey []byte
+}
+
+// CustomClaims structure
+type CustomClaims struct {
+	BaseClaims
+	BufferTime int64
+	jwt.StandardClaims
+}
+
+// BaseClaims struct
+type BaseClaims struct {
+	UUID        uuid.UUID
+	ID          uint
+	Username    string
+	NickName    string
+	AuthorityID string
 }
 
 var (
@@ -32,8 +48,8 @@ func NewJWT() *JWT {
 }
 
 // CreateClaims 创建Claims
-func (j *JWT) CreateClaims(baseClaims request.BaseClaims) request.CustomClaims {
-	claims := request.CustomClaims{
+func (j *JWT) CreateClaims(baseClaims BaseClaims) CustomClaims {
+	claims := CustomClaims{
 		BaseClaims: baseClaims,
 		BufferTime: Config.JWT.BufferTime, // 缓冲时间1天 缓冲时间内会获得新的token刷新令牌 此时一个用户会存在两个有效令牌 但是前端只留一个 另一个会丢失
 		StandardClaims: jwt.StandardClaims{
@@ -46,13 +62,13 @@ func (j *JWT) CreateClaims(baseClaims request.BaseClaims) request.CustomClaims {
 }
 
 // CreateToken 创建一个token
-func (j *JWT) CreateToken(claims request.CustomClaims) (string, error) {
+func (j *JWT) CreateToken(claims CustomClaims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(j.SigningKey)
 }
 
 // CreateTokenByOldToken 旧token 换新token 使用归并回源避免并发问题
-func (j *JWT) CreateTokenByOldToken(oldToken string, claims request.CustomClaims) (string, error) {
+func (j *JWT) CreateTokenByOldToken(oldToken string, claims CustomClaims) (string, error) {
 	v, err, _ := SingleFlight.Do("JWT:"+oldToken, func() (interface{}, error) {
 		return j.CreateToken(claims)
 	})
@@ -60,8 +76,8 @@ func (j *JWT) CreateTokenByOldToken(oldToken string, claims request.CustomClaims
 }
 
 // ParseToken 解析token
-func (j *JWT) ParseToken(tokenString string) (*request.CustomClaims, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &request.CustomClaims{}, func(token *jwt.Token) (i interface{}, e error) {
+func (j *JWT) ParseToken(tokenString string) (*CustomClaims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (i interface{}, e error) {
 		return j.SigningKey, nil
 	})
 	if err != nil {
@@ -79,7 +95,7 @@ func (j *JWT) ParseToken(tokenString string) (*request.CustomClaims, error) {
 		}
 	}
 	if token != nil {
-		if claims, ok := token.Claims.(*request.CustomClaims); ok && token.Valid {
+		if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
 			return claims, nil
 		}
 		return nil, ErrTokenInvalid
