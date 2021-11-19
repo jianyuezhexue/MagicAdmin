@@ -34,21 +34,21 @@ func NewRedisCache() RedisClient {
 }
 
 // Set 类型 添加, v 可以是任意类型
-func (c RedisClient) Set(name string, v interface{}) error {
+func (c RedisClient) Set(name string, v interface{}, expiration time.Duration) error {
 	conn := c.pool.Get()
 	s, _ := Serialization(v) // 序列化
 	defer conn.Close()
-	_, err := conn.Do("SET", name, s)
+	_, err := conn.Do("SET", name, s, expiration)
 	return err
 }
 
 // Get 获取 字符串类型的值
-func (c RedisClient) Get(name string, v interface{}) error {
+func (c RedisClient) Get(name string) (val string, err error) {
 	conn := c.pool.Get()
 	defer conn.Close()
-	temp, _ := redis.Bytes(conn.Do("Get", name))
-	err := Deserialization(temp, &v) // 反序列化
-	return err
+	val, err = redis.String(conn.Do("Get", name))
+	// err := Deserialization(temp, &v) // 反序列化
+	return val, err
 }
 
 // Exist 判断所在的 key 是否存在

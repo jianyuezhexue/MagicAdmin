@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/jianyuezhexue/MagicAdmin/config"
+	"github.com/songzhibin97/gkit/cache/local_cache"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"golang.org/x/sync/singleflight"
@@ -21,6 +22,8 @@ var (
 	Redis RedisClient
 	// SingleFlight 防止缓存击穿
 	SingleFlight = &singleflight.Group{}
+	// LocalCache 本地缓存
+	LocalCache local_cache.Cache
 )
 
 // 读取配置
