@@ -6,6 +6,7 @@ import (
 	"github.com/jianyuezhexue/MagicAdmin/config"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
+	"golang.org/x/sync/singleflight"
 	"gorm.io/gorm"
 )
 
@@ -18,6 +19,8 @@ var (
 	Orm *gorm.DB
 	// Redis redisClient
 	Redis RedisClient
+	// SingleFlight 防止缓存击穿
+	SingleFlight = &singleflight.Group{}
 )
 
 // 读取配置

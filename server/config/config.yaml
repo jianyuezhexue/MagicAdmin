@@ -7,10 +7,10 @@ system:
 
 # jwt configuration
 jwt:
-  signing-key: 'qmPlus'
+  signing-key: 'wangjie'
   expires-time: 604800
   buffer-time: 86400
-  issuer: 'qmPlus'
+  issuer: 'wangjie'
 
 # zap logger configuration
 zap:

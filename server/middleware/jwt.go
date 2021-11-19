@@ -5,10 +5,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gva-plugins/email/service"
 	"github.com/gin-gonic/gin"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
+	"github.com/jianyuezhexue/MagicAdmin/model/system"
 	"go.uber.org/zap"
 )
 
@@ -31,11 +31,11 @@ func JWTAuth() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		j := utils.NewJWT()
+		j := magic.NewJWT()
 		// parseToken 解析token包含的信息
 		claims, err := j.ParseToken(token)
 		if err != nil {
-			if err == utils.TokenExpired {
+			if err == magic.ErrTokenExpired {
 				// response.FailWithDetailed(gin.H{"reload": true}, "授权已过期", c)
 				magic.Fail(c, http.StatusForbidden, "授权已过期")
 				c.Abort()
@@ -53,15 +53,15 @@ func JWTAuth() gin.HandlerFunc {
 		//	c.Abort()
 		//}
 		if claims.ExpiresAt-time.Now().Unix() < claims.BufferTime {
-			claims.ExpiresAt = time.Now().Unix() + global.GVA_CONFIG.JWT.ExpiresTime
+			claims.ExpiresAt = time.Now().Unix() + magic.Config.JWT.ExpiresTime
 			newToken, _ := j.CreateTokenByOldToken(token, *claims)
 			newClaims, _ := j.ParseToken(newToken)
 			c.Header("new-token", newToken)
 			c.Header("new-expires-at", strconv.FormatInt(newClaims.ExpiresAt, 10))
-			if global.GVA_CONFIG.System.UseMultipoint {
+			if magic.Config.System.UseMultipoint {
 				err, RedisJwtToken := jwtService.GetRedisJWT(newClaims.Username)
 				if err != nil {
-					global.GVA_LOG.Error("get redis jwt failed", zap.Any("err", err))
+					magic.Logger.Error("get redis jwt failed", zap.Any("err", err))
 				} else { // 当之前的取成功时才进行拉黑操作
 					_ = jwtService.JsonInBlacklist(system.JwtBlacklist{Jwt: RedisJwtToken})
 				}
