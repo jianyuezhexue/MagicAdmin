@@ -19,6 +19,7 @@ func Routers() *gin.Engine {
 			c.JSON(200, "ok")
 		})
 		// 系统-用户登录
+		PublicGroup.POST("/system/register", api.Register)
 		PublicGroup.POST("/system/login", api.Login)
 	}
 

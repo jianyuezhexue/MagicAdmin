@@ -21,22 +21,29 @@ type LoginBind struct {
 	Password string `json:"password"` // 密码
 }
 
-// // Login 用户登录
-// func (u *User) Login(c *gin.Context) {
-// 	var l LoginBind
-// 	_ = c.ShouldBindJSON(&l)
-// 	if err := utils.Verify(l, utils.LoginVerify); err != nil {
-// 		response.FailWithMessage(err.Error(), c)
-// 		return
-// 	}
-// 	u := &system.SysUser{Username: l.Username, Password: l.Password}
-// 	if err, user := userService.Login(u); err != nil {
-// 		magic.Logger.Error("登陆失败! 用户名不存在或者密码错误!", zap.Any("err", err))
-// 		response.FailWithMessage("用户名不存在或者密码错误", c)
-// 	} else {
-// 		u.tokenNext(c, *user)
-// 	}
-// }
+// Register 用户注册账号
+func Register(c *gin.Context) {
+	var r systemReq.Register
+	_ = c.ShouldBindJSON(&r)
+	if err := utils.Verify(r, utils.RegisterVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	var authorities []system.SysAuthority
+	for _, v := range r.AuthorityIds {
+		authorities = append(authorities, system.SysAuthority{
+			AuthorityId: v,
+		})
+	}
+	user := &system.SysUser{Username: r.Username, NickName: r.NickName, Password: r.Password, HeaderImg: r.HeaderImg, AuthorityId: r.AuthorityId, Authorities: authorities}
+	err, userReturn := userService.Register(*user)
+	if err != nil {
+		magic.Logger.Error("注册失败!", zap.Any("err", err))
+		response.FailWithDetailed(systemRes.SysUserResponse{User: userReturn}, "注册失败", c)
+	} else {
+		response.OkWithDetailed(systemRes.SysUserResponse{User: userReturn}, "注册成功", c)
+	}
+}
 
 // Login 用户登录
 func Login(c *gin.Context) {
@@ -110,30 +117,6 @@ func (u *User) tokenNext(c *gin.Context, user system.SysUser) {
 			Token:     token,
 			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
 		}, "登录成功", c)
-	}
-}
-
-// Register 用户注册账号
-func (u *User) Register(c *gin.Context) {
-	var r systemReq.Register
-	_ = c.ShouldBindJSON(&r)
-	if err := utils.Verify(r, utils.RegisterVerify); err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-	var authorities []system.SysAuthority
-	for _, v := range r.AuthorityIds {
-		authorities = append(authorities, system.SysAuthority{
-			AuthorityId: v,
-		})
-	}
-	user := &system.SysUser{Username: r.Username, NickName: r.NickName, Password: r.Password, HeaderImg: r.HeaderImg, AuthorityId: r.AuthorityId, Authorities: authorities}
-	err, userReturn := userService.Register(*user)
-	if err != nil {
-		magic.Logger.Error("注册失败!", zap.Any("err", err))
-		response.FailWithDetailed(systemRes.SysUserResponse{User: userReturn}, "注册失败", c)
-	} else {
-		response.OkWithDetailed(systemRes.SysUserResponse{User: userReturn}, "注册成功", c)
 	}
 }
 
