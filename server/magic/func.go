@@ -25,7 +25,7 @@ func Success(c *gin.Context, code int, msg string, data ...interface{}) {
 	c.JSON(http.StatusOK, gin.H{"code": code, "msg": msg, "data": data})
 }
 
-// Fail 成功返回
+// Fail 失败返回
 func Fail(c *gin.Context, code int, msg string, data ...interface{}) {
 	// data如何默认
 	c.JSON(code, gin.H{"code": code, "msg": msg, "data": data})

@@ -1,24 +1,31 @@
 package system
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
+	"github.com/jianyuezhexue/MagicAdmin/magic"
 )
 
 // FormRegister User register structure
 type FormRegister struct {
-	Username    string `json:"userName" valid:"Required;"`
-	Password    string `json:"passWord" valid:"Required;"`
-	NickName    string `json:"nickName" valid:"Required;" gorm:"default:'QMPlusUser'"`
-	AuthorityID string `json:"authorityId" valid:"Required;" gorm:"default:2"`
+	Username    string `json:"userName" form:"userName" binding:"required,min=3,max=10"`
+	Password    string `json:"password" form:"password" binding:"required"`
+	NickName    string `json:"nickName" form:"nickName" binding:"required"`
+	AuthorityID string `json:"authorityId" form:"authorityId" binding:"required"`
 }
+
+// todo:自定义验证报错信息
 
 // Register 用户注册账号
 func Register(c *gin.Context) {
-	var r FormRegister
-	err := c.ShouldBindJSON(&r)
+	var user FormRegister
+	err := c.ShouldBind(&user)
 	if err != nil {
-
+		magic.Fail(c, http.StatusForbidden, err.Error(), user)
+		return
 	}
+	magic.Success(c, http.StatusOK, "绑定成功！", err)
 	// var authorities []system.SysAuthority
 	// for _, v := range r.AuthorityIds {
 	// 	authorities = append(authorities, system.SysAuthority{
