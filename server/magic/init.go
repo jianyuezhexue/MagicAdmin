@@ -51,9 +51,3 @@ func init() {
 	// 初始化Redis
 	Redis = NewRedisCache()
 }
-
-// 启动服务
-func run() {
-	// 中间件，路由，启动服务
-
-}
