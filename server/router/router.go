@@ -20,7 +20,7 @@ func Routers() *gin.Engine {
 		})
 		// 系统-用户登录
 		PublicGroup.POST("/system/register", system.Register)
-		PublicGroup.POST("/system/login", system.Login)
+		// PublicGroup.POST("/system/login", system.Login)
 	}
 
 	// 私有路由组
