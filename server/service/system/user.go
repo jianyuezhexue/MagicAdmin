@@ -1,4 +1,4 @@
-package system
+package service
 
 import (
 	"errors"
@@ -10,12 +10,8 @@ import (
 	"gorm.io/gorm"
 )
 
-// UserService 用户注册
-type UserService struct {
-}
-
 // Register 注册
-func (userService *UserService) Register(u system.SysUser) (userInter system.SysUser, err error) {
+func Register(u system.SysUser) (userInter system.SysUser, err error) {
 	var user system.SysUser
 	if !errors.Is(magic.Orm.Where("username = ?", u.Username).First(&user).Error, gorm.ErrRecordNotFound) { // 判断用户名是否注册
 		return errors.New("用户名已注册"), userInter
@@ -28,7 +24,7 @@ func (userService *UserService) Register(u system.SysUser) (userInter system.Sys
 }
 
 // Login 用户登录
-func (userService *UserService) Login(u *system.SysUser) (userInter *system.SysUser, err error) {
+func Login(u *system.SysUser) (userInter *system.SysUser, err error) {
 	var user system.SysUser
 	u.Password = magic.MD5V([]byte(u.Password))
 	err = magic.Orm.Where("username = ? AND password = ?", u.Username, u.Password).Preload("Authorities").Preload("Authority").First(&user).Error
@@ -36,7 +32,7 @@ func (userService *UserService) Login(u *system.SysUser) (userInter *system.SysU
 }
 
 // ChangePassword 修改用户密码
-func (userService *UserService) ChangePassword(u *system.SysUser, newPassword string) (userInter *system.SysUser, err error) {
+func ChangePassword(u *system.SysUser, newPassword string) (userInter *system.SysUser, err error) {
 	var user system.SysUser
 	u.Password = magic.MD5V([]byte(u.Password))
 	err = magic.Orm.Where("username = ? AND password = ?", u.Username, u.Password).First(&user).Update("password", magic.MD5V([]byte(newPassword))).Error
@@ -44,7 +40,7 @@ func (userService *UserService) ChangePassword(u *system.SysUser, newPassword st
 }
 
 // GetUserInfoList 分页获取数据
-func (userService *UserService) GetUserInfoList(info request.PageInfo) (list interface{}, total int64, err error) {
+func GetUserInfoList(info request.PageInfo) (list interface{}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := magic.Orm.Model(&system.SysUser{})
@@ -58,7 +54,7 @@ func (userService *UserService) GetUserInfoList(info request.PageInfo) (list int
 }
 
 // SetUserAuthority 设置一个用户的权限
-func (userService *UserService) SetUserAuthority(id uint, uuid uuid.UUID, authorityID string) (err error) {
+func SetUserAuthority(id uint, uuid uuid.UUID, authorityID string) (err error) {
 	assignErr := magic.Orm.Where("sys_user_id = ? AND sys_authority_authority_id = ?", id, authorityID).First(&system.SysUseAuthority{}).Error
 	if errors.Is(assignErr, gorm.ErrRecordNotFound) {
 		return errors.New("该用户无此角色")
@@ -68,7 +64,7 @@ func (userService *UserService) SetUserAuthority(id uint, uuid uuid.UUID, author
 }
 
 // SetUserAuthorities 设置一个用户的权限
-func (userService *UserService) SetUserAuthorities(id uint, authorityIds []string) (err error) {
+func SetUserAuthorities(id uint, authorityIds []string) (err error) {
 	return magic.Orm.Transaction(func(tx *gorm.DB) error {
 		TxErr := tx.Delete(&[]system.SysUseAuthority{}, "sys_user_id = ?", id).Error
 		if TxErr != nil {
@@ -94,7 +90,7 @@ func (userService *UserService) SetUserAuthorities(id uint, authorityIds []strin
 }
 
 // DeleteUser 删除用户
-func (userService *UserService) DeleteUser(id float64) (err error) {
+func DeleteUser(id float64) (err error) {
 	var user system.SysUser
 	err = magic.Orm.Where("id = ?", id).Delete(&user).Error
 	if err != nil {
@@ -105,27 +101,27 @@ func (userService *UserService) DeleteUser(id float64) (err error) {
 }
 
 // SetUserInfo 设置用户信息
-func (userService *UserService) SetUserInfo(reqUser system.SysUser) (user system.SysUser, err error) {
+func SetUserInfo(reqUser system.SysUser) (user system.SysUser, err error) {
 	err = magic.Orm.Updates(&reqUser).Error
 	return reqUser, err
 }
 
 // GetUserInfo 获取用户信息
-func (userService *UserService) GetUserInfo(uuid uuid.UUID) (user system.SysUser, err error) {
+func GetUserInfo(uuid uuid.UUID) (user system.SysUser, err error) {
 	var reqUser system.SysUser
 	err = magic.Orm.Preload("Authorities").Preload("Authority").First(&reqUser, "uuid = ?", uuid).Error
 	return reqUser, err
 }
 
 // FindUserByID 通过id获取用户信息
-func (userService *UserService) FindUserByID(id int) (user *system.SysUser, err error) {
+func FindUserByID(id int) (user *system.SysUser, err error) {
 	var u system.SysUser
 	err = magic.Orm.Where("`id` = ?", id).First(&u).Error
 	return &u, err
 }
 
 // FindUserByUuiD 通过uuid获取用户信息
-func (userService *UserService) FindUserByUuiD(uuid string) (user *system.SysUser, err error) {
+func FindUserByUuiD(uuid string) (user *system.SysUser, err error) {
 	var u system.SysUser
 	if err = magic.Orm.Where("`uuid` = ?", uuid).First(&u).Error; err != nil {
 		return errors.New("用户不存在"), &u

@@ -8,6 +8,7 @@ import (
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
 	"github.com/jianyuezhexue/MagicAdmin/request"
+	service "github.com/jianyuezhexue/MagicAdmin/service/system"
 	"go.uber.org/zap"
 )
 
@@ -17,9 +18,19 @@ type LoginBind struct {
 	Password string `json:"password"` // 密码
 }
 
+// FormRegister User register structure
+type FormRegister struct {
+	Username     string   `json:"userName"`
+	Password     string   `json:"passWord"`
+	NickName     string   `json:"nickName" gorm:"default:'QMPlusUser'"`
+	HeaderImg    string   `json:"headerImg" gorm:"default:'https://qmplusimg.henrongyi.top/gva_header.jpg'"`
+	AuthorityID  string   `json:"authorityId" gorm:"default:888"`
+	AuthorityIds []string `json:"authorityIds"`
+}
+
 // Register 用户注册账号
 func Register(c *gin.Context) {
-	var r systemReq.Register
+	var r FormRegister
 	_ = c.ShouldBindJSON(&r)
 	if err := utils.Verify(r, utils.RegisterVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -31,8 +42,8 @@ func Register(c *gin.Context) {
 			AuthorityId: v,
 		})
 	}
-	user := &system.SysUser{Username: r.Username, NickName: r.NickName, Password: r.Password, HeaderImg: r.HeaderImg, AuthorityId: r.AuthorityId, Authorities: authorities}
-	err, userReturn := userService.Register(*user)
+	user := &system.SysUser{Username: r.Username, NickName: r.NickName, Password: r.Password, HeaderImg: r.HeaderImg, AuthorityID: r.AuthorityId, Authorities: authorities}
+	err, userReturn := service.Register(*user)
 	if err != nil {
 		magic.Logger.Error("注册失败!", zap.Any("err", err))
 		response.FailWithDetailed(systemRes.SysUserResponse{User: userReturn}, "注册失败", c)
