@@ -11,10 +11,6 @@ import (
 	"go.uber.org/zap"
 )
 
-// User struct
-type User struct {
-}
-
 // LoginBind login structure
 type LoginBind struct {
 	Username string `json:"userName"` // 用户名
@@ -63,7 +59,7 @@ func Login(c *gin.Context) {
 }
 
 // tokenNext 登录以后签发jwt
-func (u *User) tokenNext(c *gin.Context, user system.SysUser) {
+func tokenNext(c *gin.Context, user system.SysUser) {
 	j := &utils.JWT{SigningKey: []byte(magic.Config.JWT.SigningKey)} // 唯一签名
 	claims := j.CreateClaims(systemReq.BaseClaims{
 		UUID:        user.UUID,
@@ -121,7 +117,7 @@ func (u *User) tokenNext(c *gin.Context, user system.SysUser) {
 }
 
 // ChangePassword 用户修改密码
-func (u *User) ChangePassword(c *gin.Context) {
+func ChangePassword(c *gin.Context) {
 	var user systemReq.ChangePasswordStruct
 	_ = c.ShouldBindJSON(&user)
 	if err := utils.Verify(user, utils.ChangePasswordVerify); err != nil {
@@ -137,8 +133,8 @@ func (u *User) ChangePassword(c *gin.Context) {
 	}
 }
 
-// 分页获取用户列表 GetUserList
-func (u *User) GetUserList(c *gin.Context) {
+// GetUserList 分页获取用户列表 GetUserList
+func GetUserList(c *gin.Context) {
 	var pageInfo request.PageInfo
 	_ = c.ShouldBindJSON(&pageInfo)
 	if err := utils.Verify(pageInfo, utils.PageInfoVerify); err != nil {
@@ -159,7 +155,7 @@ func (u *User) GetUserList(c *gin.Context) {
 }
 
 // SetUserAuthority 更改用户权限
-func (u *User) SetUserAuthority(c *gin.Context) {
+func SetUserAuthority(c *gin.Context) {
 	var sua systemReq.SetUserAuth
 	_ = c.ShouldBindJSON(&sua)
 	if UserVerifyErr := utils.Verify(sua, utils.SetUserAuthorityVerify); UserVerifyErr != nil {
@@ -188,7 +184,7 @@ func (u *User) SetUserAuthority(c *gin.Context) {
 }
 
 // SetUserAuthorities 设置用户权限
-func (u *User) SetUserAuthorities(c *gin.Context) {
+func SetUserAuthorities(c *gin.Context) {
 	var sua systemReq.SetUserAuthorities
 	_ = c.ShouldBindJSON(&sua)
 	if err := userService.SetUserAuthorities(sua.ID, sua.AuthorityIds); err != nil {
@@ -200,7 +196,7 @@ func (u *User) SetUserAuthorities(c *gin.Context) {
 }
 
 // DeleteUser 删除用户
-func (u *User) DeleteUser(c *gin.Context) {
+func DeleteUser(c *gin.Context) {
 	var reqId request.GetById
 	_ = c.ShouldBindJSON(&reqId)
 	if err := utils.Verify(reqId, utils.IdVerify); err != nil {
@@ -221,7 +217,7 @@ func (u *User) DeleteUser(c *gin.Context) {
 }
 
 // SetUserInfo 设置用户信息
-func (u *User) SetUserInfo(c *gin.Context) {
+func SetUserInfo(c *gin.Context) {
 	var user system.SysUser
 	_ = c.ShouldBindJSON(&user)
 	if err := utils.Verify(user, utils.IdVerify); err != nil {
@@ -237,7 +233,7 @@ func (u *User) SetUserInfo(c *gin.Context) {
 }
 
 // GetUserInfo 获取用户信息
-func (u *User) GetUserInfo(c *gin.Context) {
+func GetUserInfo(c *gin.Context) {
 	uuid := utils.GetUserUuid(c)
 	if err, ReqUser := userService.GetUserInfo(uuid); err != nil {
 		magic.Logger.Error("获取失败!", zap.Any("err", err))
