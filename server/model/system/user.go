@@ -20,3 +20,11 @@ type SysUser struct {
 	Authority   SysAuthority   `json:"authority" gorm:"foreignKey:AuthorityId;references:AuthorityId;comment:用户角色"`
 	Authorities []SysAuthority `json:"authorities" gorm:"many2many:sys_user_authority;"`
 }
+
+// FormRegister User register structure
+type FormRegister struct {
+	Username    string `json:"userName" form:"userName" binding:"required,min=3,max=10"`
+	Password    string `json:"password" form:"password" binding:"required"`
+	NickName    string `json:"nickName" form:"nickName" binding:"required,min=3,max=10"`
+	AuthorityID string `json:"authorityId" form:"authorityId" binding:"required,numeric"`
+}

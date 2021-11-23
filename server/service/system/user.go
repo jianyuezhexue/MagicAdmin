@@ -1,25 +1,25 @@
 package service
 
 import (
-	"errors"
-
-	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
-	uuid "github.com/satori/go.uuid"
-	"gorm.io/gorm"
 )
 
 // Register 注册
-func Register(u system.SysUser) (userInter system.SysUser, err error) {
+func Register(data system.FormRegister) (res system.FormRegister, err error) {
+	// 赋值
 	var user system.SysUser
-	if !errors.Is(magic.Orm.Where("username = ?", u.Username).First(&user).Error, gorm.ErrRecordNotFound) { // 判断用户名是否注册
-		return errors.New("用户名已注册"), userInter
-	}
-	// 否则 附加uuid 密码md5简单加密 注册
-	u.Password = magic.MD5V([]byte(u.Password))
-	u.UUID = uuid.NewV4()
-	err = magic.Orm.Create(&u).Error
-	return u, err
+	// user := &system.SysUser{Username: form.Username, NickName: form.NickName, Password: form.Password, AuthorityID: form.AuthorityID}
+	user.Username = data.Username
+	// return user, nil
+	return data, nil
+	// if !errors.Is(magic.Orm.Where("username = ?", u.Username).First(&user).Error, gorm.ErrRecordNotFound) { // 判断用户名是否注册
+	// 	return errors.New("用户名已注册"), userInter
+	// }
+	// // 否则 附加uuid 密码md5简单加密 注册
+	// u.Password = magic.MD5V([]byte(u.Password))
+	// u.UUID = uuid.NewV4()
+	// err = magic.Orm.Create(&u).Error
+	// return u, err
 }
 
 // // Login 用户登录

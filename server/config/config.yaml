@@ -3,7 +3,7 @@
 # system configuration
 system:
   env: 'public'  # Change to "develop" to skip authentication for development mode
-  addr: 8888
+  addr: 5240
 
 # jwt configuration
 jwt:

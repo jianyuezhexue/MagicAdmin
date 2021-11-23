@@ -5,41 +5,29 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
+	"github.com/jianyuezhexue/MagicAdmin/model/system"
+	service "github.com/jianyuezhexue/MagicAdmin/service/system"
+	"go.uber.org/zap"
 )
-
-// FormRegister User register structure
-type FormRegister struct {
-	Username    string `json:"userName" form:"userName" binding:"required,min=3,max=10"`
-	Password    string `json:"password" form:"password" binding:"required"`
-	NickName    string `json:"nickName" form:"nickName" binding:"required"`
-	AuthorityID string `json:"authorityId" form:"authorityId" binding:"required"`
-}
 
 // todo:自定义验证报错信息
 
 // Register 用户注册账号
 func Register(c *gin.Context) {
-	var user FormRegister
-	err := c.ShouldBind(&user)
+	var form system.FormRegister
+	err := c.ShouldBind(&form)
 	if err != nil {
-		magic.Fail(c, http.StatusForbidden, err.Error(), user)
+		magic.Fail(c, http.StatusBadRequest, err.Error(), form)
 		return
 	}
-	magic.Success(c, http.StatusOK, "绑定成功！", err)
-	// var authorities []system.SysAuthority
-	// for _, v := range r.AuthorityIds {
-	// 	authorities = append(authorities, system.SysAuthority{
-	// 		AuthorityId: v,
-	// 	})
-	// }
-	// user := &system.SysUser{Username: r.Username, NickName: r.NickName, Password: r.Password, HeaderImg: r.HeaderImg, AuthorityID: r.AuthorityId, Authorities: authorities}
-	// err, userReturn := service.Register(*user)
-	// if err != nil {
-	// 	magic.Logger.Error("注册失败!", zap.Any("err", err))
-	// 	response.FailWithDetailed(systemRes.SysUserResponse{User: userReturn}, "注册失败", c)
-	// } else {
-	// 	response.OkWithDetailed(systemRes.SysUserResponse{User: userReturn}, "注册成功", c)
-	// }
+	// user := &system.SysUser{Username: form.Username, NickName: form.NickName, Password: form.Password, AuthorityID: form.AuthorityID}
+	userReturn, err := service.Register(form)
+	if err != nil {
+		magic.Logger.Error("注册失败!", zap.Any("err", err))
+		magic.Fail(c, http.StatusBadGateway, "注册失败", form)
+		return
+	}
+	magic.Success(c, http.StatusOK, "注册成功", userReturn)
 }
 
 // // FormLogin login structure
