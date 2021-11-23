@@ -21,13 +21,13 @@ func Register(c *gin.Context) {
 		return
 	}
 	// user := &system.SysUser{Username: form.Username, NickName: form.NickName, Password: form.Password, AuthorityID: form.AuthorityID}
-	userReturn, err := service.Register(form)
+	res, err := service.Register(form)
 	if err != nil {
 		magic.Logger.Error("注册失败!", zap.Any("err", err))
 		magic.Fail(c, http.StatusBadGateway, "注册失败", form)
 		return
 	}
-	magic.Success(c, http.StatusOK, "注册成功", userReturn)
+	magic.Success(c, http.StatusOK, "注册成功", res)
 }
 
 // // FormLogin login structure

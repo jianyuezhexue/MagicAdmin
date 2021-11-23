@@ -10,15 +10,15 @@ import (
 )
 
 // Register 注册
-func Register(data system.FormRegister) (res system.SysUser, err error) {
+func Register(data system.FormRegister) (res system.User, err error) {
 	// 赋值
-	user := &system.SysUser{Username: data.Username,
+	user := &system.User{Username: data.Username,
 		NickName:    data.NickName,
 		Password:    data.Password,
 		AuthorityID: data.AuthorityID,
 	}
 	// 查重
-	if !errors.Is(magic.Orm.Where("username = ?", user.Username).First(user).Error, gorm.ErrRecordNotFound) { // 判断用户名是否注册
+	if !errors.Is(magic.Orm.Where("sUserName = ?", user.Username).First(user).Error, gorm.ErrRecordNotFound) { // 判断用户名是否注册
 		return *user, errors.New("用户名已注册")
 	}
 	// 加密

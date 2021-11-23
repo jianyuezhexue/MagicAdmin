@@ -54,8 +54,6 @@ func initGorm() *gorm.DB {
 	if err != nil {
 		panic(fmt.Errorf("链接数据库失败: %s", err))
 	}
-	// TODO:设置日志打印
-	// db.Logger.LogMode()
 
 	sqlDB, _ := db.DB()
 	sqlDB.SetMaxIdleConns(config.MaxIdleConns)
