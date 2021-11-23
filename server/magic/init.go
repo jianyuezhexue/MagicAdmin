@@ -2,7 +2,10 @@ package magic
 
 import (
 	"fmt"
+	"net/http"
+	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/jianyuezhexue/MagicAdmin/config"
 	"github.com/songzhibin97/gkit/cache/local_cache"
 	"github.com/spf13/viper"
@@ -50,4 +53,20 @@ func init() {
 	Orm = initGorm()
 	// 初始化Redis
 	Redis = NewRedisCache()
+}
+
+// Server Server
+type Server interface {
+	ListenAndServe() error
+}
+
+// InitServer 配置server
+func InitServer(address string, router *gin.Engine) Server {
+	return &http.Server{
+		Addr:           address,
+		Handler:        router,
+		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   10 * time.Second,
+		MaxHeaderBytes: 1 << 20,
+	}
 }
