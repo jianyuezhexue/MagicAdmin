@@ -12,19 +12,6 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-// GormLogger struct
-type GormLogger struct{}
-
-// Printf - Log Formatter
-func (*GormLogger) Printf(msg string, data ...interface{}) {
-	// fmt.Print(data[0]) // 报错文件路径
-	// fmt.Print(data[1]) // 报错信息
-	// fmt.Print(data[2]) // 消耗时间
-	// fmt.Print(data[3]) // 影响行数
-	// fmt.Print(data[4]) // SQL语句
-	// fmt.Printf(msg, append([]interface{}{utils.FileWithLineNum()}, data...)...)
-}
-
 // initGorm 初始化gorm
 func initGorm() *gorm.DB {
 	config := Config.Mysql
@@ -40,7 +27,6 @@ func initGorm() *gorm.DB {
 
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer（日志输出的目标，前缀和日志包含的内容——译者注）
-		// &GormLogger{},
 		logger.Config{
 			SlowThreshold:             2 * time.Second, // 慢 SQL 阈值
 			LogLevel:                  logger.Error,    // 日志级别
