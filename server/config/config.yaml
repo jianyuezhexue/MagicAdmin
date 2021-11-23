@@ -33,13 +33,13 @@ redis:
 mysql:
   path: 'localhost'
   config: ''
-  db-name: 'dbMagicAdmin'
-  username: 'root'
+  dbName: 'dbMagicAdmin'
+  userName: 'root'
   password: 'root'
-  max-idle-conns: 10
-  max-open-conns: 100
-  log-mode: ""
-  log-zap: false
+  maxidleConns: 10
+  maxOpenConns: 100
+  logMode: ""
+  logZap: false
 
 # timer task db clear table
 Timer:

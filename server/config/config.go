@@ -42,8 +42,8 @@ type Redis struct {
 type Mysql struct {
 	Path         string `mapstructure:"path" json:"path" yaml:"path"`                         // 服务器地址:端口
 	Config       string `mapstructure:"config" json:"config" yaml:"config"`                   // 高级配置
-	Dbname       string `mapstructure:"dbName" json:"dbname" yaml:"dbName"`                   // 数据库名
-	Username     string `mapstructure:"username" json:"username" yaml:"username"`             // 数据库用户名
+	DbName       string `mapstructure:"dbName" json:"dbname" yaml:"dbName"`                   // 数据库名
+	UserName     string `mapstructure:"userName" json:"userName" yaml:"userName"`             // 数据库用户名
 	Password     string `mapstructure:"password" json:"password" yaml:"password"`             // 数据库密码
 	MaxIdleConns int    `mapstructure:"maxidleConns" json:"maxIdleConns" yaml:"maxidleConns"` // 空闲中的最大连接数
 	MaxOpenConns int    `mapstructure:"maxOpenConns" json:"maxOpenConns" yaml:"maxOpenConns"` // 打开到数据库的最大连接数
@@ -53,7 +53,7 @@ type Mysql struct {
 
 // Dsn 组合链接参数
 func (m *Mysql) Dsn() string {
-	return m.Username + ":" + m.Password + "@tcp(" + m.Path + ")/" + m.Dbname + "?" + m.Config
+	return m.UserName + ":" + m.Password + "@tcp(" + m.Path + ")/" + m.DbName + "?" + m.Config
 }
 
 // Timer 定时器配置
