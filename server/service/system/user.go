@@ -22,7 +22,7 @@ func Register(data system.FormRegister) (res system.User, err error) {
 
 	// 查重
 	find := magic.Orm.Where("userName = ?", user.Username).First(user).Error
-	if !errors.Is(find, gorm.ErrRecordNotFound) { // 判断用户名是否注册
+	if !errors.Is(find, gorm.ErrRecordNotFound) {
 		return *user, errors.New("用户名已注册")
 	}
 
