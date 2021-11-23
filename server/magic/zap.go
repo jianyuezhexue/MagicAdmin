@@ -36,10 +36,10 @@ func initZap() (logger *zap.Logger) {
 	})
 
 	cores := [...]zapcore.Core{
-		getEncoderCore(fmt.Sprintf("./%s/debug-"+today+".log", Config.Zap.Director), debugPriority),
-		getEncoderCore(fmt.Sprintf("./%s/info-"+today+".log", Config.Zap.Director), infoPriority),
-		getEncoderCore(fmt.Sprintf("./%s/warn-"+today+".log", Config.Zap.Director), warnPriority),
-		getEncoderCore(fmt.Sprintf("./%s/error-"+today+".log", Config.Zap.Director), errorPriority),
+		getEncoderCore(fmt.Sprintf("./%s/debug_"+today+".log", Config.Zap.Director), debugPriority),
+		getEncoderCore(fmt.Sprintf("./%s/info_"+today+".log", Config.Zap.Director), infoPriority),
+		getEncoderCore(fmt.Sprintf("./%s/warn_"+today+".log", Config.Zap.Director), warnPriority),
+		getEncoderCore(fmt.Sprintf("./%s/error_"+today+".log", Config.Zap.Director), errorPriority),
 	}
 	logger = zap.New(zapcore.NewTee(cores[:]...), zap.AddCaller())
 
