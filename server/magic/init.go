@@ -53,8 +53,7 @@ func init() {
 	Orm = initGorm()
 	// 初始化Redis
 	Redis = NewRedisCache()
-
-	fmt.Println("--------------------------------------------------------------")
+	fmt.Println("-------------------------- 初始化变量完成 --------------------------")
 }
 
 // Server Server
