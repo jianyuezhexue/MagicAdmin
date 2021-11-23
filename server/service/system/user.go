@@ -18,7 +18,7 @@ func Register(data system.FormRegister) (res system.User, err error) {
 		AuthorityID: data.AuthorityID,
 	}
 	// 查重
-	if !errors.Is(magic.Orm.Where("sUserName = ?", user.Username).First(user).Error, gorm.ErrRecordNotFound) { // 判断用户名是否注册
+	if !errors.Is(magic.Orm.Where("userName = ?", user.Username).First(user).Error, gorm.ErrRecordNotFound) { // 判断用户名是否注册
 		return *user, errors.New("用户名已注册")
 	}
 	// 加密
