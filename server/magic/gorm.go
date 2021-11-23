@@ -9,6 +9,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 )
 
 // GormLogger struct
@@ -50,6 +51,9 @@ func initGorm() *gorm.DB {
 
 	db, err := gorm.Open(mysql.New(mysqlConfig), &gorm.Config{
 		Logger: newLogger,
+		NamingStrategy: schema.NamingStrategy{
+			SingularTable: true, // 使用单数表名
+		},
 	})
 	if err != nil {
 		panic(fmt.Errorf("链接数据库失败: %s", err))
