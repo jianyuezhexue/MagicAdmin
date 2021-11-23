@@ -16,7 +16,7 @@ func Routers() *gin.Engine {
 	{
 		// 健康监测
 		PublicGroup.GET("/health", func(c *gin.Context) {
-			c.JSON(200, "")
+			c.JSON(200, "是心动啊...")
 		})
 		// 系统-用户登录
 		PublicGroup.POST("/user/register", system.Register)
