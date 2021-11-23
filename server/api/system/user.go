@@ -7,26 +7,28 @@ import (
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
 	service "github.com/jianyuezhexue/MagicAdmin/service/system"
-	"go.uber.org/zap"
 )
 
 // todo:自定义验证报错信息
 
 // Register 用户注册账号
 func Register(c *gin.Context) {
+	// 表单验证
 	var form system.FormRegister
 	err := c.ShouldBind(&form)
 	if err != nil {
 		magic.Fail(c, http.StatusBadRequest, err.Error(), form)
 		return
 	}
-	// user := &system.SysUser{Username: form.Username, NickName: form.NickName, Password: form.Password, AuthorityID: form.AuthorityID}
+
+	// 逻辑处理
 	res, err := service.Register(form)
 	if err != nil {
-		magic.Logger.Error("注册失败!", zap.Any("err", err))
 		magic.Fail(c, http.StatusBadGateway, "注册失败", form)
 		return
 	}
+
+	// 结果返回
 	magic.Success(c, http.StatusOK, "注册成功", res)
 }
 

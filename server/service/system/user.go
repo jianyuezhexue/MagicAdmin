@@ -11,6 +11,7 @@ import (
 
 // Register 注册
 func Register(data system.FormRegister) (res system.User, err error) {
+
 	// 赋值
 	user := &system.User{
 		Username:    data.Username,
@@ -18,13 +19,16 @@ func Register(data system.FormRegister) (res system.User, err error) {
 		Password:    data.Password,
 		AuthorityID: data.AuthorityID,
 	}
+
 	// 查重
 	if !errors.Is(magic.Orm.Where("userName = ?", user.Username).First(user).Error, gorm.ErrRecordNotFound) { // 判断用户名是否注册
 		return *user, errors.New("用户名已注册")
 	}
+
 	// 加密
 	user.Password = magic.MD5V([]byte(user.Password))
 	user.UUID = uuid.NewV4()
+
 	// 创建
 	err = magic.Orm.Create(user).Error
 	return *user, err
