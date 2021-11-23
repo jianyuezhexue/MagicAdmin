@@ -21,12 +21,13 @@ func Register(data system.FormRegister) (res system.User, err error) {
 	}
 
 	// 查重
-	if !errors.Is(magic.Orm.Where("userName = ?", user.Username).First(user).Error, gorm.ErrRecordNotFound) { // 判断用户名是否注册
+	find := magic.Orm.Where("userName = ?", user.Username).First(user).Error
+	if !errors.Is(find, gorm.ErrRecordNotFound) { // 判断用户名是否注册
 		return *user, errors.New("用户名已注册")
 	}
 
 	// 加密
-	user.Password = magic.MD5V([]byte(user.Password))
+	user.Password = magic.MD5V(user.Password)
 	user.UUID = uuid.NewV4()
 
 	// 创建
