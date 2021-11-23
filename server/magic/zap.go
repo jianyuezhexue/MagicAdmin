@@ -12,6 +12,7 @@ import (
 
 // 初始化日志
 func initZap() (logger *zap.Logger) {
+	today := GetTime("Y-m-d")
 	// 判断是否有Director文件夹
 	if ok, _ := PathExists(Config.Zap.Director); !ok {
 		fmt.Printf("create %v directory\n", Config.Zap.Director)
@@ -35,10 +36,10 @@ func initZap() (logger *zap.Logger) {
 	})
 
 	cores := [...]zapcore.Core{
-		getEncoderCore(fmt.Sprintf("./%s/server_debug.log", Config.Zap.Director), debugPriority),
-		getEncoderCore(fmt.Sprintf("./%s/server_info.log", Config.Zap.Director), infoPriority),
-		getEncoderCore(fmt.Sprintf("./%s/server_warn.log", Config.Zap.Director), warnPriority),
-		getEncoderCore(fmt.Sprintf("./%s/server_error.log", Config.Zap.Director), errorPriority),
+		getEncoderCore(fmt.Sprintf("./%s/debug-"+today+".log", Config.Zap.Director), debugPriority),
+		getEncoderCore(fmt.Sprintf("./%s/info-"+today+".log", Config.Zap.Director), infoPriority),
+		getEncoderCore(fmt.Sprintf("./%s/warn-"+today+".log", Config.Zap.Director), warnPriority),
+		getEncoderCore(fmt.Sprintf("./%s/error-"+today+".log", Config.Zap.Director), errorPriority),
 	}
 	logger = zap.New(zapcore.NewTee(cores[:]...), zap.AddCaller())
 

@@ -1,25 +1,32 @@
 package service
 
 import (
+	"errors"
+
+	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
+	uuid "github.com/satori/go.uuid"
+	"gorm.io/gorm"
 )
 
 // Register 注册
-func Register(data system.FormRegister) (res system.FormRegister, err error) {
+func Register(data system.FormRegister) (res system.SysUser, err error) {
 	// 赋值
-	var user system.SysUser
-	// user := &system.SysUser{Username: form.Username, NickName: form.NickName, Password: form.Password, AuthorityID: form.AuthorityID}
-	user.Username = data.Username
-	// return user, nil
-	return data, nil
-	// if !errors.Is(magic.Orm.Where("username = ?", u.Username).First(&user).Error, gorm.ErrRecordNotFound) { // 判断用户名是否注册
-	// 	return errors.New("用户名已注册"), userInter
-	// }
-	// // 否则 附加uuid 密码md5简单加密 注册
-	// u.Password = magic.MD5V([]byte(u.Password))
-	// u.UUID = uuid.NewV4()
-	// err = magic.Orm.Create(&u).Error
-	// return u, err
+	user := &system.SysUser{Username: data.Username,
+		NickName:    data.NickName,
+		Password:    data.Password,
+		AuthorityID: data.AuthorityID,
+	}
+	// 查重
+	if !errors.Is(magic.Orm.Where("username = ?", user.Username).First(user).Error, gorm.ErrRecordNotFound) { // 判断用户名是否注册
+		return *user, errors.New("用户名已注册")
+	}
+	// 加密
+	user.Password = magic.MD5V([]byte(user.Password))
+	user.UUID = uuid.NewV4()
+	// 创建
+	err = magic.Orm.Create(user).Error
+	return *user, err
 }
 
 // // Login 用户登录

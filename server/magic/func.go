@@ -9,6 +9,7 @@ import (
 	"os"
 	"reflect"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -98,4 +99,24 @@ func MD5V(str []byte, b ...byte) string {
 	h := md5.New()
 	h.Write(str)
 	return hex.EncodeToString(h.Sum(b))
+}
+
+// GetTime 获取当前时间|
+func GetTime(format string) string {
+	now := time.Now()
+	year := strconv.Itoa(now.Year())
+	month := now.Format("01")
+	day := strconv.Itoa(now.Day())
+
+	switch format {
+	case "Y-m-d":
+		return year + "-" + month + "-" + day
+	case "Y-m-d H:i:s":
+		hour := now.Format("15")
+		min := now.Format("04")
+		second := now.Format("05")
+		return year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + second
+	default:
+		return year + "-" + month + "-" + day
+	}
 }
