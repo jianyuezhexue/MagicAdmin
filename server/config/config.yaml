@@ -32,7 +32,7 @@ redis:
 # mysql connect configuration
 mysql:
   path: 'localhost'
-  config: ''
+  config: 'charset=utf8mb4&parseTime=true'
   dbName: 'dbMagicAdmin'
   userName: 'root'
   password: 'root'

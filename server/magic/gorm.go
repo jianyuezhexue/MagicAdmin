@@ -21,7 +21,9 @@ func (r NewNameReplacer) Replace(name string) string {
 	if name == "" {
 		return name
 	}
-	return strings.ToLower(name)
+	first := name[0:1]
+	lowerFirst := strings.ToLower(first)
+	return strings.Replace(name, first, lowerFirst, 1)
 }
 
 // initGorm 初始化gorm
