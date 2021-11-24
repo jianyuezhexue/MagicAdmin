@@ -24,7 +24,7 @@ func Register(c *gin.Context) {
 	// 逻辑处理
 	res, err := service.Register(form)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), form)
+		magic.Fail(c, http.StatusBadGateway, err.Error(), err)
 		return
 	}
 
