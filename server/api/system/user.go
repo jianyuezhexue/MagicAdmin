@@ -32,12 +32,6 @@ func Register(c *gin.Context) {
 	magic.Success(c, http.StatusOK, "注册成功", res)
 }
 
-// // FormLogin login structure
-// type FormLogin struct {
-// 	Username string `json:"userName"` // 用户名
-// 	Password string `json:"password"` // 密码
-// }
-
 // // Login 用户登录
 // func Login(c *gin.Context) {
 // 	// 参数校验
