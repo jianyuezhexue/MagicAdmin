@@ -13,11 +13,11 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-// NewNameReplacer 库名，表名，字段名命名策略
-type NewNameReplacer struct{}
+// smallHump 库名，表名，字段名小驼峰策略
+type smallHump struct{}
 
-// Replace 库名，表名，字段名替换
-func (r NewNameReplacer) Replace(name string) string {
+// Replace 库名，表名，字段名小驼峰替换策略
+func (s smallHump) Replace(name string) string {
 	if name == "" {
 		return name
 	}
@@ -28,12 +28,13 @@ func (r NewNameReplacer) Replace(name string) string {
 
 // initGorm 初始化gorm
 func initGorm() *gorm.DB {
+	// 组合dsn
 	config := Config.Mysql
 	dsn := config.UserName + ":" + config.Password + "@tcp(" + config.Path + ")/" + config.DbName + "?" + config.Config
 	mysqlConfig := mysql.Config{DSN: dsn}
-
+	// 自定义打印
 	newLogger := logger.New(
-		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer（日志输出的目标，前缀和日志包含的内容——译者注）
+		log.New(os.Stdout, "\r\n", log.LstdFlags),
 		logger.Config{
 			SlowThreshold:             2 * time.Second, // 慢 SQL 阈值
 			LogLevel:                  logger.Error,    // 日志级别
@@ -41,19 +42,21 @@ func initGorm() *gorm.DB {
 			Colorful:                  true,            // 禁用彩色打印
 		},
 	)
-
-	db, err := gorm.Open(mysql.New(mysqlConfig), &gorm.Config{
+	// orm配置
+	ormConfig := &gorm.Config{
 		Logger: newLogger,
 		NamingStrategy: schema.NamingStrategy{
-			SingularTable: true, // 使用单数表名
-			NoLowerCase:   true, // 不使用小写
-			NameReplacer:  NewNameReplacer{},
+			SingularTable: true,        // 使用单数表名
+			NoLowerCase:   true,        // 不使用小写
+			NameReplacer:  smallHump{}, // 小驼峰策略
 		},
-	})
+	}
+	// 链接数据库
+	db, err := gorm.Open(mysql.New(mysqlConfig), ormConfig)
 	if err != nil {
 		panic(fmt.Errorf("链接数据库失败: %s", err))
 	}
-
+	// DB设置
 	sqlDB, _ := db.DB()
 	sqlDB.SetMaxIdleConns(config.MaxIdleConns)
 	sqlDB.SetMaxOpenConns(config.MaxOpenConns)
