@@ -8,10 +8,10 @@ import (
 
 // BaseOrm ORM默认字段
 type BaseOrm struct {
-	ID        uint           `gorm:"primarykey"`     // 主键ID
-	CreatedAt time.Time      `json:"createdAt"`      // 创建时间
-	UpdatedAt time.Time      `json:"updatedAt"`      // 更新时间
-	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"` // 删除时间
+	ID        uint           `gorm:"primarykey"`      // 主键ID
+	CreatedAt time.Time      `json:"createdAt"`       // 创建时间
+	UpdatedAt time.Time      `json:"updatedAt"`       // 更新时间
+	DeletedAt gorm.DeletedAt `gorm:"index;" json:"-"` // 删除时间
 }
 
 // PageInfo common input parameter structure

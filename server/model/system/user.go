@@ -13,7 +13,7 @@ type User struct {
 	Password    string    `json:"-"  gorm:"comment:用户登录密码"`                                                           // 用户登录密码
 	NickName    string    `json:"nickName" gorm:"default:系统用户;comment:用户昵称"`                                          // 用户昵称
 	SideMode    string    `json:"sideMode" gorm:"default:dark;comment:用户侧边主题"`                                        // 用户侧边主题
-	HeaderImg   string    `json:"headImg" gorm:"default:https://qmplusimg.henrongyi.top/gva_header.jpg;comment:用户头像"` // 用户头像
+	HeadImg     string    `json:"headImg" gorm:"default:https://qmplusimg.henrongyi.top/gva_header.jpg;comment:用户头像"` // 用户头像
 	BaseColor   string    `json:"baseColor" gorm:"default:#fff;comment:基础颜色"`                                         // 基础颜色
 	ActiveColor string    `json:"activeColor" gorm:"default:#1890ff;comment:活跃颜色"`                                    // 活跃颜色
 	AuthorityID string    `json:"authorityId" gorm:"default:888;comment:用户角色ID"`                                      // 用户角色ID

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"gorm.io/driver/mysql"
@@ -11,6 +12,17 @@ import (
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 )
+
+// NewNameReplacer 库名，表名，字段名命名策略
+type NewNameReplacer struct{}
+
+// Replace 库名，表名，字段名替换
+func (r NewNameReplacer) Replace(name string) string {
+	if name == "" {
+		return name
+	}
+	return strings.ToLower(name)
+}
 
 // initGorm 初始化gorm
 func initGorm() *gorm.DB {
@@ -32,6 +44,8 @@ func initGorm() *gorm.DB {
 		Logger: newLogger,
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true, // 使用单数表名
+			NoLowerCase:   true, // 不使用小写
+			NameReplacer:  NewNameReplacer{},
 		},
 	})
 	if err != nil {

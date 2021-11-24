@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
@@ -14,14 +15,14 @@ func Register(data system.FormRegister) (res system.User, err error) {
 
 	// 赋值
 	user := &system.User{
-		Username:    data.Username,
-		NickName:    data.NickName,
-		Password:    data.Password,
-		AuthorityID: data.AuthorityID,
+		Username:    strings.Trim(data.Username, " "),
+		NickName:    strings.Trim(data.NickName, " "),
+		Password:    strings.Trim(data.Password, " "),
+		AuthorityID: strings.Trim(data.AuthorityID, " "),
 	}
 
 	// 查重
-	find := magic.Orm.Where("userName = ?", user.Username).First(user).Error
+	find := magic.Orm.Debug().Where("userName = ?", user.Username).First(user).Error
 	if !errors.Is(find, gorm.ErrRecordNotFound) {
 		return *user, errors.New("用户名已注册")
 	}
