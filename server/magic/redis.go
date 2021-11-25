@@ -33,12 +33,22 @@ func NewRedisCache() RedisClient {
 	return RedisClient{pool: pool, defaultExpiration: 86400 * time.Second}
 }
 
-// Set 类型 添加, v 可以是任意类型
-func (c RedisClient) Set(name string, v interface{}, expiration time.Duration) error {
+// Option 默认传参
+type Option struct {
+}
+
+// Set 设置字符串key,valule
+func (c RedisClient) Set(key string, val string, expiration int64) (err error) {
+	// 获取链接
 	conn := c.pool.Get()
-	s, _ := Serialization(v) // 序列化
 	defer conn.Close()
-	_, err := conn.Do("SET", name, s, expiration)
+
+	// 设置kv和过期时间
+	if expiration == -1 {
+		_, err = conn.Do("SET", key, val)
+	} else {
+		_, err = conn.Do("SETEX", key, expiration, val)
+	}
 	return err
 }
 

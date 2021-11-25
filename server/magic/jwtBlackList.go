@@ -1,8 +1,6 @@
 package magic
 
 import (
-	"time"
-
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
 	"go.uber.org/zap"
 )
@@ -25,9 +23,6 @@ func (jwtService *JwtService) JSONInBlacklist(jwtList system.JwtBlacklist) (err 
 func (jwtService *JwtService) IsBlacklist(jwt string) bool {
 	_, ok := LocalCache.Get(jwt)
 	return ok
-	//err := Orm.Where("jwt = ?", jwt).First(&system.JwtBlacklist{}).Error
-	//isNotFound := errors.Is(err, gorm.ErrRecordNotFound)
-	//return !isNotFound
 }
 
 // GetRedisJWT 获取Redis中的JWT
@@ -39,7 +34,8 @@ func (jwtService *JwtService) GetRedisJWT(userName string) (redisJWT string, err
 // SetRedisJWT jwt存入redis并设置过期时间
 func (jwtService *JwtService) SetRedisJWT(jwt string, userName string) (err error) {
 	// 此处过期时间等于jwt过期时间
-	timer := time.Duration(Config.JWT.ExpiresTime) * time.Second
+	// timer := time.Duration(Config.JWT.ExpiresTime) * time.Second
+	timer := Config.JWT.ExpiresTime
 	err = Redis.Set(userName, jwt, timer)
 	return err
 }

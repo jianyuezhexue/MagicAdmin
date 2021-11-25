@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/jianyuezhexue/MagicAdmin/magic"
@@ -40,29 +41,29 @@ func Register(data system.FormRegister) (res system.User, err error) {
 func Login(data system.FormLogin) (res system.ResLogin, err error) {
 	// 实例化
 	user := &system.User{}
-	ResLogin := system.ResLogin{}
+	res = system.ResLogin{}
 
 	// 验证登录
 	data.Password = magic.MD5V(data.Password)
 	where := "userName = ? AND password = ?"
 	findErr := magic.Orm.Where(where, data.Username, data.Password).First(user).Error
 	if findErr != nil {
-		return ResLogin, errors.New("用户名或密码错误")
+		return res, errors.New("用户名或密码错误")
 	}
-	ResLogin.User = *user
+	res.User = *user
 
 	// 签发JWT
 	token, tErr := createToken(*user)
 	if tErr != nil {
-		return ResLogin, errors.New("生成签名失败")
+		return res, errors.New("生成签名失败")
 	}
-	ResLogin.Token = token
+	res.Token = token
 
-	return ResLogin, err
+	return res, err
 }
 
 // 登录以后签发jwt
-func createToken(user system.User) (string, error) {
+func createToken(user system.User) (token string, err error) {
 	// 创建Claims
 	jwt := &magic.JWT{SigningKey: []byte(magic.Config.JWT.SigningKey)}
 	claims := jwt.CreateClaims(magic.BaseClaims{
@@ -72,15 +73,27 @@ func createToken(user system.User) (string, error) {
 		Username:    user.Username,
 		AuthorityID: user.AuthorityID,
 	})
-	token, err := jwt.CreateToken(claims)
+	if token, err = jwt.CreateToken(claims); err != nil {
+		return token, err
+	}
+
+	// 单点登录-返回
 	if !magic.Config.System.UseMultipoint {
 		return token, err
 	}
 
-	return token, err
-
 	// 多点登录-先查
-	// 多点登录-后存
+	cacheToken, err := magic.Redis.Get(user.Username)
+	if err != nil {
+		// 多点登录-后存
+		err = magic.Redis.Set(user.Username, token, 86400)
+		if err != nil {
+			return "", err
+		}
+		return token, err
+	}
+	fmt.Println("找到了缓存")
+	return cacheToken, err
 }
 
 // // ChangePassword 修改用户密码
