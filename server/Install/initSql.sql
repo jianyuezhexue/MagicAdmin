@@ -1,19 +1,23 @@
 -- 用户表
-CREATE TABLE `tbUsers` (
+CREATE TABLE `user` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `createdAt` datetime DEFAULT NULL,
-  `updatedAt` datetime DEFAULT NULL,
-  `deletedAt` datetime DEFAULT NULL,
-  `uuid` varchar(191) DEFAULT NULL COMMENT '用户UUID',
-  `userName` varchar(191) DEFAULT NULL COMMENT '用户登录名',
-  `password` varchar(191) DEFAULT NULL COMMENT '用户登录密码',
-  `nickName` varchar(191) DEFAULT '系统用户' COMMENT '用户昵称',
-  `headerImg` varchar(191) DEFAULT 'http://qmplusimg.henrongyi.top/head.png' COMMENT '用户头像',
-  `authorityId` varchar(90) DEFAULT '888' COMMENT '用户角色ID',
-  PRIMARY KEY (`id`),
+  `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `updatedAt` timestamp NULL DEFAULT NULL,
+  `deletedAt` timestamp NULL DEFAULT NULL,
+  `uuid` varchar(64) NOT NULL COMMENT '用户UUID',
+  `userName` varchar(40) NOT NULL COMMENT '用户登录名',
+  `password` varchar(255) NOT NULL COMMENT '用户登录密码',
+  `nickName` varchar(40) NOT NULL DEFAULT '系统用户' COMMENT '用户昵称',
+  `headImg` varchar(255) DEFAULT 'https://qmplusimg.henrongyi.top/gva_header.jpg' COMMENT '用户头像',
+  `authorityId` int(20) NOT NULL DEFAULT '2' COMMENT '用户角色ID',
+  `sideMode` varchar(5) DEFAULT 'dark' COMMENT '用户侧边主题',
+  `baseColor` varchar(10) DEFAULT '#fff' COMMENT '基础颜色',
+  `activeColor` varchar(10) DEFAULT '#1890ff' COMMENT '活跃颜色',
+  PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `idx_userName` (`userName`) USING BTREE,
-  KEY `idx_deletedAt` (`deletedAt`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
+  KEY `idx_deletedAt` (`deletedAt`),
+  KEY `idx_pasword` (`password`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 -- 菜单表
 CREATE TABLE `tbMenus` (

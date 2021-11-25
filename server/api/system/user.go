@@ -32,22 +32,26 @@ func Register(c *gin.Context) {
 	magic.Success(c, http.StatusOK, "注册成功", res)
 }
 
-// // Login 用户登录
-// func Login(c *gin.Context) {
-// 	// 参数校验
-// 	var l FormLogin
-// 	_ = c.ShouldBindJSON(&l)
-// 	if err := request.Verify(l, request.LoginVerify); err != nil {
-// 		response.FailWithMessage(err.Error(), c)
-// 		return
-// 	}
-// 	// 逻辑实现
-// 	u := &system.SysUser{Username: l.Username, Password: l.Password}
-// 	if err, user := userService.Login(u); err != nil {
-// 		magic.Logger.Error("登陆失败! 用户名不存在或者密码错误!", zap.Any("err", err))
-// 		response.FailWithMessage("用户名不存在或者密码错误", c)
-// 	}
-// }
+// Login 用户登录
+func Login(c *gin.Context) {
+	// 参数校验
+	var form system.FormLogin
+	err := c.ShouldBind(&form)
+	if err != nil {
+		magic.Fail(c, http.StatusBadRequest, err.Error(), form)
+		return
+	}
+
+	// 逻辑实现
+	res, err := service.Login(form)
+	if err != nil {
+		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		return
+	}
+
+	// 结果返回
+	magic.Success(c, http.StatusOK, "登录成功", res)
+}
 
 // // tokenNext 登录以后签发jwt
 // func tokenNext(c *gin.Context, user system.SysUser) {

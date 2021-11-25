@@ -22,7 +22,7 @@ func Register(data system.FormRegister) (res system.User, err error) {
 	}
 
 	// 查重
-	find := magic.Orm.Where("userName = ?", user.Username).First(user).Error
+	find := magic.Orm.Select("id").Where("userName = ?", user.Username).First(user).Error
 	if !errors.Is(find, gorm.ErrRecordNotFound) {
 		return *user, errors.New("用户名已注册")
 	}
@@ -36,13 +36,26 @@ func Register(data system.FormRegister) (res system.User, err error) {
 	return *user, err
 }
 
-// // Login 用户登录
-// func Login(u *system.SysUser) (userInter *system.SysUser, err error) {
-// 	var user system.SysUser
-// 	u.Password = magic.MD5V([]byte(u.Password))
-// 	err = magic.Orm.Where("username = ? AND password = ?", u.Username, u.Password).Preload("Authorities").Preload("Authority").First(&user).Error
-// 	return &user, err
-// }
+// Login 用户登录
+func Login(data system.FormLogin) (res system.User, err error) {
+	// 赋值
+	user := &system.User{
+		Username: strings.Trim(data.Username, " "),
+		Password: strings.Trim(data.Password, " "),
+	}
+
+	// 验证登录
+	data.Password = magic.MD5V(data.Password)
+	where := "username = ? AND password = ?"
+	error := magic.Orm.Where(where, data.Username, data.Password).First(user).Error
+	if error != nil {
+		return *user, errors.New("用户名或密码错误")
+	}
+
+	// 签发JWT
+
+	return *user, err
+}
 
 // // ChangePassword 修改用户密码
 // func ChangePassword(u *system.SysUser, newPassword string) (userInter *system.SysUser, err error) {

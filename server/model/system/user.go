@@ -28,3 +28,9 @@ type FormRegister struct {
 	NickName    string `json:"nickName" form:"nickName" binding:"required,min=3,max=10"`
 	AuthorityID string `json:"authorityId" form:"authorityId" binding:"required,numeric"`
 }
+
+// FormLogin User login structure
+type FormLogin struct {
+	Username string `json:"userName" form:"userName" binding:"required,min=3,max=10"` // 用户名
+	Password string `json:"password" form:"password" binding:"required"`              // 密码
+}
