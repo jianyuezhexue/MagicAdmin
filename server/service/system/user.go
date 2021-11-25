@@ -16,14 +16,14 @@ func Register(data system.FormRegister) (res system.User, err error) {
 
 	// 实例化
 	user := &system.User{
-		Username:    strings.Trim(data.Username, " "),
+		UserName:    strings.Trim(data.UserName, " "),
 		NickName:    strings.Trim(data.NickName, " "),
 		Password:    strings.Trim(data.Password, " "),
 		AuthorityID: strings.Trim(data.AuthorityID, " "),
 	}
 
 	// 查重
-	find := magic.Orm.Select("id").Where("userName = ?", user.Username).First(user).Error
+	find := magic.Orm.Select("id").Where("userName = ?", user.UserName).First(user).Error
 	if !errors.Is(find, gorm.ErrRecordNotFound) {
 		return *user, errors.New("用户名已注册")
 	}
@@ -40,20 +40,23 @@ func Register(data system.FormRegister) (res system.User, err error) {
 // Login 用户登录
 func Login(data system.FormLogin) (res system.ResLogin, err error) {
 	// 实例化
-	user := &system.User{}
+	user := system.User{}
 	res = system.ResLogin{}
 
 	// 验证登录
 	data.Password = magic.MD5V(data.Password)
 	where := "userName = ? AND password = ?"
-	findErr := magic.Orm.Where(where, data.Username, data.Password).First(user).Error
+	findErr := magic.Orm.Debug().Select("*").Where(where, data.UserName, data.Password).First(&user).Error
+	fmt.Println(user.UserName)
+	fmt.Println(user.UUID)
+
 	if findErr != nil {
 		return res, errors.New("用户名或密码错误")
 	}
-	res.User = *user
+	res.User = user
 
 	// 签发JWT
-	token, tErr := createToken(*user)
+	token, tErr := createToken(user)
 	if tErr != nil {
 		return res, errors.New("生成签名失败")
 	}
@@ -70,7 +73,7 @@ func createToken(user system.User) (token string, err error) {
 		UUID:        user.UUID,
 		ID:          user.ID,
 		NickName:    user.NickName,
-		Username:    user.Username,
+		UserName:    user.UserName,
 		AuthorityID: user.AuthorityID,
 	})
 	if token, err = jwt.CreateToken(claims); err != nil {
@@ -83,16 +86,15 @@ func createToken(user system.User) (token string, err error) {
 	}
 
 	// 多点登录-先查
-	cacheToken, err := magic.Redis.Get(user.Username)
+	cacheToken, err := magic.Redis.Get(user.UserName)
 	if err != nil {
 		// 多点登录-后存
-		err = magic.Redis.Set(user.Username, token, 86400)
+		err = magic.Redis.Set(user.UserName, token, 86400)
 		if err != nil {
 			return "", err
 		}
 		return token, err
 	}
-	fmt.Println("找到了缓存")
 	return cacheToken, err
 }
 
@@ -100,7 +102,7 @@ func createToken(user system.User) (token string, err error) {
 // func ChangePassword(u *system.SysUser, newPassword string) (userInter *system.SysUser, err error) {
 // 	var user system.SysUser
 // 	u.Password = magic.MD5V([]byte(u.Password))
-// 	err = magic.Orm.Where("username = ? AND password = ?", u.Username, u.Password).First(&user).Update("password", magic.MD5V([]byte(newPassword))).Error
+// 	err = magic.Orm.Where("username = ? AND password = ?", u.UserName, u.Password).First(&user).Update("password", magic.MD5V([]byte(newPassword))).Error
 // 	return u, err
 // }
 

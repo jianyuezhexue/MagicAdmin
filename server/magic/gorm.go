@@ -24,6 +24,11 @@ func (s smallHump) Replace(name string) string {
 	if name == "ID" {
 		return "id"
 	}
+	if name == "UUID" {
+		return "uuid"
+	}
+	//xxxID 做转化
+
 	first := name[0:1]
 	lowerFirst := strings.ToLower(first)
 	return strings.Replace(name, first, lowerFirst, 1)

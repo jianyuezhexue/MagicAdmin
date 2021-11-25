@@ -9,7 +9,7 @@ import (
 type User struct {
 	model.BaseOrm
 	UUID        uuid.UUID `json:"uuid"`        // 用户UUID
-	Username    string    `json:"userName" `   // 用户登录名
+	UserName    string    `json:"userName"`    // 用户登录名
 	Password    string    `json:"-" `          // 用户登录密码
 	NickName    string    `json:"nickName"`    // 用户昵称
 	SideMode    string    `json:"sideMode" `   // 用户侧边主题
@@ -23,7 +23,7 @@ type User struct {
 
 // FormRegister 注册表单提交数据结构
 type FormRegister struct {
-	Username    string `json:"userName" form:"userName" binding:"required,min=3,max=10"`
+	UserName    string `json:"userName" form:"userName" binding:"required,min=3,max=10"`
 	Password    string `json:"password" form:"password" binding:"required"`
 	NickName    string `json:"nickName" form:"nickName" binding:"required,min=3,max=10"`
 	AuthorityID string `json:"authorityId" form:"authorityId" binding:"required,numeric"`
@@ -31,7 +31,7 @@ type FormRegister struct {
 
 // FormLogin 登录表单提交数据结构
 type FormLogin struct {
-	Username string `json:"userName" form:"userName" binding:"required,min=3,max=10"` // 用户名
+	UserName string `json:"userName" form:"userName" binding:"required,min=3,max=10"` // 用户名
 	Password string `json:"password" form:"password" binding:"required"`              // 密码
 }
 
