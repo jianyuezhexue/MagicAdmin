@@ -64,60 +64,23 @@ func Login(data system.FormLogin) (res system.ResLogin, err error) {
 // 登录以后签发jwt
 func createToken(user system.User) (string, error) {
 	// 创建Claims
-	j := &magic.JWT{SigningKey: []byte(magic.Config.JWT.SigningKey)}
-	claims := j.CreateClaims(magic.BaseClaims{
+	jwt := &magic.JWT{SigningKey: []byte(magic.Config.JWT.SigningKey)}
+	claims := jwt.CreateClaims(magic.BaseClaims{
 		UUID:        user.UUID,
 		ID:          user.ID,
 		NickName:    user.NickName,
 		Username:    user.Username,
 		AuthorityID: user.AuthorityID,
 	})
-	token, err := j.CreateToken(claims)
-	if err != nil {
+	token, err := jwt.CreateToken(claims)
+	if !magic.Config.System.UseMultipoint {
 		return token, err
 	}
+
 	return token, err
 
-	// if !magic.Config.System.UseMultipoint {
-	// 	response.OkWithDetailed(systemRes.LoginResponse{
-	// 		User:      user,
-	// 		Token:     token,
-	// 		ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
-	// 	}, "登录成功", c)
-	// 	return
-	// }
-
-	// if err, jwtStr := jwtService.GetRedisJWT(user.Username); err == redis.Nil {
-	// 	if err := jwtService.SetRedisJWT(token, user.Username); err != nil {
-	// 		global.GVA_LOG.Error("设置登录状态失败!", zap.Any("err", err))
-	// 		response.FailWithMessage("设置登录状态失败", c)
-	// 		return
-	// 	}
-	// 	response.OkWithDetailed(systemRes.LoginResponse{
-	// 		User:      user,
-	// 		Token:     token,
-	// 		ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
-	// 	}, "登录成功", c)
-	// } else if err != nil {
-	// 	global.GVA_LOG.Error("设置登录状态失败!", zap.Any("err", err))
-	// 	response.FailWithMessage("设置登录状态失败", c)
-	// } else {
-	// 	var blackJWT system.JwtBlacklist
-	// 	blackJWT.Jwt = jwtStr
-	// 	if err := jwtService.JsonInBlacklist(blackJWT); err != nil {
-	// 		response.FailWithMessage("jwt作废失败", c)
-	// 		return
-	// 	}
-	// 	if err := jwtService.SetRedisJWT(token, user.Username); err != nil {
-	// 		response.FailWithMessage("设置登录状态失败", c)
-	// 		return
-	// 	}
-	// 	response.OkWithDetailed(systemRes.LoginResponse{
-	// 		User:      user,
-	// 		Token:     token,
-	// 		ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
-	// 	}, "登录成功", c)
-	// }
+	// 多点登录-先查
+	// 多点登录-后存
 }
 
 // // ChangePassword 修改用户密码

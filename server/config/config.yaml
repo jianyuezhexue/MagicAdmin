@@ -4,6 +4,7 @@
 system:
   env: 'public'  # Change to "develop" to skip authentication for development mode
   addr: 5240
+  useMultipoint: true
 
 # jwt configuration
 jwt:
