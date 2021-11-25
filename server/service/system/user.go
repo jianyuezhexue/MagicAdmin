@@ -13,7 +13,7 @@ import (
 // Register 注册
 func Register(data system.FormRegister) (res system.User, err error) {
 
-	// 赋值
+	// 实例化
 	user := &system.User{
 		Username:    strings.Trim(data.Username, " "),
 		NickName:    strings.Trim(data.NickName, " "),
@@ -37,24 +37,87 @@ func Register(data system.FormRegister) (res system.User, err error) {
 }
 
 // Login 用户登录
-func Login(data system.FormLogin) (res system.User, err error) {
-	// 赋值
-	user := &system.User{
-		Username: strings.Trim(data.Username, " "),
-		Password: strings.Trim(data.Password, " "),
-	}
+func Login(data system.FormLogin) (res system.ResLogin, err error) {
+	// 实例化
+	user := &system.User{}
+	ResLogin := system.ResLogin{}
 
 	// 验证登录
 	data.Password = magic.MD5V(data.Password)
-	where := "username = ? AND password = ?"
-	error := magic.Orm.Where(where, data.Username, data.Password).First(user).Error
-	if error != nil {
-		return *user, errors.New("用户名或密码错误")
+	where := "userName = ? AND password = ?"
+	findErr := magic.Orm.Where(where, data.Username, data.Password).First(user).Error
+	if findErr != nil {
+		return ResLogin, errors.New("用户名或密码错误")
 	}
+	ResLogin.User = *user
 
 	// 签发JWT
+	token, tErr := createToken(*user)
+	if tErr != nil {
+		return ResLogin, errors.New("生成签名失败")
+	}
+	ResLogin.Token = token
 
-	return *user, err
+	return ResLogin, err
+}
+
+// 登录以后签发jwt
+func createToken(user system.User) (string, error) {
+	// 创建Claims
+	j := &magic.JWT{SigningKey: []byte(magic.Config.JWT.SigningKey)}
+	claims := j.CreateClaims(magic.BaseClaims{
+		UUID:        user.UUID,
+		ID:          user.ID,
+		NickName:    user.NickName,
+		Username:    user.Username,
+		AuthorityID: user.AuthorityID,
+	})
+	token, err := j.CreateToken(claims)
+	if err != nil {
+		return token, err
+	}
+	return token, err
+
+	// if !magic.Config.System.UseMultipoint {
+	// 	response.OkWithDetailed(systemRes.LoginResponse{
+	// 		User:      user,
+	// 		Token:     token,
+	// 		ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
+	// 	}, "登录成功", c)
+	// 	return
+	// }
+
+	// if err, jwtStr := jwtService.GetRedisJWT(user.Username); err == redis.Nil {
+	// 	if err := jwtService.SetRedisJWT(token, user.Username); err != nil {
+	// 		global.GVA_LOG.Error("设置登录状态失败!", zap.Any("err", err))
+	// 		response.FailWithMessage("设置登录状态失败", c)
+	// 		return
+	// 	}
+	// 	response.OkWithDetailed(systemRes.LoginResponse{
+	// 		User:      user,
+	// 		Token:     token,
+	// 		ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
+	// 	}, "登录成功", c)
+	// } else if err != nil {
+	// 	global.GVA_LOG.Error("设置登录状态失败!", zap.Any("err", err))
+	// 	response.FailWithMessage("设置登录状态失败", c)
+	// } else {
+	// 	var blackJWT system.JwtBlacklist
+	// 	blackJWT.Jwt = jwtStr
+	// 	if err := jwtService.JsonInBlacklist(blackJWT); err != nil {
+	// 		response.FailWithMessage("jwt作废失败", c)
+	// 		return
+	// 	}
+	// 	if err := jwtService.SetRedisJWT(token, user.Username); err != nil {
+	// 		response.FailWithMessage("设置登录状态失败", c)
+	// 		return
+	// 	}
+	// 	response.OkWithDetailed(systemRes.LoginResponse{
+	// 		User:      user,
+	// 		Token:     token,
+	// 		ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
+	// 	}, "登录成功", c)
+	// }
 }
 
 // // ChangePassword 修改用户密码

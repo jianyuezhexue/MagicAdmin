@@ -21,7 +21,7 @@ type User struct {
 	// Authorities []SysAuthority `json:"authorities" gorm:"many2many:sys_user_authority;"`
 }
 
-// FormRegister User register structure
+// FormRegister 注册表单提交数据结构
 type FormRegister struct {
 	Username    string `json:"userName" form:"userName" binding:"required,min=3,max=10"`
 	Password    string `json:"password" form:"password" binding:"required"`
@@ -29,8 +29,14 @@ type FormRegister struct {
 	AuthorityID string `json:"authorityId" form:"authorityId" binding:"required,numeric"`
 }
 
-// FormLogin User login structure
+// FormLogin 登录表单提交数据结构
 type FormLogin struct {
 	Username string `json:"userName" form:"userName" binding:"required,min=3,max=10"` // 用户名
 	Password string `json:"password" form:"password" binding:"required"`              // 密码
+}
+
+// ResLogin 登录返回数据结构
+type ResLogin struct {
+	User
+	Token string `json:"token"`
 }

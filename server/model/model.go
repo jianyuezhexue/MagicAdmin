@@ -10,10 +10,10 @@ import (
 
 // BaseOrm ORM默认字段
 type BaseOrm struct {
-	ID        uint           `gorm:"primarykey"`      // 主键ID
-	CreatedAt time.Time      `json:"-"`               // 创建时间
-	UpdatedAt LocalTime      `json:"updatedAt"`       // 更新时间
-	DeletedAt gorm.DeletedAt `gorm:"index;" json:"-"` // 删除时间
+	ID        uint           `json:"id" gorm:"primarykey"` // 主键ID
+	CreatedAt LocalTime      `json:"-"`                    // 创建时间
+	UpdatedAt LocalTime      `json:"updatedAt"`            // 更新时间
+	DeletedAt gorm.DeletedAt `json:"-" gorm:"index;"`      // 删除时间
 }
 
 // LocalTime 格式化时间
@@ -21,7 +21,7 @@ type LocalTime struct {
 	time.Time
 }
 
-// MarshalJSON MarshalJSON
+// MarshalJSON 格式时间格式
 func (t LocalTime) MarshalJSON() ([]byte, error) {
 	formatted := fmt.Sprintf("\"%s\"", t.Format("2006-01-02 15:04:05"))
 	return []byte(formatted), nil
