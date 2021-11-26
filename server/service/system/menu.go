@@ -5,7 +5,7 @@ import (
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
 )
 
-func getMenuTreeMap(authorityId string) (err error, treeMap map[string][]system.Menu) {
+func getMenuTreeMap(authorityId int) (err error, treeMap map[string][]system.Menu) {
 	var allMenus []system.Menu
 	treeMap = make(map[string][]system.Menu)
 	err = magic.Orm.Where("authority_id = ?", authorityId).Order("sort").Preload("Parameters").Find(&allMenus).Error
@@ -16,22 +16,13 @@ func getMenuTreeMap(authorityId string) (err error, treeMap map[string][]system.
 }
 
 // 获取动态菜单树
-func GetMenuTree() (menus []system.Menu, err error) {
+func Menu() (menus []system.Menu, err error) {
+	// 解析出角色ID
+
+	authorityId := 1
 	err, menuTree := getMenuTreeMap(authorityId)
 	menus = menuTree["0"]
-	for i := 0; i < len(menus); i++ {
-		err = getChildrenList(&menus[i], menuTree)
-	}
 	return menus, err
-}
-
-// 获取子菜单
-func getChildrenList(menu *system.Menu, treeMap map[string][]system.Menu) (err error) {
-	menu.Children = treeMap[menu.MenuId]
-	for i := 0; i < len(menu.Children); i++ {
-		err = getChildrenList(&menu.Children[i], treeMap)
-	}
-	return err
 }
 
 // // 获取路由分页

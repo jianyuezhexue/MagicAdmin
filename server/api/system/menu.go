@@ -9,9 +9,11 @@ import (
 )
 
 // 获取用户动态路由
-func GetMenu(c *gin.Context) {
+func Menu(c *gin.Context) {
+	// 参数获取
+
 	// 逻辑处理
-	res, err := service.GetMenuTree()
+	res, err := service.Menu()
 	if err != nil {
 		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
 		return

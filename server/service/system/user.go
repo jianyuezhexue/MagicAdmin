@@ -68,7 +68,7 @@ func createToken(user system.User) (token string, err error) {
 	jwt := &magic.JWT{SigningKey: []byte(magic.Config.JWT.SigningKey)}
 	claims := jwt.CreateClaims(magic.BaseClaims{
 		UUID:        user.UUID,
-		ID:          user.ID,
+		ID:          user.Id,
 		NickName:    user.NickName,
 		UserName:    user.UserName,
 		AuthorityId: user.AuthorityId,
