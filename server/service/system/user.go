@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	"github.com/jianyuezhexue/MagicAdmin/magic"
@@ -19,7 +18,7 @@ func Register(data system.FormRegister) (res system.User, err error) {
 		UserName:    strings.Trim(data.UserName, " "),
 		NickName:    strings.Trim(data.NickName, " "),
 		Password:    strings.Trim(data.Password, " "),
-		AuthorityID: strings.Trim(data.AuthorityID, " "),
+		AuthorityId: strings.Trim(data.AuthorityId, " "),
 	}
 
 	// 查重
@@ -47,8 +46,6 @@ func Login(data system.FormLogin) (res system.ResLogin, err error) {
 	data.Password = magic.MD5V(data.Password)
 	where := "userName = ? AND password = ?"
 	findErr := magic.Orm.Debug().Select("*").Where(where, data.UserName, data.Password).First(&user).Error
-	fmt.Println(user.UserName)
-	fmt.Println(user.UUID)
 
 	if findErr != nil {
 		return res, errors.New("用户名或密码错误")
@@ -74,7 +71,7 @@ func createToken(user system.User) (token string, err error) {
 		ID:          user.ID,
 		NickName:    user.NickName,
 		UserName:    user.UserName,
-		AuthorityID: user.AuthorityID,
+		AuthorityId: user.AuthorityId,
 	})
 	if token, err = jwt.CreateToken(claims); err != nil {
 		return token, err

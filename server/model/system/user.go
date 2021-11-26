@@ -16,7 +16,7 @@ type User struct {
 	HeadImg     string    `json:"headImg" `    // 用户头像
 	BaseColor   string    `json:"baseColor"`   // 基础颜色
 	ActiveColor string    `json:"activeColor"` // 活跃颜色
-	AuthorityID string    `json:"authorityId"` // 用户角色ID
+	AuthorityId string    `json:"authorityId"` // 用户角色ID
 	// Authority   SysAuthority   `json:"authority" gorm:"foreignKey:AuthorityId;references:AuthorityId;comment:用户角色"`
 	// Authorities []SysAuthority `json:"authorities" gorm:"many2many:sys_user_authority;"`
 }
@@ -26,7 +26,7 @@ type FormRegister struct {
 	UserName    string `json:"userName" form:"userName" binding:"required,min=3,max=10"`
 	Password    string `json:"password" form:"password" binding:"required"`
 	NickName    string `json:"nickName" form:"nickName" binding:"required,min=3,max=10"`
-	AuthorityID string `json:"authorityId" form:"authorityId" binding:"required,numeric"`
+	AuthorityId string `json:"authorityId" form:"authorityId" binding:"required,numeric"`
 }
 
 // FormLogin 登录表单提交数据结构

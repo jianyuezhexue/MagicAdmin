@@ -27,11 +27,20 @@ func (s smallHump) Replace(name string) string {
 	if name == "UUID" {
 		return "uuid"
 	}
-	//xxxID 做转化
 
+	newName := ""
+	// 首字母小写
 	first := name[0:1]
 	lowerFirst := strings.ToLower(first)
-	return strings.Replace(name, first, lowerFirst, 1)
+	newName = lowerFirst + name[1:len(name)-0]
+
+	// 为部大写D转小写
+	last := name[len(name)-1 : len(name)-0]
+	if last == "D" {
+		newName = newName[0:len(newName)-1] + "d"
+	}
+
+	return newName
 }
 
 // initGorm 初始化gorm
