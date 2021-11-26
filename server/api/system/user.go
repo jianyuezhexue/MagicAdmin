@@ -53,64 +53,6 @@ func Login(c *gin.Context) {
 	magic.Success(c, http.StatusOK, "登录成功", res)
 }
 
-// // tokenNext 登录以后签发jwt
-// func tokenNext(c *gin.Context, user system.SysUser) {
-// 	j := &utils.JWT{SigningKey: []byte(magic.Config.JWT.SigningKey)} // 唯一签名
-// 	claims := j.CreateClaims(systemReq.BaseClaims{
-// 		UUID:        user.UUID,
-// 		ID:          user.ID,
-// 		NickName:    user.NickName,
-// 		Username:    user.Username,
-// 		AuthorityId: user.AuthorityID,
-// 	})
-// 	token, err := j.CreateToken(claims)
-// 	if err != nil {
-// 		magic.Logger.Error("获取token失败!", zap.Any("err", err))
-// 		response.FailWithMessage("获取token失败", c)
-// 		return
-// 	}
-// 	if !magic.Config.System.UseMultipoint {
-// 		response.OkWithDetailed(systemRes.LoginResponse{
-// 			User:      user,
-// 			Token:     token,
-// 			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
-// 		}, "登录成功", c)
-// 		return
-// 	}
-
-// 	if err, jwtStr := jwtService.GetRedisJWT(user.Username); err == redis.Nil {
-// 		if err := jwtService.SetRedisJWT(token, user.Username); err != nil {
-// 			magic.Logger.Error("设置登录状态失败!", zap.Any("err", err))
-// 			response.FailWithMessage("设置登录状态失败", c)
-// 			return
-// 		}
-// 		response.OkWithDetailed(systemRes.LoginResponse{
-// 			User:      user,
-// 			Token:     token,
-// 			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
-// 		}, "登录成功", c)
-// 	} else if err != nil {
-// 		magic.Logger.Error("设置登录状态失败!", zap.Any("err", err))
-// 		response.FailWithMessage("设置登录状态失败", c)
-// 	} else {
-// 		var blackJWT system.JwtBlacklist
-// 		blackJWT.Jwt = jwtStr
-// 		if err := jwtService.JsonInBlacklist(blackJWT); err != nil {
-// 			response.FailWithMessage("jwt作废失败", c)
-// 			return
-// 		}
-// 		if err := jwtService.SetRedisJWT(token, user.Username); err != nil {
-// 			response.FailWithMessage("设置登录状态失败", c)
-// 			return
-// 		}
-// 		response.OkWithDetailed(systemRes.LoginResponse{
-// 			User:      user,
-// 			Token:     token,
-// 			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
-// 		}, "登录成功", c)
-// 	}
-// }
-
 // // ChangePassword 用户修改密码
 // func ChangePassword(c *gin.Context) {
 // 	var user systemReq.ChangePasswordStruct
