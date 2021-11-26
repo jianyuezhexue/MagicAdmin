@@ -21,20 +21,25 @@ func (s smallHump) Replace(name string) string {
 	if name == "" {
 		return name
 	}
+
+	// 兼容go-lint提醒
 	if name == "ID" {
 		return "id"
 	}
 	if name == "UUID" {
 		return "uuid"
 	}
+	if name == "URL" {
+		return "url"
+	}
 
-	newName := ""
 	// 首字母小写
+	newName := ""
 	first := name[0:1]
 	lowerFirst := strings.ToLower(first)
 	newName = lowerFirst + name[1:len(name)-0]
 
-	// 为部大写D转小写
+	// 尾字母D转小写
 	last := name[len(name)-1 : len(name)-0]
 	if last == "D" {
 		newName = newName[0:len(newName)-1] + "d"
