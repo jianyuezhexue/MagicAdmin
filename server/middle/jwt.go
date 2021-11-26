@@ -22,14 +22,9 @@ func JWTAuth() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		if jwtService.IsBlacklist(token) {
-			magic.Fail(c, http.StatusForbidden, "您的帐户异地登陆或令牌失效")
-			c.Abort()
-			return
-		}
-		j := magic.NewJWT()
+		jwt := magic.NewJWT()
 		// parseToken 解析token包含的信息
-		claims, err := j.ParseToken(token)
+		claims, err := jwt.ParseToken(token)
 		if err != nil {
 			if err == magic.ErrTokenExpired {
 				magic.Fail(c, http.StatusForbidden, "授权已过期")
@@ -42,8 +37,8 @@ func JWTAuth() gin.HandlerFunc {
 		}
 		if claims.ExpiresAt-time.Now().Unix() < claims.BufferTime {
 			claims.ExpiresAt = time.Now().Unix() + magic.Config.JWT.ExpiresTime
-			newToken, _ := j.CreateTokenByOldToken(token, *claims)
-			newClaims, _ := j.ParseToken(newToken)
+			newToken, _ := jwt.CreateTokenByOldToken(token, *claims)
+			newClaims, _ := jwt.ParseToken(newToken)
 			c.Header("new-token", newToken)
 			c.Header("new-expires-at", strconv.FormatInt(newClaims.ExpiresAt, 10))
 			if magic.Config.System.UseMultipoint {

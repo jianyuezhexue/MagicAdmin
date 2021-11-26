@@ -17,8 +17,6 @@ func getMenuTreeMap(authorityId int) (err error, treeMap map[string][]system.Men
 
 // 获取动态菜单树
 func Menu() (menus []system.Menu, err error) {
-	// 解析出角色ID
-
 	authorityId := 1
 	err, menuTree := getMenuTreeMap(authorityId)
 	menus = menuTree["0"]

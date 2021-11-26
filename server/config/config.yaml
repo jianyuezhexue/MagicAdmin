@@ -8,9 +8,9 @@ system:
 
 # jwt configuration
 jwt:
-  signing-key: 'wangjie'
-  expires-time: 604800
-  buffer-time: 86400
+  signingKey: 'wangjie'
+  expiresTime: 604800
+  bufferTime: 86400
   issuer: 'wangjie'
 
 # zap logger configuration
@@ -19,10 +19,10 @@ zap:
   format: 'console'
   prefix: '[Magic Admin]'
   director: 'log'
-  show-line: true
-  encode-level: 'LowercaseColorLevelEncoder'
+  showLine: true
+  encodeLevel: 'LowercaseColorLevelEncoder'
   stacktrace-key: 'stacktrace'
-  log-in-console: true
+  logInConsole: true
 
 # redis configuration
 redis:

@@ -2,7 +2,6 @@ package magic
 
 import (
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -15,13 +14,6 @@ type JWT struct {
 	SigningKey []byte
 }
 
-// CustomClaims structure
-type CustomClaims struct {
-	BaseClaims
-	BufferTime int64
-	jwt.StandardClaims
-}
-
 // BaseClaims struct
 type BaseClaims struct {
 	UUID        uuid.UUID
@@ -29,6 +21,13 @@ type BaseClaims struct {
 	UserName    string
 	NickName    string
 	AuthorityId string
+}
+
+// CustomClaims structure
+type CustomClaims struct {
+	BaseClaims
+	BufferTime int64
+	jwt.StandardClaims
 }
 
 var (
@@ -63,7 +62,7 @@ func (j *JWT) CreateClaims(baseClaims BaseClaims) CustomClaims {
 	return claims
 }
 
-// CreateToken 创建一个token
+// CreateToken 创建token
 func (j *JWT) CreateToken(claims CustomClaims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(j.SigningKey)
@@ -101,32 +100,14 @@ func (j *JWT) ParseToken(tokenString string) (*CustomClaims, error) {
 			return claims, nil
 		}
 		return nil, ErrTokenInvalid
-
 	}
 	return nil, ErrTokenInvalid
 }
 
-func GetClaims(c *gin.Context) (*CustomClaims, error) {
+// TokenInfo token解析出用户信息|这里默认已经经过了JWT中间件的鉴权
+func TokenInfo(c *gin.Context) (userInfo *BaseClaims) {
 	token := c.Request.Header.Get("x-token")
-	fmt.Println("传参接收到的token:", token)
-	j := NewJWT()
-	claims, err := j.ParseToken(token)
-	if err != nil {
-		Logger.Error("从Gin的Context中获取从jwt解析信息失败, 请检查请求头是否存在x-token且claims是否为规定结构")
-	}
-	return claims, err
-}
-
-// 从Gin的Context中获取从jwt解析出来的用户角色id
-func GetUserInfo(c *gin.Context) (userInfo *CustomClaims) {
-	if claims, exists := c.Get("claims"); !exists {
-		if cl, err := GetClaims(c); err != nil {
-			return nil
-		} else {
-			return cl
-		}
-	} else {
-		waitUse := claims.(CustomClaims)
-		return &waitUse
-	}
+	jwt := NewJWT()
+	claims, _ := jwt.ParseToken(token)
+	return &claims.BaseClaims
 }

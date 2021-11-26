@@ -1,25 +1,29 @@
 package system
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
-	service "github.com/jianyuezhexue/MagicAdmin/service/system"
 )
 
 // 获取用户动态路由
 func Menu(c *gin.Context) {
 	// 参数获取
+	test := magic.TokenInfo(c)
+	fmt.Print(test.AuthorityId)
+	magic.Success(c, http.StatusOK, "动态菜单", test)
+	return
 
-	// 逻辑处理
-	res, err := service.Menu()
-	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
-		return
-	}
-	// 结果返回
-	magic.Success(c, http.StatusOK, "注册成功", res)
+	// // 逻辑处理
+	// res, err := service.Menu()
+	// if err != nil {
+	// 	magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+	// 	return
+	// }
+	// // 结果返回
+	// magic.Success(c, http.StatusOK, "注册成功", res)
 }
 
 // // 获取用户动态路由

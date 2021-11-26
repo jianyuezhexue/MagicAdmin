@@ -11,6 +11,12 @@ import (
 
 // todo:自定义验证报错信息
 
+// ConfigInfo
+func ConfigInfo(c *gin.Context) {
+	res := magic.Config
+	magic.Success(c, http.StatusOK, "打印所有的配置文件", res)
+}
+
 // Register 用户注册账号
 func Register(c *gin.Context) {
 	// 表单验证
