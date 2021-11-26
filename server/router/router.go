@@ -28,6 +28,7 @@ func Routers() *gin.Engine {
 	PrivateGroup.Use(middle.JWTAuth())
 	{
 		// 系统-查询所有菜单
+		PrivateGroup.POST("/menu/GetMenu", system.GetMenu)
 	}
 
 	magic.Logger.Info("router register success")
