@@ -16,14 +16,13 @@ type Meta struct {
 // Menu 后台菜单
 type Menu struct {
 	model.BaseOrm
-	MenuLevel     uint                              `json:"-"`
-	ParentId      string                            `json:"parentId"`  // 父菜单ID
-	Path          string                            `json:"path"`      // 路由path
-	Name          string                            `json:"name"`      // 路由name
-	Hidden        bool                              `json:"hidden"`    // 是否在列表隐藏
-	Component     string                            `json:"component"` // 对应前端文件路径
-	Sort          int                               `json:"sort"`      // 排序标记
-	Meta          `json:"meta" gorm:"comment:附加属性"` // 附加属性
-	SysAuthoritys []SysAuthority                    `json:"authoritys" gorm:"many2many:sys_authority_menus;"`
-	Children      []Menu                            `json:"children" gorm:"-"`
+	Meta
+	ParentId      string         `json:"parentId"`  // 父菜单ID
+	Path          string         `json:"path"`      // 路由path
+	Name          string         `json:"name"`      // 路由name
+	Hidden        bool           `json:"hidden"`    // 是否在列表隐藏
+	Component     string         `json:"component"` // 对应前端文件路径
+	Sort          int            `json:"sort"`      // 排序标记
+	SysAuthoritys []SysAuthority `json:"authoritys" gorm:"many2many:sys_authority_menus;"`
+	Children      []Menu         `json:"children" gorm:"-"`
 }

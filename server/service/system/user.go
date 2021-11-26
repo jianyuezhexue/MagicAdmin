@@ -45,7 +45,7 @@ func Login(data system.FormLogin) (res system.ResLogin, err error) {
 	// 验证登录
 	data.Password = magic.MD5V(data.Password)
 	where := "userName = ? AND password = ?"
-	findErr := magic.Orm.Debug().Select("*").Where(where, data.UserName, data.Password).First(&user).Error
+	findErr := magic.Orm.Select("*").Where(where, data.UserName, data.Password).First(&user).Error
 
 	if findErr != nil {
 		return res, errors.New("用户名或密码错误")
