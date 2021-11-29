@@ -5,22 +5,17 @@ import (
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
 )
 
-func getMenuTreeMap(authorityId int) (err error, treeMap map[string][]system.Menu) {
-	var allMenus []system.Menu
-	treeMap = make(map[string][]system.Menu)
-	err = magic.Orm.Where("authority_id = ?", authorityId).Order("sort").Preload("Parameters").Find(&allMenus).Error
-	for _, v := range allMenus {
-		treeMap[v.ParentId] = append(treeMap[v.ParentId], v)
-	}
-	return err, treeMap
-}
-
 // 获取动态菜单树
-func Menu() (menus []system.Menu, err error) {
-	authorityId := 1
-	err, menuTree := getMenuTreeMap(authorityId)
-	menus = menuTree["0"]
-	return menus, err
+func Menu(authorityId int) (menus []system.Menu, err error) {
+	// 查数据
+	var myMenus []system.Menu
+	err = magic.Orm.Order("sort").Find(&myMenus).Error
+	if err != nil {
+		return nil, err
+	}
+	return myMenus, err
+
+	// 树形转换
 }
 
 // // 获取路由分页
@@ -53,10 +48,10 @@ func Menu() (menus []system.Menu, err error) {
 
 // // 获取路由总树map
 // func getBaseMenuTreeMap() (err error, treeMap map[string][]system.SysBaseMenu) {
-// 	var allMenus []system.SysBaseMenu
+// 	var myMenus []system.SysBaseMenu
 // 	treeMap = make(map[string][]system.SysBaseMenu)
-// 	err = magic.Orm.Order("sort").Preload("Parameters").Find(&allMenus).Error
-// 	for _, v := range allMenus {
+// 	err = magic.Orm.Order("sort").Preload("Parameters").Find(&myMenus).Error
+// 	for _, v := range myMenus {
 // 		treeMap[v.ParentId] = append(treeMap[v.ParentId], v)
 // 	}
 // 	return err, treeMap

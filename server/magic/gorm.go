@@ -82,7 +82,6 @@ func initGorm() *gorm.DB {
 	sqlDB, _ := db.DB()
 	sqlDB.SetMaxIdleConns(config.MaxIdleConns)
 	sqlDB.SetMaxOpenConns(config.MaxOpenConns)
-	// TODO:设置SetConnMaxLifetime()因为会出现invalid connection的情况
-	// 解决的方案就是SetConnMaxLifetime()设置的时间小于wait_timeout就行，一般建议wait_timeout/2。
+	sqlDB.SetConnMaxLifetime(time.Hour * 4)
 	return db
 }
