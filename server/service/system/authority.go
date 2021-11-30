@@ -1,8 +1,8 @@
 package service
 
 import (
-	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/gomodule/redigo/redis"
 	"github.com/jianyuezhexue/MagicAdmin/config"
@@ -11,7 +11,7 @@ import (
 )
 
 // MenuIds 通过权限ID查出所有菜单ID
-func MenuIds(authorityId int) (res []int, err error) {
+func MenuIds(authorityId int) (res []string, err error) {
 	// 先查缓存
 	menuIds := ""
 	key := config.MenueIds + strconv.Itoa(authorityId)
@@ -19,18 +19,21 @@ func MenuIds(authorityId int) (res []int, err error) {
 	if err != nil && err != redis.ErrNil { // 区分空值和报错
 		return nil, err
 	}
-	fmt.Print(menuIds)
 
 	// 没缓存查DB
 	if err == redis.ErrNil {
 		var authorites system.Authority
-		// 防击穿查询
-		_, err, _ = magic.SingleFlight.Do(key, func() (interface{}, error) {
-			res := magic.Orm.Where("authorityId = ?", authorityId).First(&authorites)
-			return authorites, res.Error
-		})
+		err = magic.Orm.Where("authorityId = ?", authorityId).First(&authorites).Error
+		if err != nil {
+			return nil, err
+		}
+		menuIds = authorites.MenuIds
+
+		// 设置缓存
+		magic.Redis.Set(key, menuIds, -1)
 	}
 
 	// 字符串解析
-	return nil, nil
+	slice := strings.Split(menuIds, ",")
+	return slice, nil
 }

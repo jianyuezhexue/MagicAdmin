@@ -1,39 +1,13 @@
 package service
 
 import (
-	"fmt"
-
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
 )
 
-// 获取动态菜单树
-func Menu(authorityId int) (menus []system.Menu, err error) {
-	// 查权限
-	menuIds, err := MenuIds(authorityId)
-	fmt.Println(menuIds)
-	// var authorites system.Authority
-	// err = magic.Orm.Where("authorityId = ?", authorityId).First(&authorites).Error
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// fmt.Println(authorites)
-
-	// 查菜单
-	var myMenus []system.Menu
-	err = magic.Orm.Order("sort").Find(&myMenus).Error
-	if err != nil {
-		return nil, err
-	}
-
-	// 树形转换
-	treeMenuus := TreeTransform(myMenus)
-	return treeMenuus, err
-}
-
-// TreeTransform 保证传进来的结构有Id,ParendId
+// TreeTransform 菜单树型转换
 func TreeTransform(data []system.Menu) (trees []system.Menu) {
-	// 一级级找子集
+	// 一级找子集
 	for index := range data {
 		if data[index].ParentId == 0 {
 			// todo:性能结合实际业务待优化
@@ -43,7 +17,7 @@ func TreeTransform(data []system.Menu) (trees []system.Menu) {
 	return trees
 }
 
-// FindChild 子级找子集
+// FindChild 菜单树型转换-子集找子集
 func FindChild(node system.Menu, data []system.Menu) system.Menu {
 	for index := range data {
 		if node.Id == data[index].ParentId {
@@ -51,6 +25,28 @@ func FindChild(node system.Menu, data []system.Menu) system.Menu {
 		}
 	}
 	return node
+}
+
+// 获取动态菜单树
+func Menu(authorityId int) (menus []system.Menu, err error) {
+	// 查权限[防击穿]
+	menuIds, err, _ := magic.SingleFlight.Do("ServiceMenu", func() (interface{}, error) {
+		return MenuIds(authorityId)
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	// 查菜单
+	var myMenus []system.Menu
+	err = magic.Orm.Where("id IN ?", menuIds).Order("sort").Find(&myMenus).Error
+	if err != nil {
+		return nil, err
+	}
+
+	// 树形转换
+	treeMenuus := TreeTransform(myMenus)
+	return treeMenuus, err
 }
 
 // // 获取路由分页
