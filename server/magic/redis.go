@@ -52,12 +52,16 @@ func (c RedisClient) Set(key string, val string, expiration int64) (err error) {
 	return err
 }
 
+// SetNx 设置唯一键
+func SetNx() error {
+	return nil
+}
+
 // Get 获取 字符串类型的值
 func (c RedisClient) Get(name string) (val string, err error) {
 	conn := c.pool.Get()
 	defer conn.Close()
 	val, err = redis.String(conn.Do("Get", name))
-	// err := Deserialization(temp, &v) // 反序列化
 	return val, err
 }
 

@@ -1,13 +1,25 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
 )
 
 // 获取动态菜单树
 func Menu(authorityId int) (menus []system.Menu, err error) {
-	// 查数据
+	// 查权限
+	menuIds, err := MenuIds(authorityId)
+	fmt.Println(menuIds)
+	// var authorites system.Authority
+	// err = magic.Orm.Where("authorityId = ?", authorityId).First(&authorites).Error
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// fmt.Println(authorites)
+
+	// 查菜单
 	var myMenus []system.Menu
 	err = magic.Orm.Order("sort").Find(&myMenus).Error
 	if err != nil {
@@ -31,8 +43,8 @@ func TreeTransform(data []system.Menu) (trees []system.Menu) {
 	return trees
 }
 
-// findChild 子级找子集
-func FindChild(node system.Menu, data []system.Menu) (res system.Menu) {
+// FindChild 子级找子集
+func FindChild(node system.Menu, data []system.Menu) system.Menu {
 	for index := range data {
 		if node.Id == data[index].ParentId {
 			node.Children = append(node.Children, FindChild(data[index], data))

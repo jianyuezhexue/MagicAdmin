@@ -79,3 +79,8 @@ type Config struct {
 	Mysql  Mysql  `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
 	Timer  Timer  `mapstructure:"timer" json:"timer" yaml:"timer"`
 }
+
+// Redis 前缀配置
+var (
+	MenueIds = "Menu_"
+)
