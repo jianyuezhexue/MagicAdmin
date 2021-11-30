@@ -37,29 +37,24 @@ func Register(data system.FormRegister) (res system.User, err error) {
 }
 
 // Login 用户登录
-func Login(data system.FormLogin) (res system.ResLogin, err error) {
-	// 实例化
-	user := system.User{}
-	res = system.ResLogin{}
-
+func Login(data system.FormLogin) (user system.User, err error) {
 	// 验证登录
 	data.Password = magic.MD5V(data.Password)
 	where := "userName = ? AND password = ?"
 	findErr := magic.Orm.Select("*").Where(where, data.UserName, data.Password).First(&user).Error
 
 	if findErr != nil {
-		return res, errors.New("用户名或密码错误")
+		return user, errors.New("用户名或密码错误")
 	}
-	res.User = user
 
 	// 签发JWT
 	token, tErr := createToken(user)
 	if tErr != nil {
-		return res, errors.New("生成签名失败")
+		return user, errors.New("生成签名失败")
 	}
-	res.Token = token
+	user.Token = token
 
-	return res, err
+	return user, err
 }
 
 // 登录以后签发jwt

@@ -17,6 +17,7 @@ type User struct {
 	BaseColor   string    `json:"baseColor"`   // 基础颜色
 	ActiveColor string    `json:"activeColor"` // 活跃颜色
 	AuthorityId string    `json:"authorityId"` // 用户角色ID
+	Token       string    `json:"token" gorm:"-"`
 	// Authority   SysAuthority   `json:"authority" gorm:"foreignKey:AuthorityId;references:AuthorityId;comment:用户角色"`
 	// Authorities []SysAuthority `json:"authorities" gorm:"many2many:sys_user_authority;"`
 }
@@ -33,10 +34,4 @@ type FormRegister struct {
 type FormLogin struct {
 	UserName string `json:"userName" form:"userName" binding:"required,min=3,max=10"` // 用户名
 	Password string `json:"password" form:"password" binding:"required"`              // 密码
-}
-
-// ResLogin 登录返回数据结构
-type ResLogin struct {
-	User
-	Token string `json:"token"`
 }

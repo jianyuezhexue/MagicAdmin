@@ -3,8 +3,8 @@ import service from '@/utils/request'
 // 用户登录 获取动态路由
 export const asyncMenu = () => {
   return service({
-    url: '/menu/getMenu',
-    method: 'post'
+    url: '/menu',
+    method: 'GET'
   })
 }
 
@@ -12,7 +12,7 @@ export const asyncMenu = () => {
 export const getMenuList = (data) => {
   return service({
     url: '/menu/getMenuList',
-    method: 'post',
+    method: 'POST',
     data
   })
 }
@@ -21,7 +21,7 @@ export const getMenuList = (data) => {
 export const addBaseMenu = (data) => {
   return service({
     url: '/menu/addBaseMenu',
-    method: 'post',
+    method: 'POST',
     data
   })
 }
@@ -30,7 +30,7 @@ export const addBaseMenu = (data) => {
 export const getBaseMenuTree = () => {
   return service({
     url: '/menu/getBaseMenuTree',
-    method: 'post'
+    method: 'POST'
   })
 }
 
@@ -38,7 +38,7 @@ export const getBaseMenuTree = () => {
 export const addMenuAuthority = (data) => {
   return service({
     url: '/menu/addMenuAuthority',
-    method: 'post',
+    method: 'POST',
     data
   })
 }
@@ -47,7 +47,7 @@ export const addMenuAuthority = (data) => {
 export const getMenuAuthority = (data) => {
   return service({
     url: '/menu/getMenuAuthority',
-    method: 'post',
+    method: 'POST',
     data
   })
 }
@@ -56,7 +56,7 @@ export const getMenuAuthority = (data) => {
 export const deleteBaseMenu = (data) => {
   return service({
     url: '/menu/deleteBaseMenu',
-    method: 'post',
+    method: 'POST',
     data
   })
 }
@@ -65,7 +65,7 @@ export const deleteBaseMenu = (data) => {
 export const updateBaseMenu = (data) => {
   return service({
     url: '/menu/updateBaseMenu',
-    method: 'post',
+    method: 'POST',
     data
   })
 }
@@ -74,7 +74,7 @@ export const updateBaseMenu = (data) => {
 export const getBaseMenuById = (data) => {
   return service({
     url: '/menu/getBaseMenuById',
-    method: 'post',
+    method: 'POST',
     data
   })
 }
