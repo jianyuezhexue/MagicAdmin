@@ -1,13 +1,6 @@
 import service from '@/utils/request'
 
-// @Tags WorkflowProcess
-// @Summary 创建WorkflowProcess
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body model.WorkflowProcess true "创建WorkflowProcess"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /workflowProcess/createWorkflowProcess [post]
+// 创建WorkflowProcess
 export const createWorkflowProcess = (data) => {
     return service({
         url: '/workflowProcess/createWorkflowProcess',
@@ -16,14 +9,7 @@ export const createWorkflowProcess = (data) => {
     })
 }
 
-// @Tags WorkflowProcess
-// @Summary 删除WorkflowProcess
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body model.WorkflowProcess true "删除WorkflowProcess"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /workflowProcess/deleteWorkflowProcess [delete]
+// 删除WorkflowProcess
 export const deleteWorkflowProcess = (data) => {
     return service({
         url: '/workflowProcess/deleteWorkflowProcess',
@@ -32,14 +18,7 @@ export const deleteWorkflowProcess = (data) => {
     })
 }
 
-// @Tags WorkflowProcess
-// @Summary 删除WorkflowProcess
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body request.IdsReq true "删除WorkflowProcess"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /workflowProcess/deleteWorkflowProcess [delete]
+// 删除WorkflowProcess
 export const deleteWorkflowProcessByIds = (data) => {
     return service({
         url: '/workflowProcess/deleteWorkflowProcessByIds',
@@ -48,14 +27,7 @@ export const deleteWorkflowProcessByIds = (data) => {
     })
 }
 
-// @Tags WorkflowProcess
-// @Summary 更新WorkflowProcess
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body model.WorkflowProcess true "更新WorkflowProcess"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /workflowProcess/updateWorkflowProcess [put]
+// 更新WorkflowProcess
 export const updateWorkflowProcess = (data) => {
     return service({
         url: '/workflowProcess/updateWorkflowProcess',
@@ -64,14 +36,7 @@ export const updateWorkflowProcess = (data) => {
     })
 }
 
-// @Tags WorkflowProcess
-// @Summary 用id查询WorkflowProcess
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body model.WorkflowProcess true "用id查询WorkflowProcess"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /workflowProcess/findWorkflowProcess [get]
+// 用id查询WorkflowProcess
 export const findWorkflowProcess = (params) => {
     return service({
         url: '/workflowProcess/findWorkflowProcess',
@@ -80,14 +45,7 @@ export const findWorkflowProcess = (params) => {
     })
 }
 
-// @Tags WorkflowProcess
-// @Summary 分页获取WorkflowProcess列表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body request.PageInfo true "分页获取WorkflowProcess列表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /workflowProcess/getWorkflowProcessList [get]
+// 分页获取WorkflowProcess列表
 export const getWorkflowProcessList = (params) => {
     return service({
         url: '/workflowProcess/getWorkflowProcessList',
@@ -96,14 +54,7 @@ export const getWorkflowProcessList = (params) => {
     })
 }
 
-// @Tags WorkflowProcess
-// @Summary 用id查询工作流步骤
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body model.WorkflowProcess true "用id查询WorkflowProcess"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /workflowProcess/findWorkflowStep [get]
+// 用id查询工作流步骤
 export const findWorkflowStep = (params) => {
     return service({
         url: '/workflowProcess/findWorkflowStep',
@@ -112,13 +63,7 @@ export const findWorkflowStep = (params) => {
     })
 }
 
-// @Tags ExaWfLeave
-// @Summary 创建ExaWfLeave
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /workflowProcess/startWorkflow [post]
+// 创建ExaWfLeave
 export const startWorkflow = (data, params = { businessType: data.wf.businessType }) => {
     return service({
         url: '/workflowProcess/startWorkflow',
@@ -128,13 +73,7 @@ export const startWorkflow = (data, params = { businessType: data.wf.businessTyp
     })
 }
 
-// @Tags ExaWfLeave
-// @Summary 创建ExaWfLeave
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /workflowProcess/completeWorkflowMove [post]
+// 创建ExaWfLeave
 export const completeWorkflowMove = (data, params = { businessType: data.wf.businessType }) => {
     return service({
         url: '/workflowProcess/completeWorkflowMove',
@@ -144,13 +83,7 @@ export const completeWorkflowMove = (data, params = { businessType: data.wf.busi
     })
 }
 
-// @Tags WorkflowProcess
-// @Summary 我发起的工作流
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /workflowProcess/getMyStated [get]
+// 我发起的工作流
 export const getMyStated = () => {
     return service({
         url: '/workflowProcess/getMyStated',
@@ -158,13 +91,7 @@ export const getMyStated = () => {
     })
 }
 
-// @Tags WorkflowProcess
-// @Summary 我发起的工作流
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /workflowProcess/getMyNeed [get]
+// 我发起的工作流
 export const getMyNeed = () => {
     return service({
         url: '/workflowProcess/getMyNeed',
@@ -172,14 +99,7 @@ export const getMyNeed = () => {
     })
 }
 
-// @Tags WorkflowProcess
-// @Summary 根据id获取当前节点详情和历史
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body request.GetById true "根据id获取当前节点详情和过往"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /workflowProcess/getWorkflowMoveByID [get]
+// 根据id获取当前节点详情和历史
 export const getWorkflowMoveByID = (params) => {
     return service({
         url: '/workflowProcess/getWorkflowMoveByID',

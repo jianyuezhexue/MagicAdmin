@@ -76,8 +76,6 @@ export default {
       loginForm: {
         username: "admin",
         password: "123456",
-        captcha: "",
-        captchaId: "",
       },
       rules: {
         username: [{ validator: checkUsername, trigger: "blur" }],
