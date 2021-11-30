@@ -22,7 +22,7 @@ type Response struct {
 }
 
 // Success 成功返回
-func Success(c *gin.Context, msg string, data ...interface{}) {
+func Success(c *gin.Context, msg string, data interface{}) {
 	c.JSON(http.StatusOK, gin.H{"code": 0, "msg": msg, "data": data})
 }
 
