@@ -22,7 +22,7 @@ func Menu(c *gin.Context) {
 		return
 	}
 	// 结果返回
-	magic.Success(c, http.StatusOK, "注册成功", res)
+	magic.Success(c, http.StatusOK, "获取我的菜单成功", res)
 }
 
 // // 获取用户动态路由

@@ -15,11 +15,12 @@ type Meta struct {
 // Menu 后台菜单
 type Menu struct {
 	model.BaseOrm
-	Meta
-	ParentId  string `json:"parentId"`  // 父菜单ID
+	Meta      `json:"meta"`
+	ParentId  uint   `json:"parentId"`  // 父菜单ID
 	Path      string `json:"path"`      // 路由path
 	Name      string `json:"name"`      // 路由name
 	Hidden    bool   `json:"hidden"`    // 是否在列表隐藏
 	Component string `json:"component"` // 对应前端文件路径
 	Sort      int    `json:"sort"`      // 排序标记
+	Children  []Menu `json:"children" gorm:"-"`
 }

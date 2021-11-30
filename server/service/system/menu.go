@@ -13,9 +13,32 @@ func Menu(authorityId int) (menus []system.Menu, err error) {
 	if err != nil {
 		return nil, err
 	}
-	return myMenus, err
 
 	// 树形转换
+	treeMenuus := TreeTransform(myMenus)
+	return treeMenuus, err
+}
+
+// TreeTransform 保证传进来的结构有Id,ParendId
+func TreeTransform(data []system.Menu) (trees []system.Menu) {
+	// 一级级找子集
+	for index := range data {
+		if data[index].ParentId == 0 {
+			// todo:性能结合实际业务待优化
+			trees = append(trees, FindChild(data[index], data))
+		}
+	}
+	return trees
+}
+
+// findChild 子级找子集
+func FindChild(node system.Menu, data []system.Menu) (res system.Menu) {
+	for index := range data {
+		if node.Id == data[index].ParentId {
+			node.Children = append(node.Children, FindChild(data[index], data))
+		}
+	}
+	return node
 }
 
 // // 获取路由分页
