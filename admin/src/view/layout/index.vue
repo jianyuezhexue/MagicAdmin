@@ -51,16 +51,16 @@
                             <el-dropdown-menu class="dropdown-group">
                               <el-dropdown-item>
                                 <span style="font-weight: 600;">
-                                  当前角色：{{ userInfo.authority.authorityName }}
+                                  当前角色：{{ userInfo.nickName }}
                                 </span>
                               </el-dropdown-item>
-                              <template v-if="userInfo.authorities">
+                              <!-- <template v-if="userInfo.authorities">
                                 <el-dropdown-item v-for="item in userInfo.authorities.filter(i=>i.authorityId!==userInfo.authorityId)" :key="item.authorityId" @click="changeUserAuth(item.authorityId)">
                                   <span>
-                                    切换为：{{ item.authorityName }}
+                                    切换为：{{ item.nickName }}
                                   </span>
                                 </el-dropdown-item>
-                              </template>
+                              </template> -->
                               <el-dropdown-item icon="el-icon-s-custom" @click="toPerson">个人信息</el-dropdown-item>
                               <el-dropdown-item icon="el-icon-table-lamp" @click="LoginOut">登 出</el-dropdown-item>
                             </el-dropdown-menu>

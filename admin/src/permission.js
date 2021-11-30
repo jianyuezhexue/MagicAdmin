@@ -7,7 +7,7 @@ const whiteList = ['Login', 'Init']
 
 const getRouter = async() => {
   await store.dispatch('router/SetAsyncRouter')
-  await store.dispatch('user/GetUserInfo')
+  // await store.dispatch('user/GetUserInfo')
   const asyncRouters = store.getters['router/asyncRouters']
   asyncRouters.forEach(asyncRouter => {
     router.addRoute(asyncRouter)
