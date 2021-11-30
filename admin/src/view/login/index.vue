@@ -90,8 +90,6 @@ export default {
           },
         ],
       },
-      logVerify: "",
-      picPath: "",
     };
   },
   created() {
@@ -121,28 +119,18 @@ export default {
       this.$refs.loginForm.validate(async (v) => {
         if (v) {
           const flag = await this.login();
-          if (!flag) {
-            this.loginVerify();
-          }
         } else {
           this.$message({
             type: "error",
             message: "请正确填写登录信息",
             showClose: true,
           });
-          this.loginVerify();
           return false;
         }
       });
     },
     changeLock() {
       this.lock = this.lock === "lock" ? "unlock" : "lock";
-    },
-    loginVerify() {
-      captcha({}).then((ele) => {
-        this.picPath = ele.data.picPath;
-        this.loginForm.captchaId = ele.data.captchaId;
-      });
     },
   },
 };
