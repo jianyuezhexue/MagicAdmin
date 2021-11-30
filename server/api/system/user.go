@@ -14,7 +14,7 @@ import (
 // ConfigInfo
 func ConfigInfo(c *gin.Context) {
 	res := magic.Config
-	magic.Success(c, http.StatusOK, "打印所有的配置文件", res)
+	magic.Success(c, "打印所有的配置文件", res)
 }
 
 // Register 用户注册账号
@@ -35,7 +35,7 @@ func Register(c *gin.Context) {
 	}
 
 	// 结果返回
-	magic.Success(c, http.StatusOK, "注册成功", res)
+	magic.Success(c, "注册成功", res)
 }
 
 // Login 用户登录
@@ -56,5 +56,5 @@ func Login(c *gin.Context) {
 	}
 
 	// 结果返回
-	magic.Success(c, http.StatusOK, "登录成功", res)
+	magic.Success(c, "登录成功", res)
 }

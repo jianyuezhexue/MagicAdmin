@@ -22,8 +22,8 @@ type Response struct {
 }
 
 // Success 成功返回
-func Success(c *gin.Context, code int, msg string, data ...interface{}) {
-	c.JSON(http.StatusOK, gin.H{"code": code, "msg": msg, "data": data})
+func Success(c *gin.Context, msg string, data ...interface{}) {
+	c.JSON(http.StatusOK, gin.H{"code": 0, "msg": msg, "data": data})
 }
 
 // Fail 失败返回
