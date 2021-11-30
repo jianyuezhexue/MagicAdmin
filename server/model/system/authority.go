@@ -15,4 +15,5 @@ type SysAuthority struct {
 	DataAuthorityID []SysAuthority `json:"dataAuthorityId"`
 	Children        []SysAuthority `json:"children" gorm:"-"`
 	DefaultRouter   string         `json:"defaultRouter"` // 默认菜单(默认dashboard)
+	MenuIds         string         `json:"menuIds"`       // 权限下的ID
 }
