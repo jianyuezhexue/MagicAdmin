@@ -46,6 +46,11 @@ func Menus(c *gin.Context) {
 	magic.Success(c, "获取菜单列表成功", res)
 }
 
+// CreateMenu 创建菜单
+func CreateMenu(c *gin.Context) {
+
+}
+
 // // 增加menu和角色关联关系
 // func AddMenuAuthority(c *gin.Context) {
 // 	var authorityMenu systemReq.AddMenuAuthorityInfo

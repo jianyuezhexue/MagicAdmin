@@ -53,7 +53,7 @@ type PageInfo struct {
 }
 
 type ResPageData struct {
-	Data  interface{}
-	Total int `json:"total"`
+	List  interface{} `json:"list"`
+	Total int         `json:"total"`
 	PageInfo
 }

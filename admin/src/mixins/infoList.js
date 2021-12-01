@@ -50,7 +50,7 @@ export default {
       beforeFunc()
       const table = await this.listApi({ page: this.page, pageSize: this.pageSize, ...this.searchInfo })
       if (table.code === 0) {
-        this.tableData = table.data
+        this.tableData = table.data.list
         this.total = table.data.total
         this.page = table.data.page
         this.pageSize = table.data.pageSize

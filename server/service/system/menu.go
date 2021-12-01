@@ -51,13 +51,22 @@ func MyMenu(authorityId int) (menus []system.Menu, err error) {
 }
 
 // Menus 分页获取菜单列表
-func Menus(pageInfo model.PageInfo) (menus []system.Menu, err error) {
+func Menus(pageInfo model.PageInfo) (list model.ResPageData, err error) {
 	// 查菜单
+	var menus []system.Menu
 	err = magic.Orm.Order("sort").Find(&menus).Error
 	if err != nil {
-		return nil, err
+		return list, err
 	}
-	return menus, err
+	// 树形转换
+	treeMenuus := TreeTransform(menus)
+
+	// 数据封装
+	list.List = treeMenuus
+	list.Page = 1
+	list.PageSize = 999
+	list.Total = len(menus)
+	return list, err
 }
 
 // // 获取路由分页
