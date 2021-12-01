@@ -3,7 +3,7 @@
     "version": "2.3.5",
     "private": true,
     "scripts": {
-        "serve": "node openDocument.js && vite --host --mode development",
+        "serve": "vite --host --mode development",
         "build": "vite build --mode production",
         "preview": "vite preview"
     },

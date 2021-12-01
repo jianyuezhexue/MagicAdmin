@@ -63,7 +63,8 @@ export const user = {
       if (res.code === 0) {
         commit('setUserInfo', res.data)
         commit('setToken', res.data.token)
-        await dispatch('router/SetAsyncRouter', {}, { root: true })
+        // 减少重复请求菜单接口
+        // await dispatch('router/SetAsyncRouter', {}, { root: true })
         const asyncRouters = rootGetters['router/asyncRouters']
         asyncRouters.forEach(asyncRouter => {
           router.addRoute(asyncRouter)
