@@ -6,17 +6,18 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
+	"github.com/jianyuezhexue/MagicAdmin/model"
 	service "github.com/jianyuezhexue/MagicAdmin/service/system"
 )
 
 // 获取用户动态路由
-func Menu(c *gin.Context) {
+func MyMenu(c *gin.Context) {
 	// 参数获取
 	userInfo := magic.TokenInfo(c)
 	authorityId, _ := strconv.Atoi(userInfo.AuthorityId)
 
 	// 逻辑处理
-	res, err := service.Menu(authorityId)
+	res, err := service.MyMenu(authorityId)
 	if err != nil {
 		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
 		return
@@ -25,15 +26,25 @@ func Menu(c *gin.Context) {
 	magic.Success(c, "获取我的菜单成功", res)
 }
 
-// // 获取用户动态路由
-// func GetBaseMenuTree(c *gin.Context) {
-// 	if err, menus := menuService.GetBaseMenuTree(); err != nil {
-// 		magic.Logger.Error("获取失败!", zap.Any("err", err))
-// 		response.FailWithMessage("获取失败", c)
-// 	} else {
-// 		response.OkWithDetailed(systemRes.SysBaseMenusResponse{Menus: menus}, "获取成功", c)
-// 	}
-// }
+// 分页获取基础menu列表
+func Menus(c *gin.Context) {
+	// 参数获取
+	var pageInfo model.PageInfo
+	err := c.ShouldBind(&pageInfo)
+	if err != nil {
+		magic.Fail(c, http.StatusBadRequest, err.Error(), pageInfo)
+		return
+	}
+
+	// 逻辑处理
+	res, err := service.Menus(pageInfo)
+	if err != nil {
+		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		return
+	}
+	// 结果返回
+	magic.Success(c, "获取菜单列表成功", res)
+}
 
 // // 增加menu和角色关联关系
 // func AddMenuAuthority(c *gin.Context) {
@@ -137,26 +148,5 @@ func Menu(c *gin.Context) {
 // 		response.FailWithMessage("获取失败", c)
 // 	} else {
 // 		response.OkWithDetailed(systemRes.SysBaseMenuResponse{Menu: menu}, "获取成功", c)
-// 	}
-// }
-
-// // 分页获取基础menu列表
-// func GetMenuList(c *gin.Context) {
-// 	var pageInfo request.PageInfo
-// 	_ = c.ShouldBindJSON(&pageInfo)
-// 	if err := utils.Verify(pageInfo, utils.PageInfoVerify); err != nil {
-// 		response.FailWithMessage(err.Error(), c)
-// 		return
-// 	}
-// 	if err, menuList, total := menuService.GetInfoList(); err != nil {
-// 		magic.Logger.Error("获取失败!", zap.Any("err", err))
-// 		response.FailWithMessage("获取失败", c)
-// 	} else {
-// 		response.OkWithDetailed(response.PageResult{
-// 			List:     menuList,
-// 			Total:    total,
-// 			Page:     pageInfo.Page,
-// 			PageSize: pageInfo.PageSize,
-// 		}, "获取成功", c)
 // 	}
 // }

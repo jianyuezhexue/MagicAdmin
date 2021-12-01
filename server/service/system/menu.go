@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/jianyuezhexue/MagicAdmin/magic"
+	"github.com/jianyuezhexue/MagicAdmin/model"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
 )
 
@@ -27,8 +28,8 @@ func FindChild(node system.Menu, data []system.Menu) system.Menu {
 	return node
 }
 
-// 获取动态菜单树
-func Menu(authorityId int) (menus []system.Menu, err error) {
+// MyMenu 获取动态菜单树
+func MyMenu(authorityId int) (menus []system.Menu, err error) {
 	// 查权限[防击穿]
 	menuIds, err, _ := magic.SingleFlight.Do("ServiceMenu", func() (interface{}, error) {
 		return MenuIds(authorityId)
@@ -47,6 +48,16 @@ func Menu(authorityId int) (menus []system.Menu, err error) {
 	// 树形转换
 	treeMenuus := TreeTransform(myMenus)
 	return treeMenuus, err
+}
+
+// Menus 分页获取菜单列表
+func Menus(pageInfo model.PageInfo) (menus []system.Menu, err error) {
+	// 查菜单
+	err = magic.Orm.Order("sort").Find(&menus).Error
+	if err != nil {
+		return nil, err
+	}
+	return menus, err
 }
 
 // // 获取路由分页
