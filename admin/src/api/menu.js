@@ -3,25 +3,25 @@ import service from '@/utils/request'
 // 用户登录 获取动态路由
 export const asyncMenu = () => {
   return service({
-    url: '/myMenu',
-    method: 'GET'
+    method: 'GET',
+    url: '/myMenu'
   })
 }
 
 // 获取menu列表
 export const getMenuList = (data) => {
   return service({
-    url: '/menus',
     method: 'GET',
+    url: '/menus',
     data
   })
 }
 
-// 新增基础menu
-export const addBaseMenu = (data) => {
+// 新增menu
+export const create = (data) => {
   return service({
-    url: '/menu/addBaseMenu',
     method: 'POST',
+    url: '/menu',
     data
   })
 }

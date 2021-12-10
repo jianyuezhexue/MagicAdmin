@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
-	service "github.com/jianyuezhexue/MagicAdmin/service/system"
+	serviceSystem "github.com/jianyuezhexue/MagicAdmin/service/system"
 )
 
 // todo:自定义验证报错信息
@@ -28,7 +28,7 @@ func Register(c *gin.Context) {
 	}
 
 	// 逻辑处理
-	res, err := service.Register(form)
+	res, err := serviceSystem.Register(form)
 	if err != nil {
 		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
 		return
@@ -49,7 +49,7 @@ func Login(c *gin.Context) {
 	}
 
 	// 逻辑实现
-	res, err := service.Login(form)
+	res, err := serviceSystem.Login(form)
 	if err != nil {
 		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
 		return

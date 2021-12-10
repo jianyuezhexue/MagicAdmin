@@ -1,4 +1,4 @@
-package service
+package system
 
 import (
 	"github.com/jianyuezhexue/MagicAdmin/magic"

@@ -40,7 +40,7 @@ service.interceptors.request.use(
         config.headers = {
             'Content-Type': 'application/json',
             'x-token': token,
-            'x-user-id': user.ID
+            'x-user-id': user.id
         }
         return config
     },

@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model"
-	service "github.com/jianyuezhexue/MagicAdmin/service/system"
+	serviceSystem "github.com/jianyuezhexue/MagicAdmin/service/system"
 )
 
 // 获取用户动态路由
@@ -17,7 +17,8 @@ func MyMenu(c *gin.Context) {
 	authorityId, _ := strconv.Atoi(userInfo.AuthorityId)
 
 	// 逻辑处理
-	res, err := service.MyMenu(authorityId)
+	// res, err := service.MyMenu(authorityId)
+	res, err := serviceSystem.MyMenu(authorityId)
 	if err != nil {
 		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
 		return
@@ -37,7 +38,7 @@ func Menus(c *gin.Context) {
 	}
 
 	// 逻辑处理
-	res, err := service.Menus(pageInfo)
+	res, err := serviceSystem.Menus(pageInfo)
 	if err != nil {
 		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
 		return
@@ -48,7 +49,9 @@ func Menus(c *gin.Context) {
 
 // CreateMenu 创建菜单
 func CreateMenu(c *gin.Context) {
+	// 参数校验
 
+	magic.Success(c, "创建菜单成功", 1)
 }
 
 // // 增加menu和角色关联关系

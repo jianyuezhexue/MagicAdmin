@@ -140,7 +140,7 @@
 import {
   updateBaseMenu,
   getMenuList,
-  addBaseMenu,
+  create,
   deleteBaseMenu,
   getBaseMenuById,
 } from "@/api/menu";
@@ -331,7 +331,7 @@ export default {
           if (this.isEdit) {
             res = await updateBaseMenu(this.form);
           } else {
-            res = await addBaseMenu(this.form);
+            res = await create(this.form);
           }
           if (res.code === 0) {
             this.$message({

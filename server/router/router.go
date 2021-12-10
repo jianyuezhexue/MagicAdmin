@@ -30,7 +30,7 @@ func Routers() *gin.Engine {
 	{
 		// 系统-菜单
 		PrivateGroup.GET("/myMenu", system.MyMenu)    // 权限菜单
-		PrivateGroup.GET("/menus", system.Menus)      // 列表菜单
+		PrivateGroup.GET("/menus", system.Menus)      // 树型菜单
 		PrivateGroup.POST("/menu", system.CreateMenu) // 新增菜单
 		PrivateGroup.PUT("/menu", system.Menus)       // 编辑菜单
 		PrivateGroup.DELETE("/menu", system.Menus)    // 删除菜单
