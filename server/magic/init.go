@@ -3,6 +3,7 @@ package magic
 import (
 	"fmt"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -27,6 +28,8 @@ var (
 	SingleFlight = &singleflight.Group{}
 	// LocalCache 本地缓存
 	LocalCache local_cache.Cache
+	// once
+	once sync.Once
 )
 
 // 读取配置
@@ -46,7 +49,7 @@ func initConfig() {
 // 初始化配置
 func init() {
 	// 读取配置
-	initConfig()
+	once.Do(func() { initConfig() })
 	// 初始化日志
 	Logger = initZap()
 	// 初始化ORM

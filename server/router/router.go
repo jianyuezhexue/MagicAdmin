@@ -34,6 +34,7 @@ func Routers() *gin.Engine {
 		PrivateGroup.POST("/menu", system.CreateMenu) // 新增菜单
 		PrivateGroup.PUT("/menu", system.Menus)       // 编辑菜单
 		PrivateGroup.DELETE("/menu", system.Menus)    // 删除菜单
+		PrivateGroup.GET("/menu:id", system.MyMenu)   // 查询菜单
 	}
 
 	magic.Logger.Info("router register success")
