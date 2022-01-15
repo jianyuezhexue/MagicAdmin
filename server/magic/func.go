@@ -27,7 +27,7 @@ func Success(c *gin.Context, msg string, data interface{}) {
 }
 
 // Fail 失败返回
-func Fail(c *gin.Context, code int, msg string, data ...interface{}) {
+func Fail(c *gin.Context, code int, msg string, data interface{}) {
 	// data如何默认
 	c.JSON(http.StatusInternalServerError, gin.H{"code": code, "msg": msg, "data": data})
 }
