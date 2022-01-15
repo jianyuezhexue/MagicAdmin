@@ -18,7 +18,7 @@ func JWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Request.Header.Get("x-token")
 		if token == "" {
-			magic.Fail(c, http.StatusForbidden, "未登录或非法访问")
+			magic.Fail(c, http.StatusForbidden, "未登录或非法访问", "")
 			c.Abort()
 			return
 		}
@@ -27,11 +27,11 @@ func JWTAuth() gin.HandlerFunc {
 		claims, err := jwt.ParseToken(token)
 		if err != nil {
 			if err == magic.ErrTokenExpired {
-				magic.Fail(c, http.StatusForbidden, "授权已过期")
+				magic.Fail(c, http.StatusForbidden, "授权已过期", "")
 				c.Abort()
 				return
 			}
-			magic.Fail(c, http.StatusForbidden, err.Error())
+			magic.Fail(c, http.StatusForbidden, err.Error(), "")
 			c.Abort()
 			return
 		}
