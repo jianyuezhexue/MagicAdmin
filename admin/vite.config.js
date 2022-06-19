@@ -22,16 +22,11 @@ export default ({
 	}
 
   let rollupOptions = {};
-
-
   let optimizeDeps = {};
-
-
   let alias = {
     '@': path.resolve(__dirname, './src'),
     'vue$': 'vue/dist/vue.runtime.esm-bundler.js',
   }
-
   let esbuild = {}
 
   return {
