@@ -18,7 +18,6 @@ func MyMenu(c *gin.Context) {
 	authorityId, _ := strconv.Atoi(userInfo.AuthorityId)
 
 	// 逻辑处理
-	// res, err := service.MyMenu(authorityId)
 	res, err := serviceSystem.MyMenu(authorityId)
 	if err != nil {
 		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
