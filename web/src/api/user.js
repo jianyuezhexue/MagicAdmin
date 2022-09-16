@@ -1,17 +1,18 @@
 import service from '@/utils/request'
-// 用户登录
-export const login = (data) => {
+
+// 获取验证码
+export const captcha = (data) => {
   return service({
-    url: '/base/login',
+    url: '/user/captcha',
     method: 'post',
     data: data
   })
 }
 
-// 获取验证码
-export const captcha = (data) => {
+// 用户登录
+export const login = (data) => {
   return service({
-    url: '/base/captcha',
+    url: '/user/login',
     method: 'post',
     data: data
   })

@@ -3,25 +3,13 @@
     <div class="login_panel">
       <div class="login_panel_form">
         <div class="login_panel_form_title">
-          <img
-            class="login_panel_form_title_logo"
-            :src="$GIN_VUE_ADMIN.appLogo"
-            alt
-          >
+          <img class="login_panel_form_title_logo" :src="$GIN_VUE_ADMIN.appLogo" alt>
           <p class="login_panel_form_title_p">{{ $GIN_VUE_ADMIN.appName }}</p>
         </div>
-        <el-form
-          ref="loginForm"
-          :model="loginFormData"
-          :rules="rules"
-          :validate-on-rule-change="false"
-          @keyup.enter="submitForm"
-        >
+        <el-form ref="loginForm" :model="loginFormData" :rules="rules" :validate-on-rule-change="false"
+          @keyup.enter="submitForm">
           <el-form-item prop="username">
-            <el-input
-              v-model="loginFormData.username"
-              placeholder="请输入用户名"
-            >
+            <el-input v-model="loginFormData.username" placeholder="请输入用户名">
               <template #suffix>
                 <span class="input-icon">
                   <el-icon>
@@ -32,18 +20,12 @@
             </el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input
-              v-model="loginFormData.password"
-              :type="lock === 'lock' ? 'password' : 'text'"
-              placeholder="请输入密码"
-            >
+            <el-input v-model="loginFormData.password" :type="lock === 'lock' ? 'password' : 'text'"
+              placeholder="请输入密码">
               <template #suffix>
                 <span class="input-icon">
                   <el-icon>
-                    <component
-                      :is="lock"
-                      @click="changeLock"
-                    />
+                    <component :is="lock" @click="changeLock" />
                   </el-icon>
                 </span>
               </template>
@@ -51,34 +33,21 @@
           </el-form-item>
           <el-form-item prop="captcha">
             <div class="vPicBox">
-              <el-input
-                v-model="loginFormData.captcha"
-                placeholder="请输入验证码"
-                style="width: 60%"
-              />
+              <el-input v-model="loginFormData.captcha" placeholder="请输入验证码" style="width: 60%" />
               <div class="vPic">
-                <img
-                  v-if="picPath"
-                  :src="picPath"
-                  alt="请输入验证码"
-                  @click="loginVerify()"
-                >
+                <img v-if="picPath" :src="picPath" alt="请输入验证码" @click="loginVerify()">
               </div>
             </div>
           </el-form-item>
           <el-form-item>
-            <el-button
+            <!-- <el-button
               type="primary"
               style="width: 46%"
               size="large"
               @click="checkInit"
-            >前往初始化</el-button>
-            <el-button
-              type="primary"
-              size="large"
-              style="width: 46%; margin-left: 8%"
-              @click="submitForm"
-            >登 录</el-button>
+            >前往初始化</el-button> -->
+            <el-button type="primary" size="large" style="width: 100%; margin-left: 0%" @click="submitForm">登 录
+            </el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -91,10 +60,7 @@
           <a href="https://support.qq.com/product/371961" target="_blank">
             <img src="@/assets/kefu.png" class="link-icon">
           </a>
-          <a
-            href="https://github.com/flipped-aurora/gin-vue-admin"
-            target="_blank"
-          >
+          <a href="https://github.com/flipped-aurora/gin-vue-admin" target="_blank">
             <img src="@/assets/github.png" class="link-icon">
           </a>
           <a href="https://space.bilibili.com/322210472" target="_blank">
@@ -142,7 +108,7 @@ const checkPassword = (rule, value, callback) => {
 
 // 获取验证码
 const loginVerify = () => {
-  captcha({}).then(async(ele) => {
+  captcha({}).then(async (ele) => {
     rules.captcha.push({
       max: ele.data.captchaLength,
       min: ele.data.captchaLength,
@@ -181,11 +147,11 @@ const rules = reactive({
 })
 
 const userStore = useUserStore()
-const login = async() => {
+const login = async () => {
   return await userStore.LoginIn(loginFormData)
 }
 const submitForm = () => {
-  loginForm.value.validate(async(v) => {
+  loginForm.value.validate(async (v) => {
     if (v) {
       const flag = await login()
       if (!flag) {
@@ -201,22 +167,6 @@ const submitForm = () => {
       return false
     }
   })
-}
-
-// 跳转初始化
-const checkInit = async() => {
-  const res = await checkDB()
-  if (res.code === 0) {
-    if (res.data?.needInit) {
-      userStore.NeedInit()
-      router.push({ name: 'Init' })
-    } else {
-      ElMessage({
-        type: 'info',
-        message: '已配置数据库信息，无法初始化',
-      })
-    }
-  }
 }
 
 </script>

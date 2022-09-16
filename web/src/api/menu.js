@@ -1,113 +1,80 @@
 import service from '@/utils/request'
-// @Summary 用户登录 获取动态路由
-// @Produce  application/json
-// @Param 可以什么都不填 调一下即可
-// @Router /menu/getMenu [post]
+
+// 用户登录 获取动态路由
 export const asyncMenu = () => {
   return service({
-    url: '/menu/getMenu',
-    method: 'post'
+    method: 'GET',
+    url: '/myMenu'
   })
 }
 
-// @Summary 获取menu列表
-// @Produce  application/json
-// @Param {
-//  page     int
-//	pageSize int
-// }
-// @Router /menu/getMenuList [post]
+// 获取menu列表
 export const getMenuList = (data) => {
   return service({
-    url: '/menu/getMenuList',
-    method: 'post',
+    method: 'GET',
+    url: '/menus',
     data
   })
 }
 
-// @Summary 新增基础menu
-// @Produce  application/json
-// @Param menu Object
-// @Router /menu/getMenuList [post]
-export const addBaseMenu = (data) => {
+// 新增menu
+export const create = (data) => {
   return service({
-    url: '/menu/addBaseMenu',
-    method: 'post',
+    method: 'POST',
+    url: '/menu',
     data
   })
 }
 
-// @Summary 获取基础路由列表
-// @Produce  application/json
-// @Param 可以什么都不填 调一下即可
-// @Router /menu/getBaseMenuTree [post]
+// 获取基础路由列表
 export const getBaseMenuTree = () => {
   return service({
     url: '/menu/getBaseMenuTree',
-    method: 'post'
+    method: 'POST'
   })
 }
 
-// @Summary 添加用户menu关联关系
-// @Produce  application/json
-// @Param menus Object authorityId string
-// @Router /menu/getMenuList [post]
+// 添加用户menu关联关系
 export const addMenuAuthority = (data) => {
   return service({
     url: '/menu/addMenuAuthority',
-    method: 'post',
+    method: 'POST',
     data
   })
 }
 
-// @Summary 获取用户menu关联关系
-// @Produce  application/json
-// @Param authorityId string
-// @Router /menu/getMenuAuthority [post]
+// 获取用户menu关联关系
 export const getMenuAuthority = (data) => {
   return service({
     url: '/menu/getMenuAuthority',
-    method: 'post',
+    method: 'POST',
     data
   })
 }
 
-// @Summary 获取用户menu关联关系
-// @Produce  application/json
-// @Param ID float64
-// @Router /menu/deleteBaseMenu [post]
+// 获取用户menu关联关系
 export const deleteBaseMenu = (data) => {
   return service({
     url: '/menu/deleteBaseMenu',
-    method: 'post',
+    method: 'POST',
     data
   })
 }
 
-// @Summary 修改menu列表
-// @Produce  application/json
-// @Param menu Object
-// @Router /menu/updateBaseMenu [post]
+// 修改menu列表
 export const updateBaseMenu = (data) => {
   return service({
     url: '/menu/updateBaseMenu',
-    method: 'post',
+    method: 'POST',
     data
   })
 }
 
-// @Tags menu
-// @Summary 根据id获取菜单
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body api.GetById true "根据id获取菜单"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /menu/getBaseMenuById [post]
+// 根据id获取菜单
 export const getBaseMenuById = (data) => {
   return service({
     url: '/menu/getBaseMenuById',
-    method: 'post',
+    method: 'POST',
     data
   })
 }
