@@ -154,6 +154,9 @@ const submitForm = () => {
   loginForm.value.validate(async (v) => {
     if (v) {
       const flag = await login()
+      console.log("==============")
+      console.log(flag)
+      console.log("==============")
       if (!flag) {
         loginVerify()
       }

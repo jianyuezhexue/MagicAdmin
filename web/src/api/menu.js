@@ -17,6 +17,15 @@ export const getMenuList = (data) => {
   })
 }
 
+// 新增基础menu
+export const addBaseMenu = (data) => {
+  return service({
+    url: '/menu/addBaseMenu',
+    method: 'post',
+    data
+  })
+}
+
 // 新增menu
 export const create = (data) => {
   return service({

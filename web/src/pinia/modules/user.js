@@ -57,15 +57,17 @@ export const useUserStore = defineStore('user', () => {
     try {
       const res = await login(loginInfo)
       if (res.code === 0) {
-        setUserInfo(res.data.user)
-        setToken(res.data.token)
+        setUserInfo(res.data)     // 存储用户信息
+        setToken(res.data.token)  // 存储token
         const routerStore = useRouterStore()
         await routerStore.SetAsyncRouter()
         const asyncRouters = routerStore.asyncRouters
         asyncRouters.forEach(asyncRouter => {
           router.addRoute(asyncRouter)
         })
-        await router.push({ name: userInfo.value.authority.defaultRouter })
+        // 跳转进入管理页
+        await router.push({ name: "dashboard" })
+        // await router.push({ name: userInfo.value.authority.defaultRouter })
         loadingInstance.value.close()
         return true
       }

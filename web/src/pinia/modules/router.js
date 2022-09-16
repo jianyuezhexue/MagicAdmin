@@ -50,7 +50,7 @@ export const useRouterStore = defineStore('router', () => {
       children: []
     }]
     const asyncRouterRes = await asyncMenu()
-    const asyncRouter = asyncRouterRes.data.menus
+    const asyncRouter = asyncRouterRes.data
     asyncRouter && asyncRouter.push({
       path: '404',
       name: '404',
