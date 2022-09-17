@@ -96,7 +96,7 @@ func UserInfo(uuid uuid.UUID) (user system.User, err error) {
 	// 查询数据
 	findErr := magic.Orm.Where("uuid = ?", uuid).Preload("Authority").First(&user).Error
 	if findErr != nil {
-		return user, errors.New("签名错误")
+		return user, errors.New("用户查询错误")
 	}
 	// 返回数据
 	return user, err

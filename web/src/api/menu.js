@@ -73,8 +73,8 @@ export const deleteBaseMenu = (data) => {
 // 修改menu列表
 export const updateBaseMenu = (data) => {
   return service({
-    url: '/menu/updateBaseMenu',
-    method: 'POST',
+    url: '/menu',
+    method: 'put',
     data
   })
 }

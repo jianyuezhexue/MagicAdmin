@@ -1,9 +1,12 @@
 package system
 
 import (
+	"errors"
+
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
+	"gorm.io/gorm"
 )
 
 // TreeTransform 菜单树型转换
@@ -78,6 +81,27 @@ func FindMenu(id model.GetById) (res system.Menu, err error) {
 		return res, err
 	}
 
+	return menu, err
+}
+
+// 更新菜单
+func UpdateMenu(menu system.Menu) (res system.Menu, err error) {
+	// 查询数据
+	err = magic.Orm.Where("id = ?", menu.Id).Find(&menu).Error
+	if err != nil {
+		return res, err
+	}
+
+	// 校验是否存在
+	if err == gorm.ErrRecordNotFound {
+		return res, errors.New("您编辑的菜单不存在！")
+	}
+
+	// 更新数据
+	err = magic.Orm.Model(&menu).Updates(menu).Error
+	if err != nil {
+		return res, err
+	}
 	return menu, err
 }
 

@@ -67,6 +67,7 @@ func initGorm() *gorm.DB {
 	// orm配置
 	ormConfig := &gorm.Config{
 		Logger: newLogger,
+		// Logger: logger.Default.LogMode(logger.Info), // 配置日志级别，打印出所有的sql
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,        // 使用单数表名
 			NoLowerCase:   true,        // 不使用小写

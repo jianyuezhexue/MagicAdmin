@@ -6,10 +6,10 @@ import (
 
 // Meta 属性
 type Meta struct {
-	KeepAlive bool   `json:"keepAlive" form:"keepAlive" binding:"required"` // 是否缓存
-	Title     string `json:"title" form:"title" binding:"required,max=40"`  // 菜单名
-	Icon      string `json:"icon" form:"icon" binding:"required,max=20"`    // 菜单图标
-	CloseTab  bool   `json:"closeTab" form:"closeTab" binding:"required"`   // 自动关闭tab
+	KeepAlive bool   `json:"keepAlive" form:"keepAlive"`                   // 是否缓存
+	Title     string `json:"title" form:"title" binding:"required,max=40"` // 菜单名
+	Icon      string `json:"icon" form:"icon" binding:"required,max=20"`   // 菜单图标
+	CloseTab  bool   `json:"closeTab" form:"closeTab"`                     // 自动关闭tab
 }
 
 // Menu 后台菜单

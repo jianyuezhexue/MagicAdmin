@@ -39,8 +39,8 @@ func Routers() *gin.Engine {
 		PrivateGroup.GET("/myMenu", system.MyMenu)     // 权限菜单
 		PrivateGroup.GET("/menus", system.Menus)       // 树型菜单
 		PrivateGroup.GET("/menu/:id", system.FindMenu) // 查询菜单
+		PrivateGroup.PUT("/menu", system.UpdateMenu)   // 编辑菜单
 		PrivateGroup.POST("/menu", system.CreateMenu)  // 新增菜单
-		PrivateGroup.PUT("/menu", system.Menus)        // 编辑菜单
 		PrivateGroup.DELETE("/menu", system.Menus)     // 删除菜单
 	}
 

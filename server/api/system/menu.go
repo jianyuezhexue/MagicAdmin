@@ -61,11 +61,33 @@ func FindMenu(c *gin.Context) {
 	// 逻辑处理
 	res, err := serviceSystem.FindMenu(id)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.Fail(c, 1202, err.Error(), res)
 		return
 	}
 
+	// 返回结果
 	magic.Success(c, "根据id查询菜单成功", res)
+}
+
+// 更新菜单
+func UpdateMenu(c *gin.Context) {
+	// 参数校验
+	var menu system.Menu
+	err := c.ShouldBind(&menu)
+	if err != nil {
+		magic.Fail(c, 1204, err.Error(), menu)
+		return
+	}
+
+	// 逻辑处理
+	res, err := serviceSystem.UpdateMenu(menu)
+	if err != nil {
+		magic.Fail(c, 1206, err.Error(), res)
+		return
+	}
+
+	// 返回结果
+	magic.Success(c, "更新菜单成功", res)
 }
 
 // CreateMenu 创建菜单
@@ -86,13 +108,6 @@ func CreateMenu(c *gin.Context) {
 	}
 	// 结果返回
 	magic.Success(c, "创建菜单成功", res)
-}
-
-// UpdateMenu 更新菜单
-func UpdateMenu(c *gin.Context) {
-	// 参数校验
-
-	magic.Success(c, "创建菜单成功", 1)
 }
 
 // DelMenu 删除菜单
