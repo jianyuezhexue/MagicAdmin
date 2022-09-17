@@ -47,6 +47,13 @@ func Menus(c *gin.Context) {
 	magic.Success(c, "获取菜单列表成功", res)
 }
 
+// 根据id获取菜单
+func FindMenu(c *gin.Context) {
+	// 参数校验
+
+	magic.Success(c, "创建菜单成功", 1)
+}
+
 // CreateMenu 创建菜单
 func CreateMenu(c *gin.Context) {
 	// 参数校验
@@ -76,13 +83,6 @@ func UpdateMenu(c *gin.Context) {
 
 // DelMenu 删除菜单
 func DelMenu(c *gin.Context) {
-	// 参数校验
-
-	magic.Success(c, "创建菜单成功", 1)
-}
-
-// 根据id获取菜单
-func FindMenu(c *gin.Context) {
 	// 参数校验
 
 	magic.Success(c, "创建菜单成功", 1)

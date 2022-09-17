@@ -80,9 +80,9 @@ export const updateBaseMenu = (data) => {
 }
 
 // 根据id获取菜单
-export const getBaseMenuById = (data) => {
+export const getBaseMenuById = (id) => {
   return service({
-    url: '/menu/getBaseMenuById',
+    url: `/menu/${id}`,
     method: 'POST',
     data
   })
