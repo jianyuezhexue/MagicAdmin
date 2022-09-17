@@ -83,7 +83,6 @@ export const updateBaseMenu = (data) => {
 export const getBaseMenuById = (id) => {
   return service({
     url: `/menu/${id}`,
-    method: 'POST',
-    data
+    method: 'get'
   })
 }

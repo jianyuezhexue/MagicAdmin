@@ -43,6 +43,7 @@ func Menus(c *gin.Context) {
 		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
+
 	// 结果返回
 	magic.Success(c, "获取菜单列表成功", res)
 }
@@ -50,8 +51,21 @@ func Menus(c *gin.Context) {
 // 根据id获取菜单
 func FindMenu(c *gin.Context) {
 	// 参数校验
+	var id model.GetById
+	err := c.ShouldBindUri(&id)
+	if err != nil {
+		magic.Fail(c, http.StatusBadRequest, err.Error(), id)
+		return
+	}
 
-	magic.Success(c, "创建菜单成功", 1)
+	// 逻辑处理
+	res, err := serviceSystem.FindMenu(id)
+	if err != nil {
+		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		return
+	}
+
+	magic.Success(c, "根据id查询菜单成功", res)
 }
 
 // CreateMenu 创建菜单

@@ -46,14 +46,20 @@ func (t *LocalTime) Scan(v interface{}) error {
 	return fmt.Errorf("can not convert %v to timestamp", v)
 }
 
-// PageInfo common input parameter structure
+// 分页查询参数结构
 type PageInfo struct {
 	Page     int `json:"page" form:"page"`         // 页码
 	PageSize int `json:"pageSize" form:"pageSize"` // 每页大小
 }
 
+// 分页查询返回结构
 type ResPageData struct {
 	List  interface{} `json:"list"`
 	Total int         `json:"total"`
 	PageInfo
+}
+
+// 根据id查询接参结构
+type GetById struct {
+	ID int `json:"id" uri:"id" form:"id" binding:"required"` // 主键ID
 }

@@ -69,6 +69,18 @@ func Menus(pageInfo model.PageInfo) (list model.ResPageData, err error) {
 	return list, err
 }
 
+// 根据id查询菜单
+func FindMenu(id model.GetById) (res system.Menu, err error) {
+	// 查询数据
+	var menu system.Menu
+	err = magic.Orm.Where("id = ?", id.ID).Find(&menu).Error
+	if err != nil {
+		return res, err
+	}
+
+	return menu, err
+}
+
 // CreateMenu 创建菜单
 func CreateMenu(form system.FormMenu) (res system.Menu, err error) {
 	// 鉴权
