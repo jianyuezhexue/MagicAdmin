@@ -6,14 +6,14 @@
       </div>
 
       <!-- 由于此处菜单跟左侧列表一一对应所以不需要分页 pageSize默认999 -->
-      <el-table :data="tableData" row-key="ID">
-        <el-table-column align="left" label="ID" min-width="100" prop="ID" />
-        <el-table-column align="left" label="展示名称" min-width="120" prop="authorityName">
+      <el-table :data="tableData" row-key="id">
+        <el-table-column align="left" label="id" min-width="100" prop="id" />
+        <el-table-column align="left" label="展示名称" min-width="150" prop="authorityName">
           <template #default="scope">
             <span>{{ scope.row.meta.title }}</span>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="图标" min-width="140" prop="authorityName">
+        <el-table-column align="left" label="图标" min-width="180" prop="authorityName">
           <template #default="scope">
             <div v-if="scope.row.meta.icon" class="icon-column">
               <el-icon>
@@ -35,49 +35,19 @@
         <el-table-column align="left" label="文件路径" min-width="360" prop="component" />
         <el-table-column align="left" fixed="right" label="操作" width="300">
           <template #default="scope">
-            <el-button
-              size="small"
-              type="primary"
-              link
-              icon="plus"
-              @click="addMenu(scope.row.ID)"
-            >添加子菜单</el-button>
-            <el-button
-              size="small"
-              type="primary"
-              link
-              icon="edit"
-              @click="editMenu(scope.row.ID)"
-            >编辑</el-button>
-            <el-button
-              size="small"
-              type="primary"
-              link
-              icon="delete"
-              @click="deleteMenu(scope.row.ID)"
-            >删除</el-button>
+            <el-button size="small" type="primary" link icon="plus" @click="addMenu(scope.row.id)">添加子菜单</el-button>
+            <el-button size="small" type="primary" link icon="edit" @click="editMenu(scope.row.id)">编辑</el-button>
+            <el-button size="small" type="primary" link icon="delete" @click="deleteMenu(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <el-dialog v-model="dialogFormVisible" :before-close="handleClose" :title="dialogTitle">
       <warning-bar title="新增菜单，需要在角色管理内配置权限才可使用" />
-      <el-form
-        v-if="dialogFormVisible"
-        ref="menuForm"
-        :inline="true"
-        :model="form"
-        :rules="rules"
-        label-position="top"
-        label-width="85px"
-      >
+      <el-form v-if="dialogFormVisible" ref="menuForm" :inline="true" :model="form" :rules="rules" label-position="top"
+        label-width="85px">
         <el-form-item label="路由Name" prop="path" style="width:30%">
-          <el-input
-            v-model="form.name"
-            autocomplete="off"
-            placeholder="唯一英文字符串"
-            @change="changeName"
-          />
+          <el-input v-model="form.name" autocomplete="off" placeholder="唯一英文字符串" @change="changeName" />
         </el-form-item>
         <el-form-item prop="path" style="width:30%">
           <template #label>
@@ -87,12 +57,7 @@
             </div>
           </template>
 
-          <el-input
-            v-model="form.path"
-            :disabled="!checkFlag"
-            autocomplete="off"
-            placeholder="建议只在后方拼接参数"
-          />
+          <el-input v-model="form.path" :disabled="!checkFlag" autocomplete="off" placeholder="建议只在后方拼接参数" />
         </el-form-item>
         <el-form-item label="是否隐藏" style="width:30%">
           <el-select v-model="form.hidden" placeholder="是否在列表隐藏">
@@ -101,19 +66,16 @@
           </el-select>
         </el-form-item>
         <el-form-item label="父节点ID" style="width:30%">
-          <el-cascader
-            v-model="form.parentId"
-            style="width:100%"
-            :disabled="!isEdit"
-            :options="menuOption"
-            :props="{ checkStrictly: true,label:'title',value:'ID',disabled:'disabled',emitPath:false}"
-            :show-all-levels="false"
-            filterable
-          />
+          <el-cascader v-model="form.parentId" style="width:100%" :disabled="!isEdit" :options="menuOption"
+            :props="{ checkStrictly: true,label:'title',value:'id',disabled:'disabled',emitPath:false}"
+            :show-all-levels="false" filterable />
         </el-form-item>
         <el-form-item label="文件路径" prop="component" style="width:60%">
-          <el-input v-model="form.component" autocomplete="off" placeholder="页面:view/xxx/xx.vue 插件:plugin/xx/xx.vue" @blur="fmtComponent" />
-          <span style="font-size:12px;margin-right:12px;">如果菜单包含子菜单，请创建router-view二级路由页面或者</span><el-button style="margin-top:4px" size="small" @click="form.component = 'view/routerHolder.vue'">点我设置</el-button>
+          <el-input v-model="form.component" autocomplete="off" placeholder="页面:view/xxx/xx.vue 插件:plugin/xx/xx.vue"
+            @blur="fmtComponent" />
+          <span style="font-size:12px;margin-right:12px;">如果菜单包含子菜单，请创建router-view二级路由页面或者</span>
+          <el-button style="margin-top:4px" size="small" @click="form.component = 'view/routerHolder.vue'">点我设置
+          </el-button>
         </el-form-item>
         <el-form-item label="展示名称" prop="meta.title" style="width:30%">
           <el-input v-model="form.meta.title" autocomplete="off" />
@@ -138,12 +100,7 @@
         </el-form-item>
       </el-form>
       <div>
-        <el-button
-          size="small"
-          type="primary"
-          icon="edit"
-          @click="addParameter(form)"
-        >新增菜单参数</el-button>
+        <el-button size="small" type="primary" icon="edit" @click="addParameter(form)">新增菜单参数</el-button>
         <el-table :data="form.parameters" style="width: 100%">
           <el-table-column align="left" prop="type" label="参数类型" width="180">
             <template #default="scope">
@@ -170,24 +127,15 @@
           <el-table-column align="left">
             <template #default="scope">
               <div>
-                <el-button
-                  type="danger"
-                  size="small"
-                  icon="delete"
-                  @click="deleteParameter(form.parameters,scope.$index)"
-                >删除</el-button>
+                <el-button type="danger" size="small" icon="delete"
+                  @click="deleteParameter(form.parameters,scope.$index)">删除</el-button>
               </div>
             </template>
           </el-table-column>
         </el-table>
 
-        <el-button
-          style="margin-top:12px"
-          size="small"
-          type="primary"
-          icon="edit"
-          @click="addBtn(form)"
-        >新增可控按钮</el-button>
+        <el-button style="margin-top:12px" size="small" type="primary" icon="edit" @click="addBtn(form)">新增可控按钮
+        </el-button>
         <el-table :data="form.menuBtn" style="width: 100%">
           <el-table-column align="left" prop="name" label="按钮名称" width="180">
             <template #default="scope">
@@ -206,12 +154,8 @@
           <el-table-column align="left">
             <template #default="scope">
               <div>
-                <el-button
-                  type="danger"
-                  size="small"
-                  icon="delete"
-                  @click="deleteBtn(form.menuBtn,scope.$index)"
-                >删除</el-button>
+                <el-button type="danger" size="small" icon="delete" @click="deleteBtn(form.menuBtn,scope.$index)">删除
+                </el-button>
               </div>
             </template>
           </el-table-column>
@@ -257,7 +201,7 @@ const pageSize = ref(999)
 const tableData = ref([])
 const searchInfo = ref({})
 // 查询
-const getTableData = async() => {
+const getTableData = async () => {
   const table = await getMenuList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
   if (table.code === 0) {
     tableData.value = table.data.list
@@ -301,13 +245,13 @@ const addBtn = (form) => {
   })
 }
 // 删除可控按钮
-const deleteBtn = async(btns, index) => {
+const deleteBtn = async (btns, index) => {
   const btn = btns[index]
-  if (btn.ID === 0) {
+  if (btn.id === 0) {
     btns.splice(index, 1)
     return
   }
-  const res = await canRemoveAuthorityBtnApi({ id: btn.ID })
+  const res = await canRemoveAuthorityBtnApi({ id: btn.id })
   if (res.code === 0) {
     btns.splice(index, 1)
     return
@@ -315,7 +259,7 @@ const deleteBtn = async(btns, index) => {
 }
 
 const form = ref({
-  ID: 0,
+  id: 0,
   path: '',
   name: '',
   hidden: '',
@@ -340,14 +284,14 @@ const handleClose = (done) => {
   done()
 }
 // 删除菜单
-const deleteMenu = (ID) => {
+const deleteMenu = (id) => {
   ElMessageBox.confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
   })
-    .then(async() => {
-      const res = await deleteBaseMenu({ ID })
+    .then(async () => {
+      const res = await deleteBaseMenu({ id })
       if (res.code === 0) {
         ElMessage({
           type: 'success',
@@ -373,7 +317,7 @@ const initForm = () => {
   checkFlag.value = false
   menuForm.value.resetFields()
   form.value = {
-    ID: 0,
+    id: 0,
     path: '',
     name: '',
     hidden: '',
@@ -395,7 +339,7 @@ const closeDialog = () => {
   dialogFormVisible.value = false
 }
 // 添加menu
-const enterDialog = async() => {
+const enterDialog = async () => {
   menuForm.value.validate(async valid => {
     if (valid) {
       let res
@@ -419,14 +363,14 @@ const enterDialog = async() => {
 
 const menuOption = ref([
   {
-    ID: '0',
+    id: '0',
     title: '根菜单'
   }
 ])
 const setOptions = () => {
   menuOption.value = [
     {
-      ID: '0',
+      id: '0',
       title: '根目录'
     }
   ]
@@ -434,29 +378,29 @@ const setOptions = () => {
 }
 const setMenuOptions = (menuData, optionsData, disabled) => {
   menuData &&
-        menuData.forEach(item => {
-          if (item.children && item.children.length) {
-            const option = {
-              title: item.meta.title,
-              ID: String(item.ID),
-              disabled: disabled || item.ID === form.value.ID,
-              children: []
-            }
-            setMenuOptions(
-              item.children,
-              option.children,
-              disabled || item.ID === form.value.ID
-            )
-            optionsData.push(option)
-          } else {
-            const option = {
-              title: item.meta.title,
-              ID: String(item.ID),
-              disabled: disabled || item.ID === form.value.ID
-            }
-            optionsData.push(option)
-          }
-        })
+    menuData.forEach(item => {
+      if (item.children && item.children.length) {
+        const option = {
+          title: item.meta.title,
+          id: String(item.id),
+          disabled: disabled || item.id === form.value.id,
+          children: []
+        }
+        setMenuOptions(
+          item.children,
+          option.children,
+          disabled || item.id === form.value.id
+        )
+        optionsData.push(option)
+      } else {
+        const option = {
+          title: item.meta.title,
+          id: String(item.id),
+          disabled: disabled || item.id === form.value.id
+        }
+        optionsData.push(option)
+      }
+    })
 }
 
 // 添加菜单方法，id为 0则为添加根菜单
@@ -470,7 +414,7 @@ const addMenu = (id) => {
   dialogFormVisible.value = true
 }
 // 修改菜单方法
-const editMenu = async(id) => {
+const editMenu = async (id) => {
   dialogTitle.value = '编辑菜单'
   const res = await getBaseMenuById({ id })
   form.value = res.data.menu
@@ -491,10 +435,12 @@ export default {
 .warning {
   color: #dc143c;
 }
-.icon-column{
+
+.icon-column {
   display: flex;
   align-items: center;
-  .el-icon{
+
+  .el-icon {
     margin-right: 8px;
   }
 }
