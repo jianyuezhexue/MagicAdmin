@@ -88,3 +88,19 @@ func Login(c *gin.Context) {
 	// 结果返回
 	magic.Success(c, "登录成功", res)
 }
+
+// 用户信息
+func UserInfo(c *gin.Context) {
+	// 解密uuid
+	uuid := magic.TokenInfo(c).UUID
+
+	// 逻辑处理
+	res, err := serviceSystem.UserInfo(uuid)
+	if err != nil {
+		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		return
+	}
+
+	// 结果返回
+	magic.Success(c, "查询用户信息成功", res)
+}

@@ -18,7 +18,7 @@ type User struct {
 	ActiveColor string    `json:"activeColor"` // 活跃颜色
 	AuthorityId string    `json:"authorityId"` // 用户角色ID
 	Token       string    `json:"token" gorm:"-"`
-	// Authority   SysAuthority   `json:"authority" gorm:"foreignKey:AuthorityId;references:AuthorityId;comment:用户角色"`
+	Authority   Authority `json:"authority" gorm:"foreignKey:AuthorityId;references:AuthorityId;comment:用户角色"`
 	// Authorities []SysAuthority `json:"authorities" gorm:"many2many:sys_user_authority;"`
 }
 

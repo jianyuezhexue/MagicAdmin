@@ -45,7 +45,7 @@ export const useUserStore = defineStore('user', () => {
   const GetUserInfo = async () => {
     const res = await getUserInfo()
     if (res.code === 0) {
-      setUserInfo(res.data.userInfo)
+      setUserInfo(res.data)
     }
     return res
   }
@@ -68,8 +68,7 @@ export const useUserStore = defineStore('user', () => {
           router.addRoute(asyncRouter)
         })
         // 跳转进入管理页
-        await router.push({ name: "dashboard" })
-        // await router.push({ name: userInfo.value.authority.defaultRouter })
+        await router.push({ name: userInfo.value.authority.defaultRouter })
         loadingInstance.value.close()
         return true
       }

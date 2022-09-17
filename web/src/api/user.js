@@ -93,7 +93,7 @@ export const setUserAuthorities = (data) => {
 // 获取用户信息
 export const getUserInfo = () => {
   return service({
-    url: '/user/getUserInfo',
+    url: '/user/info',
     method: 'get'
   })
 }

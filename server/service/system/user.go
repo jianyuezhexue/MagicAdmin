@@ -41,7 +41,7 @@ func Login(data system.FormLogin) (user system.User, err error) {
 	// 验证登录
 	data.Password = magic.MD5V(data.Password)
 	where := "userName = ? AND password = ?"
-	findErr := magic.Orm.Select("*").Where(where, data.UserName, data.Password).First(&user).Error
+	findErr := magic.Orm.Select("*").Where(where, data.UserName, data.Password).Preload("Authority").First(&user).Error
 
 	if findErr != nil {
 		return user, errors.New("用户名或密码错误")
@@ -89,6 +89,17 @@ func createToken(user system.User) (token string, err error) {
 		return token, err
 	}
 	return cacheToken, err
+}
+
+// 获取用户信息
+func UserInfo(uuid uuid.UUID) (user system.User, err error) {
+	// 查询数据
+	findErr := magic.Orm.Where("uuid = ?", uuid).Preload("Authority").First(&user).Error
+	if findErr != nil {
+		return user, errors.New("签名错误")
+	}
+	// 返回数据
+	return user, err
 }
 
 // // ChangePassword 修改用户密码

@@ -32,6 +32,9 @@ func Routers() *gin.Engine {
 	PrivateGroup := Router.Group("")
 	PrivateGroup.Use(middle.JWTAuth())
 	{
+		// 系统-用户
+		PrivateGroup.GET("/user/info", system.UserInfo) // 用户信息
+
 		// 系统-菜单
 		PrivateGroup.GET("/myMenu", system.MyMenu)    // 权限菜单
 		PrivateGroup.GET("/menus", system.Menus)      // 树型菜单
