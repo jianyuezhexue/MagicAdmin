@@ -39,7 +39,7 @@ func initConfig() {
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath("./config")
 	if err := viper.ReadInConfig(); err != nil {
-		panic(fmt.Errorf("Fatal error config file: %s", err))
+		panic(fmt.Errorf("读取配置信息错误: %s", err))
 	}
 	if err := viper.Unmarshal(&Config); err != nil {
 		fmt.Println(err)

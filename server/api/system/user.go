@@ -73,6 +73,10 @@ func Login(c *gin.Context) {
 	}
 
 	// 验证码校验
+	if !store.Verify(form.CaptchaId, form.Captcha, true) {
+		magic.Fail(c, 1202, "验证码错误", form)
+		return
+	}
 
 	// 逻辑实现
 	res, err := serviceSystem.Login(form)

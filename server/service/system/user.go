@@ -78,10 +78,11 @@ func createToken(user system.User) (token string, err error) {
 	}
 
 	// 多点登录-先查
-	cacheToken, err := magic.Redis.Get(user.UserName)
+	var redisKey string = "token_" + user.UserName
+	cacheToken, err := magic.Redis.Get(redisKey)
 	if err != nil {
 		// 多点登录-后存
-		err = magic.Redis.Set(user.UserName, token, 86400)
+		err = magic.Redis.Set(redisKey, token, 86400)
 		if err != nil {
 			return "", err
 		}

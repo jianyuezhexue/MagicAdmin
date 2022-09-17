@@ -32,8 +32,10 @@ type FormRegister struct {
 
 // FormLogin 登录表单提交数据结构
 type FormLogin struct {
-	UserName string `json:"userName" form:"userName" binding:"required,min=3,max=10"` // 用户名
-	Password string `json:"password" form:"password" binding:"required"`              // 密码
+	UserName  string `json:"userName" form:"userName" binding:"required,min=3,max=10"` // 用户名
+	Password  string `json:"password" form:"password" binding:"required"`              // 密码
+	CaptchaId string `json:"captchaId" form:"captchaId" binding:"required"`            // 验证码ID
+	Captcha   string `json:"captcha" form:"captcha" binding:"required"`                // 验证码字符
 }
 
 // 验证码
