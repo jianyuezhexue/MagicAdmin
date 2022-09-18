@@ -18,9 +18,9 @@ export const getMenuList = (data) => {
 }
 
 // 新增基础menu
-export const addBaseMenu = (data) => {
+export const createMenu = (data) => {
   return service({
-    url: '/menu/addBaseMenu',
+    url: '/menu',
     method: 'post',
     data
   })
@@ -71,7 +71,7 @@ export const deleteBaseMenu = (data) => {
 }
 
 // 修改menu列表
-export const updateBaseMenu = (data) => {
+export const updateMenu = (data) => {
   return service({
     url: '/menu',
     method: 'put',

@@ -100,7 +100,8 @@
         </el-form-item>
       </el-form>
       <div>
-        <el-button size="small" type="primary" icon="edit" @click="addParameter(form)">新增菜单参数</el-button>
+        <!-- 这块内容的功能确定是做什么的，先注释掉 -->
+        <!-- <el-button size="small" type="primary" icon="edit" @click="addParameter(form)">新增菜单参数</el-button>
         <el-table :data="form.parameters" style="width: 100%">
           <el-table-column align="left" prop="type" label="参数类型" width="180">
             <template #default="scope">
@@ -159,7 +160,7 @@
               </div>
             </template>
           </el-table-column>
-        </el-table>
+        </el-table> -->
       </div>
       <template #footer>
         <div class="dialog-footer">
@@ -173,9 +174,9 @@
 
 <script setup>
 import {
-  updateBaseMenu,
+  updateMenu,
   getMenuList,
-  addBaseMenu,
+  createMenu,
   deleteBaseMenu,
   getBaseMenuById
 } from '@/api/menu'
@@ -344,9 +345,9 @@ const enterDialog = async () => {
     if (valid) {
       let res
       if (isEdit.value) {
-        res = await updateBaseMenu(form.value)
+        res = await updateMenu(form.value)
       } else {
-        res = await addBaseMenu(form.value)
+        res = await createMenu(form.value)
       }
       if (res.code === 0) {
         ElMessage({
