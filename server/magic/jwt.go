@@ -9,7 +9,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-// JWT jwt结构体
+// JWT结构体
 type JWT struct {
 	SigningKey []byte
 }
@@ -48,7 +48,7 @@ func NewJWT() *JWT {
 	}
 }
 
-// CreateClaims 创建Claims
+// 创建Claims
 func (j *JWT) CreateClaims(baseClaims BaseClaims) CustomClaims {
 	claims := CustomClaims{
 		BaseClaims: baseClaims,
@@ -62,13 +62,13 @@ func (j *JWT) CreateClaims(baseClaims BaseClaims) CustomClaims {
 	return claims
 }
 
-// CreateToken 创建token
+// 创建token
 func (j *JWT) CreateToken(claims CustomClaims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(j.SigningKey)
 }
 
-// CreateTokenByOldToken 旧token 换新token 使用归并回源避免并发问题
+// 旧token 换新token 使用归并回源避免并发问题
 func (j *JWT) CreateTokenByOldToken(oldToken string, claims CustomClaims) (string, error) {
 	v, err, _ := SingleFlight.Do("JWT:"+oldToken, func() (interface{}, error) {
 		return j.CreateToken(claims)
@@ -76,7 +76,7 @@ func (j *JWT) CreateTokenByOldToken(oldToken string, claims CustomClaims) (strin
 	return v.(string), err
 }
 
-// ParseToken 解析token
+// 解析token
 func (j *JWT) ParseToken(tokenString string) (*CustomClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (i interface{}, e error) {
 		return j.SigningKey, nil
@@ -104,7 +104,7 @@ func (j *JWT) ParseToken(tokenString string) (*CustomClaims, error) {
 	return nil, ErrTokenInvalid
 }
 
-// TokenInfo token解析出用户信息|这里默认已经经过了JWT中间件的鉴权
+// token解析出用户信息|这里默认已经经过了JWT中间件的鉴权
 func TokenInfo(c *gin.Context) (userInfo *BaseClaims) {
 	token := c.Request.Header.Get("x-token")
 	jwt := NewJWT()
