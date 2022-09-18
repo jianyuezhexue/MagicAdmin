@@ -87,7 +87,8 @@ func FindMenu(id model.GetById) (res system.Menu, err error) {
 // 更新菜单
 func UpdateMenu(menu system.Menu) (res system.Menu, err error) {
 	// 查询数据
-	err = magic.Orm.Where("id = ?", menu.Id).Find(&menu).Error
+	var oldData system.Menu
+	err = magic.Orm.Where("id = ?", menu.Id).Find(&oldData).Error
 	if err != nil {
 		return res, err
 	}
@@ -98,10 +99,11 @@ func UpdateMenu(menu system.Menu) (res system.Menu, err error) {
 	}
 
 	// 更新数据
-	err = magic.Orm.Model(&menu).Updates(menu).Error
+	err = magic.Orm.Updates(menu).Error
 	if err != nil {
 		return res, err
 	}
+
 	return menu, err
 }
 

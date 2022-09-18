@@ -2,8 +2,6 @@ package magic
 
 import (
 	"fmt"
-	"log"
-	"os"
 	"strings"
 	"time"
 
@@ -55,19 +53,19 @@ func initGorm() *gorm.DB {
 	dsn := config.Dsn()
 	mysqlConfig := mysql.Config{DSN: dsn}
 	// 自定义打印
-	newLogger := logger.New(
-		log.New(os.Stdout, "\r\n", log.LstdFlags),
-		logger.Config{
-			SlowThreshold:             2 * time.Second, // 慢 SQL 阈值
-			LogLevel:                  logger.Error,    // 日志级别
-			IgnoreRecordNotFoundError: true,            // 忽略ErrRecordNotFound（记录未找到）错误
-			Colorful:                  true,            // 禁用彩色打印
-		},
-	)
+	// newLogger := logger.New(
+	// 	log.New(os.Stdout, "\r\n", log.LstdFlags),
+	// 	logger.Config{
+	// 		SlowThreshold:             2 * time.Second, // 慢 SQL 阈值
+	// 		LogLevel:                  logger.Error,    // 日志级别
+	// 		IgnoreRecordNotFoundError: true,            // 忽略ErrRecordNotFound（记录未找到）错误
+	// 		Colorful:                  true,            // 禁用彩色打印
+	// 	},
+	// )
 	// orm配置
 	ormConfig := &gorm.Config{
-		Logger: newLogger,
-		// Logger: logger.Default.LogMode(logger.Info), // 配置日志级别，打印出所有的sql
+		// Logger: newLogger,
+		Logger: logger.Default.LogMode(logger.Info), // 配置日志级别，打印出所有的sql
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,        // 使用单数表名
 			NoLowerCase:   true,        // 不使用小写
