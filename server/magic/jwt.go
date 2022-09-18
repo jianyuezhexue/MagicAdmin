@@ -32,13 +32,13 @@ type CustomClaims struct {
 
 var (
 	// ErrTokenExpired 存在
-	ErrTokenExpired = errors.New("Token is expired")
+	ErrTokenExpired = errors.New("token is expired")
 	// ErrTokenNotValidYet 未验证
-	ErrTokenNotValidYet = errors.New("Token not active yet")
+	ErrTokenNotValidYet = errors.New("token not active yet")
 	// ErrTokenMalformed 格式错误
-	ErrTokenMalformed = errors.New("That's not even a token")
+	ErrTokenMalformed = errors.New("that's not even a token")
 	// ErrTokenInvalid 无法验证
-	ErrTokenInvalid = errors.New("Couldn't handle this token")
+	ErrTokenInvalid = errors.New("couldn't handle this token")
 )
 
 // NewJWT 加入签名实例化JWT
