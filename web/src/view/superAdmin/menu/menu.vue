@@ -263,8 +263,8 @@ const form = ref({
   id: 0,
   path: '',
   name: '',
-  hidden: '',
-  parentId: '',
+  hidden: false,
+  parentId: 0,
   component: '',
   meta: {
     title: '',
@@ -273,6 +273,7 @@ const form = ref({
     closeTab: false,
     keepAlive: false
   },
+  sort: 50,
   parameters: [],
   menuBtn: []
 })
@@ -319,14 +320,15 @@ const initForm = () => {
   menuForm.value.resetFields()
   form.value = {
     id: 0,
-    path: '',
-    name: '',
-    hidden: '',
-    parentId: '',
-    component: '',
+    path: "",
+    name: "",
+    hidden: false,
+    parentId: 0,
+    component: "",
+    sort: 50,
     meta: {
-      title: '',
-      icon: '',
+      title: "",
+      icon: "",
       defaultMenu: false,
       closeTab: false,
       keepAlive: false
@@ -410,7 +412,7 @@ const isEdit = ref(false)
 const dialogTitle = ref('新增菜单')
 const addMenu = (id) => {
   dialogTitle.value = '新增菜单'
-  form.value.parentId = String(id)
+  form.value.parentId = id
   isEdit.value = false
   setOptions()
   dialogFormVisible.value = true
