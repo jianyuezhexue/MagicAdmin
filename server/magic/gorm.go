@@ -20,16 +20,16 @@ func (s smallHump) Replace(name string) string {
 		return name
 	}
 
-	// // 兼容go-lint提醒
-	// if name == "ID" {
-	// 	return "id"
-	// }
-	// if name == "UUID" {
-	// 	return "uuid"
-	// }
-	// if name == "URL" {
-	// 	return "url"
-	// }
+	// 兼容go-lint提醒
+	if name == "ID" {
+		return "id"
+	}
+	if name == "UUID" {
+		return "uuid"
+	}
+	if name == "URL" {
+		return "url"
+	}
 
 	// 首字母小写
 	newName := ""

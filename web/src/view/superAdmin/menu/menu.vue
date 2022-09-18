@@ -328,7 +328,8 @@ const initForm = () => {
       title: '',
       icon: '',
       defaultMenu: false,
-      keepAlive: ''
+      closeTab: false,
+      keepAlive: false
     }
   }
 }

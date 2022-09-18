@@ -26,15 +26,6 @@ export const createMenu = (data) => {
   })
 }
 
-// 新增menu
-export const create = (data) => {
-  return service({
-    method: 'POST',
-    url: '/menu',
-    data
-  })
-}
-
 // 获取基础路由列表
 export const getBaseMenuTree = () => {
   return service({

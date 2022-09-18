@@ -26,11 +26,11 @@ type Menu struct {
 }
 
 type FormMenu struct {
-	ParentId  uint   `json:"parentId" form:"parentId" binding:"numeric"`    // 父菜单ID
+	ParentId  string `json:"parentId" form:"parentId" binding:"numeric"`    // 父菜单ID
 	Path      string `json:"path" form:"path" binding:"required,max=40"`    // 路由path
 	Name      string `json:"name" form:"name" binding:"required,max=40"`    // 路由name
-	Hidden    bool   `json:"hidden" form:"hidden" binding:"required"`       // 是否在列表隐藏
+	Hidden    bool   `json:"hidden" form:"hidden"`                          // 是否在列表隐藏
 	Component string `json:"component" form:"component" binding:"required"` // 对应前端文件路径
 	Sort      int    `json:"sort" form:"sort" binding:"numeric"`            // 排序标记
-	Meta
+	Meta      Meta   `json:"meta" gorm:"embedded"`                          // 附加属性
 }

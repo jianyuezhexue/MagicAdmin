@@ -40,10 +40,9 @@ func Register(data system.FormRegister) (res system.User, err error) {
 func Login(data system.FormLogin) (user system.User, err error) {
 	// 验证登录
 	data.Password = magic.MD5V(data.Password)
-	where := "userName = ? AND password = ?"
-	findErr := magic.Orm.Select("*").Where(where, data.UserName, data.Password).Preload("Authority").First(&user).Error
-
-	if findErr != nil {
+	where := "userName = ?"
+	findErr := magic.Orm.Select("*").Where(where, data.UserName).Preload("Authority").First(&user).Error
+	if findErr != nil || user.Password != data.Password {
 		return user, errors.New("用户名或密码错误")
 	}
 

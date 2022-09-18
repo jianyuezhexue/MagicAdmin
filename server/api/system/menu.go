@@ -93,7 +93,7 @@ func UpdateMenu(c *gin.Context) {
 // CreateMenu 创建菜单
 func CreateMenu(c *gin.Context) {
 	// 参数校验
-	var form system.FormMenu
+	var form system.Menu
 	err := c.ShouldBind(&form)
 	if err != nil {
 		magic.Fail(c, http.StatusBadRequest, err.Error(), form)

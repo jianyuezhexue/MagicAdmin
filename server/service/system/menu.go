@@ -108,8 +108,14 @@ func UpdateMenu(menu system.Menu) (res system.Menu, err error) {
 }
 
 // CreateMenu 创建菜单
-func CreateMenu(form system.FormMenu) (res system.Menu, err error) {
-	// 鉴权
+func CreateMenu(menu system.Menu) (res system.Menu, err error) {
+	// 查重名称
+	err = magic.Orm.Where("name = ?", menu.Name).Find(&system.Menu{}).Error
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
+		return res, errors.New("存在重复name,请修改name")
+	}
 
-	return res, err
+	// 保存数据
+	err = magic.Orm.Create(&menu).Error
+	return menu, err
 }
