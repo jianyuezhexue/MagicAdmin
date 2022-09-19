@@ -367,14 +367,14 @@ const enterDialog = async () => {
 
 const menuOption = ref([
   {
-    id: '0',
+    id: 0,
     title: '根菜单'
   }
 ])
 const setOptions = () => {
   menuOption.value = [
     {
-      id: '0',
+      id: 0,
       title: '根目录'
     }
   ]
