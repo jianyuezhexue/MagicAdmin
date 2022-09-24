@@ -26,7 +26,7 @@ type Menu struct {
 }
 
 type FormMenu struct {
-	ParentId  string `json:"parentId" form:"parentId" binding:"numeric"`    // 父菜单ID
+	ParentId  uint   `json:"parentId" form:"parentId" binding:"numeric"`    // 父菜单ID
 	Path      string `json:"path" form:"path" binding:"required,max=40"`    // 路由path
 	Name      string `json:"name" form:"name" binding:"required,max=40"`    // 路由name
 	Hidden    bool   `json:"hidden" form:"hidden"`                          // 是否在列表隐藏

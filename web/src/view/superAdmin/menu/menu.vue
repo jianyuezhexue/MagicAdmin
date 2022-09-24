@@ -7,7 +7,7 @@
 
       <!-- 由于此处菜单跟左侧列表一一对应所以不需要分页 pageSize默认999 -->
       <el-table :data="tableData" row-key="id">
-        <el-table-column align="left" label="id" min-width="100" prop="id" />
+        <!-- <el-table-column align="left" label="id" min-width="100" prop="id" /> -->
         <el-table-column align="left" label="展示名称" min-width="150" prop="authorityName">
           <template #default="scope">
             <span>{{ scope.row.meta.title }}</span>
@@ -100,7 +100,7 @@
         </el-form-item>
       </el-form>
       <div>
-        <!-- 这块内容的功能确定是做什么的，先注释掉 -->
+        <!-- 这块内容的功能不确定是做什么的，先注释掉 -->
         <!-- <el-button size="small" type="primary" icon="edit" @click="addParameter(form)">新增菜单参数</el-button>
         <el-table :data="form.parameters" style="width: 100%">
           <el-table-column align="left" prop="type" label="参数类型" width="180">
