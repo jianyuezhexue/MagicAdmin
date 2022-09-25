@@ -2,6 +2,7 @@ package system
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model"
@@ -9,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// TreeTransform 菜单树型转换
+// 菜单树型转换
 func TreeTransform(data []system.Menu) (trees []system.Menu) {
 	// 一级找子集
 	for index := range data {
@@ -21,7 +22,7 @@ func TreeTransform(data []system.Menu) (trees []system.Menu) {
 	return trees
 }
 
-// FindChild 菜单树型转换-子集找子集
+// 菜单树型转换-子集找子集
 func FindChild(node system.Menu, data []system.Menu) system.Menu {
 	for index := range data {
 		if node.Id == data[index].ParentId {
@@ -31,7 +32,7 @@ func FindChild(node system.Menu, data []system.Menu) system.Menu {
 	return node
 }
 
-// MyMenu 获取动态菜单树
+// 获取动态菜单树
 func MyMenu(authorityId int) (menus []system.Menu, err error) {
 	// 查权限[防击穿]
 	menuIds, err, _ := magic.SingleFlight.Do("ServiceMenu", func() (interface{}, error) {
@@ -53,7 +54,7 @@ func MyMenu(authorityId int) (menus []system.Menu, err error) {
 	return treeMenuus, err
 }
 
-// Menus 分页获取菜单列表
+// 分页获取菜单列表
 func Menus(pageInfo model.PageInfo) (list model.ResPageData, err error) {
 	// 查菜单
 	var menus []system.Menu
@@ -107,15 +108,39 @@ func UpdateMenu(menu system.Menu) (res system.Menu, err error) {
 	return menu, err
 }
 
-// CreateMenu 创建菜单
+// 创建菜单
 func CreateMenu(menu system.Menu) (res system.Menu, err error) {
 	// 查重名称
 	err = magic.Orm.Where("name = ?", menu.Name).Find(&system.Menu{}).Error
-	if !errors.Is(err, gorm.ErrRecordNotFound) {
-		return res, errors.New("存在重复name,请修改name")
+	fmt.Println("查出来的错误是:", err)
+	if err != nil {
+		if !errors.Is(err, gorm.ErrRecordNotFound) {
+			return res, errors.New("存在重复name,请修改name")
+		}
+		return res, errors.New("数据库跪了")
 	}
 
 	// 保存数据
 	err = magic.Orm.Create(&menu).Error
 	return menu, err
+}
+
+//  删除菜单
+func DeleteMenu(id model.GetById) (err error) {
+	// 查询是否存在
+	var menu system.Menu
+	err = magic.Orm.Where("id = ?", id.ID).Find(&menu).Error
+	if err != nil {
+		if !errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("您要删除的菜单不存在")
+		}
+		return err
+	}
+
+	// todo这里的权限系统要重新设计
+	// 设计权限相关的操作
+
+	// 删除菜单
+	err = magic.Orm.Delete(&menu).Error
+	return err
 }

@@ -5,7 +5,7 @@
     @click="open"
   >
     <el-icon>
-      <warning-filled />
+      <InfoFilled />
     </el-icon>
     <span>
       {{ title }}
@@ -13,7 +13,7 @@
   </div>
 </template>
 <script setup>
-import { WarningFilled } from '@element-plus/icons-vue'
+import { InfoFilled } from '@element-plus/icons-vue'
 const prop = defineProps({
   title: {
     type: String,

@@ -2,9 +2,8 @@
   <div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="small" type="primary" icon="plus" @click="addMenu('0')">新增根菜单</el-button>
+        <el-button size="small" type="primary" icon="plus" @click="addMenu(0)">新增根菜单</el-button>
       </div>
-
       <!-- 由于此处菜单跟左侧列表一一对应所以不需要分页 pageSize默认999 -->
       <el-table :data="tableData" row-key="id">
         <!-- <el-table-column align="left" label="id" min-width="100" prop="id" /> -->
@@ -46,20 +45,13 @@
       <warning-bar title="新增菜单，需要在角色管理内配置权限才可使用" />
       <el-form v-if="dialogFormVisible" ref="menuForm" :inline="true" :model="form" :rules="rules" label-position="top"
         label-width="85px">
-        <el-form-item label="路由Name" prop="path" style="width:30%">
-          <el-input v-model="form.name" autocomplete="off" placeholder="唯一英文字符串" @change="changeName" />
+        <el-form-item label="图标" prop="meta.icon" style="width:30%">
+          <icon :meta="form.meta" style="width:100%" />
         </el-form-item>
-        <el-form-item prop="path" style="width:30%">
-          <template #label>
-            <div style="display:inline-flex">
-              路由Path
-              <el-checkbox v-model="checkFlag" style="float:right;margin-left:20px;">添加参数</el-checkbox>
-            </div>
-          </template>
-
-          <el-input v-model="form.path" :disabled="!checkFlag" autocomplete="off" placeholder="建议只在后方拼接参数" />
+        <el-form-item label="展示名称" prop="meta.title" style="width:30%">
+          <el-input v-model="form.meta.title" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="是否隐藏" style="width:30%">
+        <el-form-item label="是否普通页面" style="width:30%">
           <el-select v-model="form.hidden" placeholder="是否在列表隐藏">
             <el-option :value="false" label="否" />
             <el-option :value="true" label="是" />
@@ -70,38 +62,34 @@
             :props="{ checkStrictly: true,label:'title',value:'id',disabled:'disabled',emitPath:false}"
             :show-all-levels="false" filterable />
         </el-form-item>
-        <el-form-item label="文件路径" prop="component" style="width:60%">
+        <el-form-item label="路由Name" prop="path" style="width:30%">
+          <el-input v-model="form.name" autocomplete="off" placeholder="唯一英文字符串" @change="changeName" />
+        </el-form-item>
+        <el-form-item prop="path" style="width:30%">
+          <template #label>
+            <div style="display:inline-flex">
+              路由Path
+              <el-checkbox v-model="checkFlag" style="float:right;margin-left:20px;">自定义Path</el-checkbox>
+            </div>
+          </template>
+          <el-input v-model="form.path" :disabled="!checkFlag" autocomplete="off" placeholder="建议只在后方拼接参数" />
+        </el-form-item>
+        <el-form-item prop="component" style="width:63%">
+          <template #label>
+            <div style="display:inline-flex">
+              文件路径
+              <span @click="form.component = 'view/routerHolder.vue'" style="margin-left:12px;">点我设置默认路径</span>
+            </div>
+          </template>
           <el-input v-model="form.component" autocomplete="off" placeholder="页面:view/xxx/xx.vue 插件:plugin/xx/xx.vue"
             @blur="fmtComponent" />
-          <span style="font-size:12px;margin-right:12px;">如果菜单包含子菜单，请创建router-view二级路由页面或者</span>
-          <el-button style="margin-top:4px" size="small" @click="form.component = 'view/routerHolder.vue'">点我设置
-          </el-button>
-        </el-form-item>
-        <el-form-item label="展示名称" prop="meta.title" style="width:30%">
-          <el-input v-model="form.meta.title" autocomplete="off" />
-        </el-form-item>
-        <el-form-item label="图标" prop="meta.icon" style="width:30%">
-          <icon :meta="form.meta" style="width:100%" />
         </el-form-item>
         <el-form-item label="排序标记" prop="sort" style="width:30%">
           <el-input v-model.number="form.sort" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="KeepAlive" prop="meta.keepAlive" style="width:30%">
-          <el-select v-model="form.meta.keepAlive" style="width:100%" placeholder="是否keepAlive缓存页面">
-            <el-option :value="false" label="否" />
-            <el-option :value="true" label="是" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="CloseTab" prop="meta.closeTab" style="width:30%">
-          <el-select v-model="form.meta.closeTab" style="width:100%" placeholder="是否自动关闭tab">
-            <el-option :value="false" label="否" />
-            <el-option :value="true" label="是" />
-          </el-select>
-        </el-form-item>
       </el-form>
       <div>
-        <!-- 这块内容的功能不确定是做什么的，先注释掉 -->
-        <!-- <el-button size="small" type="primary" icon="edit" @click="addParameter(form)">新增菜单参数</el-button>
+        <el-button size="small" type="primary" icon="edit" @click="addParameter(form)">新增菜单参数</el-button>
         <el-table :data="form.parameters" style="width: 100%">
           <el-table-column align="left" prop="type" label="参数类型" width="180">
             <template #default="scope">
@@ -160,7 +148,7 @@
               </div>
             </template>
           </el-table-column>
-        </el-table> -->
+        </el-table>
       </div>
       <template #footer>
         <div class="dialog-footer">
@@ -177,7 +165,7 @@ import {
   updateMenu,
   getMenuList,
   createMenu,
-  deleteBaseMenu,
+  delMenu,
   getBaseMenuById
 } from '@/api/menu'
 import icon from '@/view/superAdmin/menu/icon.vue'
@@ -214,7 +202,7 @@ const getTableData = async () => {
 
 getTableData()
 
-// 新增参数
+// 新增API配置
 const addParameter = (form) => {
   if (!form.parameters) {
     form.parameters = []
@@ -226,16 +214,16 @@ const addParameter = (form) => {
   })
 }
 
-const fmtComponent = () => {
-  form.value.component = form.value.component.replace(/\\/g, '/')
-}
-
-// 删除参数
+// 删除API配置
 const deleteParameter = (parameters, index) => {
   parameters.splice(index, 1)
 }
 
-// 新增可控按钮
+const fmtComponent = () => {
+  form.value.component = form.value.component.replace(/\\/g, '/')
+}
+
+// 新增菜单数据权限
 const addBtn = (form) => {
   if (!form.menuBtn) {
     form.menuBtn = []
@@ -245,7 +233,7 @@ const addBtn = (form) => {
     desc: '',
   })
 }
-// 删除可控按钮
+// 删除菜单数据权限
 const deleteBtn = async (btns, index) => {
   const btn = btns[index]
   if (btn.id === 0) {
@@ -265,7 +253,7 @@ const form = ref({
   name: '',
   hidden: false,
   parentId: 0,
-  component: '',
+  component: 'view/routerHolder.vue',
   meta: {
     title: '',
     icon: '',
@@ -291,26 +279,24 @@ const deleteMenu = (id) => {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
-  })
-    .then(async () => {
-      const res = await deleteBaseMenu({ id })
-      if (res.code === 0) {
-        ElMessage({
-          type: 'success',
-          message: '删除成功!'
-        })
-        if (tableData.value.length === 1 && page.value > 1) {
-          page.value--
-        }
-        getTableData()
-      }
-    })
-    .catch(() => {
+  }).then(async () => {
+    const res = await delMenu(id)
+    if (res.code === 0) {
       ElMessage({
-        type: 'info',
-        message: '已取消删除'
+        type: 'success',
+        message: '删除成功!'
       })
+      if (tableData.value.length === 1 && page.value > 1) {
+        page.value--
+      }
+      getTableData()
+    }
+  }).catch(() => {
+    ElMessage({
+      type: 'info',
+      message: '已取消删除'
     })
+  })
 }
 // 初始化弹窗内表格方法
 const menuForm = ref(null)

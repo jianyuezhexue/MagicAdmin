@@ -17,11 +17,37 @@ export const getMenuList = (data) => {
   })
 }
 
-// 新增基础menu
+// 根据id查询菜单
+export const getBaseMenuById = (id) => {
+  return service({
+    url: `/menu/${id}`,
+    method: 'get'
+  })
+}
+
+// 新增menu
 export const createMenu = (data) => {
   return service({
     url: '/menu',
-    method: 'post',
+    method: 'POST',
+    data
+  })
+}
+
+// 修改menu列表
+export const updateMenu = (data) => {
+  return service({
+    url: '/menu',
+    method: 'PUT',
+    data
+  })
+}
+
+// 根据id删除菜单
+export const delMenu = (id) => {
+  return service({
+    url: `/menu/${id}`,
+    method: 'DELETE',
     data
   })
 }
@@ -49,31 +75,5 @@ export const getMenuAuthority = (data) => {
     url: '/menu/getMenuAuthority',
     method: 'POST',
     data
-  })
-}
-
-// 获取用户menu关联关系
-export const deleteBaseMenu = (data) => {
-  return service({
-    url: '/menu/deleteBaseMenu',
-    method: 'POST',
-    data
-  })
-}
-
-// 修改menu列表
-export const updateMenu = (data) => {
-  return service({
-    url: '/menu',
-    method: 'put',
-    data
-  })
-}
-
-// 根据id获取菜单
-export const getBaseMenuById = (id) => {
-  return service({
-    url: `/menu/${id}`,
-    method: 'get'
   })
 }
