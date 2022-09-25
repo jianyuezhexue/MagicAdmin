@@ -35,7 +35,7 @@ func FindChild(node system.Menu, data []system.Menu) system.Menu {
 // 获取动态菜单树
 func MyMenu(authorityId int) (menus []system.Menu, err error) {
 	// 查权限[防击穿]
-	menuIds, err, _ := magic.SingleFlight.Do("ServiceMenu", func() (interface{}, error) {
+	menuIds, err, _ := magic.SingleFlight.Do("ServiceMenu", func() (any, error) {
 		return MenuIds(authorityId)
 	})
 	if err != nil {
