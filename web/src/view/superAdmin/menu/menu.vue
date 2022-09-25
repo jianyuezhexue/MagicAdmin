@@ -49,7 +49,7 @@
           <icon :meta="form.meta" style="width:100%" />
         </el-form-item>
         <el-form-item label="展示名称" prop="meta.title" style="width:30%">
-          <el-input v-model="form.meta.title" autocomplete="off" />
+          <el-input v-model="form.meta.title" autocomplete="off" placeholder="中文名" />
         </el-form-item>
         <el-form-item label="是否普通页面" style="width:30%">
           <el-select v-model="form.hidden" placeholder="是否在列表隐藏">
@@ -78,7 +78,7 @@
           <template #label>
             <div style="display:inline-flex">
               文件路径
-              <span @click="form.component = 'view/routerHolder.vue'" style="margin-left:12px;">点我设置默认路径</span>
+              <span @click="form.component = 'view/routerHolder.vue'" style="margin-left:30px;">点我设置默认路径</span>
             </div>
           </template>
           <el-input v-model="form.component" autocomplete="off" placeholder="页面:view/xxx/xx.vue 插件:plugin/xx/xx.vue"
@@ -89,24 +89,63 @@
         </el-form-item>
       </el-form>
       <div>
-        <el-button size="small" type="primary" icon="edit" @click="addParameter(form)">新增菜单参数</el-button>
-        <el-table :data="form.parameters" style="width: 100%">
-          <el-table-column align="left" prop="type" label="参数类型" width="180">
+        <el-button size="small" type="primary" icon="edit" @click="addApi(form)">新增API权限</el-button>
+        <el-table :data="form.apis" style="width: 100%">
+          <el-table-column align="left" prop="type" label="请求类型" width="180">
             <template #default="scope">
               <el-select v-model="scope.row.type" placeholder="请选择">
-                <el-option key="query" value="query" label="query" />
-                <el-option key="params" value="params" label="params" />
+                <el-option key="GET" value="GET" label="GET" />
+                <el-option key="POST" value="POST" label="POST" />
+                <el-option key="PUT" value="PUT" label="PUT" />
+                <el-option key="PATCH" value="PATCH" label="PATCH" />
+                <el-option key="DELETE" value="DELETE" label="DELETE" />
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column align="left" prop="key" label="参数key" width="180">
+          <el-table-column align="left" prop="route" label="路由地址" width="340">
             <template #default="scope">
               <div>
-                <el-input v-model="scope.row.key" />
+                <el-input v-model="scope.row.route" />
               </div>
             </template>
           </el-table-column>
-          <el-table-column align="left" prop="value" label="参数值">
+          <el-table-column align="left" prop="name" label="路由名称">
+            <template #default="scope">
+              <div>
+                <el-input v-model="scope.row.name" />
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column align="left">
+            <template #default="scope">
+              <div>
+                <el-button type="danger" size="small" icon="delete" @click="deleteParameter(form.apis,scope.$index)">删除
+                </el-button>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <el-button style="margin-top:12px" size="small" type="primary" icon="edit" @click="addExpandAuthority(form)">
+          新增拓展权限
+        </el-button>
+        <el-table :data="form.expandAuthority" style="width: 100%">
+          <el-table-column align="left" prop="type" label="请求类型" width="180">
+            <template #default="scope">
+              <el-select v-model="scope.row.type" placeholder="请选择">
+                <el-option key="数据权限" value="0" label="数据权限" />
+                <el-option key="按钮权限" value="1" label="按钮权限" />
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column align="left" prop="name" label="权限中文名" width="250">
+            <template #default="scope">
+              <div>
+                <el-input v-model="scope.row.name" />
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column align="left" prop="name" label="权限英文名" width="240">
             <template #default="scope">
               <div>
                 <el-input v-model="scope.row.value" />
@@ -117,33 +156,7 @@
             <template #default="scope">
               <div>
                 <el-button type="danger" size="small" icon="delete"
-                  @click="deleteParameter(form.parameters,scope.$index)">删除</el-button>
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
-
-        <el-button style="margin-top:12px" size="small" type="primary" icon="edit" @click="addBtn(form)">新增可控按钮
-        </el-button>
-        <el-table :data="form.menuBtn" style="width: 100%">
-          <el-table-column align="left" prop="name" label="按钮名称" width="180">
-            <template #default="scope">
-              <div>
-                <el-input v-model="scope.row.name" />
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column align="left" prop="name" label="备注" width="180">
-            <template #default="scope">
-              <div>
-                <el-input v-model="scope.row.desc" />
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column align="left">
-            <template #default="scope">
-              <div>
-                <el-button type="danger" size="small" icon="delete" @click="deleteBtn(form.menuBtn,scope.$index)">删除
+                  @click="deleteExpandAuthority(form.expandAuthority,scope.$index)">删除
                 </el-button>
               </div>
             </template>
@@ -200,51 +213,40 @@ const getTableData = async () => {
   }
 }
 
+// 初始化表格数据
 getTableData()
 
 // 新增API配置
-const addParameter = (form) => {
-  if (!form.parameters) {
-    form.parameters = []
+const addApi = (form) => {
+  if (!form.apis) {
+    form.apis = []
   }
-  form.parameters.push({
-    type: 'query',
-    key: '',
-    value: ''
+  form.apis.push({
+    type: 'GET',
+    route: '',
+    name: ''
   })
 }
 
 // 删除API配置
-const deleteParameter = (parameters, index) => {
-  parameters.splice(index, 1)
+const deleteParameter = (apis, index) => {
+  apis.splice(index, 1)
 }
 
-const fmtComponent = () => {
-  form.value.component = form.value.component.replace(/\\/g, '/')
-}
-
-// 新增菜单数据权限
-const addBtn = (form) => {
-  if (!form.menuBtn) {
-    form.menuBtn = []
+// 新增菜单拓展[按钮+数据]权限
+const addExpandAuthority = (form) => {
+  if (!form.expandAuthority) {
+    form.expandAuthority = []
   }
-  form.menuBtn.push({
+  form.expandAuthority.push({
+    type: '0',
     name: '',
-    desc: '',
+    value: '',
   })
 }
 // 删除菜单数据权限
-const deleteBtn = async (btns, index) => {
-  const btn = btns[index]
-  if (btn.id === 0) {
-    btns.splice(index, 1)
-    return
-  }
-  const res = await canRemoveAuthorityBtnApi({ id: btn.id })
-  if (res.code === 0) {
-    btns.splice(index, 1)
-    return
-  }
+const deleteExpandAuthority = async (expands, index) => {
+  expands.splice(index, 1)
 }
 
 const form = ref({
@@ -262,17 +264,26 @@ const form = ref({
     keepAlive: false
   },
   sort: 50,
-  parameters: [],
-  menuBtn: []
+  apis: [],
+  expandAuthority: []
 })
+
+// 修改path名字
 const changeName = () => {
   form.value.path = form.value.name
 }
 
+// 格式化文件路径
+const fmtComponent = () => {
+  form.value.component = form.value.component.replace(/\\/g, '/')
+}
+
+// 关闭操作
 const handleClose = (done) => {
   initForm()
   done()
 }
+
 // 删除菜单
 const deleteMenu = (id) => {
   ElMessageBox.confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
@@ -298,6 +309,7 @@ const deleteMenu = (id) => {
     })
   })
 }
+
 // 初始化弹窗内表格方法
 const menuForm = ref(null)
 const checkFlag = ref(false)
@@ -310,7 +322,7 @@ const initForm = () => {
     name: "",
     hidden: false,
     parentId: 0,
-    component: "",
+    component: "view/routerHolder.vue",
     sort: 50,
     meta: {
       title: "",
@@ -321,13 +333,14 @@ const initForm = () => {
     }
   }
 }
-// 关闭弹窗
 
+// 关闭弹窗
 const dialogFormVisible = ref(false)
 const closeDialog = () => {
   initForm()
   dialogFormVisible.value = false
 }
+
 // 添加menu
 const enterDialog = async () => {
   menuForm.value.validate(async valid => {
