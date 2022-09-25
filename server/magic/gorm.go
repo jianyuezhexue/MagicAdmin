@@ -14,6 +14,8 @@ import (
 // smallHump 库名，表名，字段名小驼峰策略
 type smallHump struct{}
 
+// todo这里要修改
+
 // Replace 库名，表名，字段名小驼峰替换策略
 func (s smallHump) Replace(name string) string {
 	if name == "" {
