@@ -148,7 +148,7 @@
           <el-table-column align="left" prop="name" label="权限英文名" width="240">
             <template #default="scope">
               <div>
-                <el-input v-model="scope.row.value" />
+                <el-input v-model="scope.row.val" />
               </div>
             </template>
           </el-table-column>
@@ -241,7 +241,7 @@ const addExpandAuthority = (form) => {
   form.expandAuthority.push({
     type: '0',
     name: '',
-    value: '',
+    val: '',
   })
 }
 // 删除菜单数据权限
