@@ -42,6 +42,13 @@ func Routers() *gin.Engine {
 		PrivateGroup.PUT("/menu", system.UpdateMenu)    // 编辑菜单
 		PrivateGroup.POST("/menu", system.CreateMenu)   // 新增菜单
 		PrivateGroup.DELETE("/menu", system.DeleteMenu) // 删除菜单
+
+		// 字典-目录
+		PrivateGroup.POST("/dictionary", system.DictionaryApi.Create)   // 新增目录
+		PrivateGroup.PUT("/dictionary", system.DictionaryApi.Update)    // 更新目录
+		PrivateGroup.DELETE("/dictionary", system.DictionaryApi.Delete) // 删除目录
+		PrivateGroup.GET("/dictionary", system.DictionaryApi.List)      // 分页目录
+		PrivateGroup.GET("/dictionary:id", system.DictionaryApi.Item)   // 查询目录
 	}
 
 	magic.Logger.Info("router register success")

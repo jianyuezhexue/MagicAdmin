@@ -5,7 +5,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-// User 后台系统用户
+// 后台系统用户
 type User struct {
 	model.BaseOrm
 	UUID        uuid.UUID `json:"uuid"`        // 用户UUID
@@ -22,7 +22,7 @@ type User struct {
 	// Authorities []SysAuthority `json:"authorities" gorm:"many2many:sys_user_authority;"`
 }
 
-// FormRegister 注册表单提交数据结构
+// 注册表单提交数据结构
 type FormRegister struct {
 	UserName    string `json:"userName" form:"userName" binding:"required,min=3,max=10"`
 	Password    string `json:"password" form:"password" binding:"required"`
@@ -30,7 +30,7 @@ type FormRegister struct {
 	AuthorityId string `json:"authorityId" form:"authorityId" binding:"required,numeric"`
 }
 
-// FormLogin 登录表单提交数据结构
+// 登录表单提交数据结构
 type FormLogin struct {
 	UserName  string `json:"userName" form:"userName" binding:"required,min=3,max=10"` // 用户名
 	Password  string `json:"password" form:"password" binding:"required"`              // 密码
