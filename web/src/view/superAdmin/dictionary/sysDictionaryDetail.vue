@@ -48,12 +48,12 @@
 
         <el-table-column align="left" label="按钮组">
           <template #default="scope">
-            <el-button size="small" type="primary" link icon="edit" @click="updateSysDictionaryDetailFunc(scope.row)">变更</el-button>
+            <el-button size="small" type="primary" link icon="edit" @click="updateDictionaryDetailFunc(scope.row)">变更</el-button>
             <el-popover v-model="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
                 <el-button size="small" type="primary" link @click="scope.row.visible = false">取消</el-button>
-                <el-button type="primary" size="small" @click="deleteSysDictionaryDetailFunc(scope.row)">确定</el-button>
+                <el-button type="primary" size="small" @click="deleteDictionaryDetailFunc(scope.row)">确定</el-button>
               </div>
               <template #reference>
                 <el-button type="primary" link icon="delete" size="small" @click="scope.row.visible = true">删除</el-button>
@@ -115,18 +115,18 @@
 
 <script>
 export default {
-  name: 'SysDictionaryDetail'
+  name: 'DictionaryDetail'
 }
 </script>
 
 <script setup>
 import {
-  createSysDictionaryDetail,
-  deleteSysDictionaryDetail,
-  updateSysDictionaryDetail,
-  findSysDictionaryDetail,
-  getSysDictionaryDetailList
-} from '@/api/sysDictionaryDetail' // 此处请自行替换地址
+  createDictionaryDetail,
+  deleteDictionaryDetail,
+  updateDictionaryDetail,
+  findDictionaryDetail,
+  getDictionaryDetailList
+} from '@/api/DictionaryDetail' // 此处请自行替换地址
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
@@ -134,7 +134,7 @@ import { formatBoolean, formatDate } from '@/utils/format'
 const route = useRoute()
 
 watch(() => route.params.id, (id) => {
-  searchInfo.value.sysDictionaryID = Number(id)
+  searchInfo.value.DictionaryID = Number(id)
   getTableData()
 })
 
@@ -172,9 +172,9 @@ const page = ref(1)
 const total = ref(0)
 const pageSize = ref(10)
 const tableData = ref([])
-const searchInfo = ref({ sysDictionaryID: Number(route.params.id) })
+const searchInfo = ref({ DictionaryID: Number(route.params.id) })
 const onReset = () => {
-  searchInfo.value = { sysDictionaryID: Number(route.params.id) }
+  searchInfo.value = { DictionaryID: Number(route.params.id) }
 }
 
 // 条件搜索前端看此方法
@@ -200,7 +200,7 @@ const handleCurrentChange = (val) => {
 
 // 查询
 const getTableData = async() => {
-  const table = await getSysDictionaryDetailList({
+  const table = await getDictionaryDetailList({
     page: page.value,
     pageSize: pageSize.value,
     ...searchInfo.value,
@@ -217,11 +217,11 @@ getTableData()
 
 const type = ref('')
 const dialogFormVisible = ref(false)
-const updateSysDictionaryDetailFunc = async(row) => {
-  const res = await findSysDictionaryDetail({ ID: row.ID })
+const updateDictionaryDetailFunc = async(row) => {
+  const res = await findDictionaryDetail({ ID: row.ID })
   type.value = 'update'
   if (res.code === 0) {
-    formData.value = res.data.reSysDictionaryDetail
+    formData.value = res.data.reDictionaryDetail
     dialogFormVisible.value = true
   }
 }
@@ -233,12 +233,12 @@ const closeDialog = () => {
     value: null,
     status: true,
     sort: null,
-    sysDictionaryID: ''
+    DictionaryID: ''
   }
 }
-const deleteSysDictionaryDetailFunc = async(row) => {
+const deleteDictionaryDetailFunc = async(row) => {
   row.visible = false
-  const res = await deleteSysDictionaryDetail({ ID: row.ID })
+  const res = await deleteDictionaryDetail({ ID: row.ID })
   if (res.code === 0) {
     ElMessage({
       type: 'success',
@@ -253,19 +253,19 @@ const deleteSysDictionaryDetailFunc = async(row) => {
 
 const dialogForm = ref(null)
 const enterDialog = async() => {
-  formData.value.sysDictionaryID = Number(route.params.id)
+  formData.value.DictionaryID = Number(route.params.id)
   dialogForm.value.validate(async valid => {
     if (!valid) return
     let res
     switch (type.value) {
       case 'create':
-        res = await createSysDictionaryDetail(formData.value)
+        res = await createDictionaryDetail(formData.value)
         break
       case 'update':
-        res = await updateSysDictionaryDetail(formData.value)
+        res = await updateDictionaryDetail(formData.value)
         break
       default:
-        res = await createSysDictionaryDetail(formData.value)
+        res = await createDictionaryDetail(formData.value)
         break
     }
     if (res.code === 0) {

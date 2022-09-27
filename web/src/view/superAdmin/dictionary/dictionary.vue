@@ -94,7 +94,7 @@
               icon="edit"
               type="primary"
               link
-              @click="updateSysDictionaryFunc(scope.row)"
+              @click="updateDictionaryFunc(scope.row)"
             >变更</el-button>
             <el-popover
               v-model="scope.row.visible"
@@ -112,7 +112,7 @@
                 <el-button
                   type="primary"
                   size="small"
-                  @click="deleteSysDictionaryFunc(scope.row)"
+                  @click="deleteDictionaryFunc(scope.row)"
                 >确定</el-button>
               </div>
               <template #reference>
@@ -202,18 +202,18 @@
 
 <script>
 export default {
-  name: 'SysDictionary',
+  name: 'Dictionary',
 }
 </script>
 
 <script setup>
 import {
-  createSysDictionary,
-  deleteSysDictionary,
-  updateSysDictionary,
-  findSysDictionary,
-  getSysDictionaryList,
-} from '@/api/sysDictionary' // 此处请自行替换地址
+  createDictionary,
+  deleteDictionary,
+  updateDictionary,
+  findDictionary,
+  getDictionaryList,
+} from '@/api/Dictionary' // 此处请自行替换地址
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -285,7 +285,7 @@ const handleCurrentChange = (val) => {
 
 // 查询
 const getTableData = async() => {
-  const table = await getSysDictionaryList({
+  const table = await getDictionaryList({
     page: page.value,
     pageSize: pageSize.value,
     ...searchInfo.value,
@@ -311,11 +311,11 @@ const toDetail = (row) => {
 
 const dialogFormVisible = ref(false)
 const type = ref('')
-const updateSysDictionaryFunc = async(row) => {
-  const res = await findSysDictionary({ ID: row.ID, status: row.status })
+const updateDictionaryFunc = async(row) => {
+  const res = await findDictionary({ ID: row.ID, status: row.status })
   type.value = 'update'
   if (res.code === 0) {
-    formData.value = res.data.resysDictionary
+    formData.value = res.data.reDictionary
     dialogFormVisible.value = true
   }
 }
@@ -328,9 +328,9 @@ const closeDialog = () => {
     desc: null,
   }
 }
-const deleteSysDictionaryFunc = async(row) => {
+const deleteDictionaryFunc = async(row) => {
   row.visible = false
-  const res = await deleteSysDictionary({ ID: row.ID })
+  const res = await deleteDictionary({ ID: row.ID })
   if (res.code === 0) {
     ElMessage({
       type: 'success',
@@ -350,13 +350,13 @@ const enterDialog = async() => {
     let res
     switch (type.value) {
       case 'create':
-        res = await createSysDictionary(formData.value)
+        res = await createDictionary(formData.value)
         break
       case 'update':
-        res = await updateSysDictionary(formData.value)
+        res = await updateDictionary(formData.value)
         break
       default:
-        res = await createSysDictionary(formData.value)
+        res = await createDictionary(formData.value)
         break
     }
     if (res.code === 0) {

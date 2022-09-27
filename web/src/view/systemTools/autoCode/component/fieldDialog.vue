@@ -97,7 +97,7 @@
 
 <script setup>
 import { toLowerCase, toSQLLine } from '@/utils/stringFun'
-import { getSysDictionaryList } from '@/api/sysDictionary'
+import { getDictionaryList } from '@/api/Dictionary'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 
@@ -188,7 +188,7 @@ const rules = ref({
 
 const init = async() => {
   middleDate.value = props.dialogMiddle
-  const dictRes = await getSysDictionaryList({
+  const dictRes = await getDictionaryList({
     page: 1,
     pageSize: 999999
   })

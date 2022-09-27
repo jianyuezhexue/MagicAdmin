@@ -1,79 +1,79 @@
 import service from '@/utils/request'
-// @Tags SysDictionaryDetail
-// @Summary 创建SysDictionaryDetail
+// @Tags DictionaryDetail
+// @Summary 创建DictionaryDetail
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysDictionaryDetail true "创建SysDictionaryDetail"
+// @Param data body model.DictionaryDetail true "创建DictionaryDetail"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /sysDictionaryDetail/createSysDictionaryDetail [post]
-export const createSysDictionaryDetail = (data) => {
+// @Router /DictionaryDetail/createDictionaryDetail [post]
+export const createDictionaryDetail = (data) => {
   return service({
-    url: '/sysDictionaryDetail/createSysDictionaryDetail',
+    url: '/DictionaryDetail/createDictionaryDetail',
     method: 'post',
     data
   })
 }
 
-// @Tags SysDictionaryDetail
-// @Summary 删除SysDictionaryDetail
+// @Tags DictionaryDetail
+// @Summary 删除DictionaryDetail
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysDictionaryDetail true "删除SysDictionaryDetail"
+// @Param data body model.DictionaryDetail true "删除DictionaryDetail"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /sysDictionaryDetail/deleteSysDictionaryDetail [delete]
-export const deleteSysDictionaryDetail = (data) => {
+// @Router /DictionaryDetail/deleteDictionaryDetail [delete]
+export const deleteDictionaryDetail = (data) => {
   return service({
-    url: '/sysDictionaryDetail/deleteSysDictionaryDetail',
+    url: '/DictionaryDetail/deleteDictionaryDetail',
     method: 'delete',
     data
   })
 }
 
-// @Tags SysDictionaryDetail
-// @Summary 更新SysDictionaryDetail
+// @Tags DictionaryDetail
+// @Summary 更新DictionaryDetail
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysDictionaryDetail true "更新SysDictionaryDetail"
+// @Param data body model.DictionaryDetail true "更新DictionaryDetail"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /sysDictionaryDetail/updateSysDictionaryDetail [put]
-export const updateSysDictionaryDetail = (data) => {
+// @Router /DictionaryDetail/updateDictionaryDetail [put]
+export const updateDictionaryDetail = (data) => {
   return service({
-    url: '/sysDictionaryDetail/updateSysDictionaryDetail',
+    url: '/DictionaryDetail/updateDictionaryDetail',
     method: 'put',
     data
   })
 }
 
-// @Tags SysDictionaryDetail
-// @Summary 用id查询SysDictionaryDetail
+// @Tags DictionaryDetail
+// @Summary 用id查询DictionaryDetail
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysDictionaryDetail true "用id查询SysDictionaryDetail"
+// @Param data body model.DictionaryDetail true "用id查询DictionaryDetail"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /sysDictionaryDetail/findSysDictionaryDetail [get]
-export const findSysDictionaryDetail = (params) => {
+// @Router /DictionaryDetail/findDictionaryDetail [get]
+export const findDictionaryDetail = (params) => {
   return service({
-    url: '/sysDictionaryDetail/findSysDictionaryDetail',
+    url: '/DictionaryDetail/findDictionaryDetail',
     method: 'get',
     params
   })
 }
 
-// @Tags SysDictionaryDetail
-// @Summary 分页获取SysDictionaryDetail列表
+// @Tags DictionaryDetail
+// @Summary 分页获取DictionaryDetail列表
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.PageInfo true "分页获取SysDictionaryDetail列表"
+// @Param data body request.PageInfo true "分页获取DictionaryDetail列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /sysDictionaryDetail/getSysDictionaryDetailList [get]
-export const getSysDictionaryDetailList = (params) => {
+// @Router /DictionaryDetail/getDictionaryDetailList [get]
+export const getDictionaryDetailList = (params) => {
   return service({
-    url: '/sysDictionaryDetail/getSysDictionaryDetailList',
+    url: '/DictionaryDetail/getDictionaryDetailList',
     method: 'get',
     params
   })

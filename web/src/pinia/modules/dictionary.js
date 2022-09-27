@@ -1,4 +1,4 @@
-import { findSysDictionary } from '@/api/sysDictionary'
+import { findDictionary } from '@/api/Dictionary'
 
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
@@ -14,17 +14,17 @@ export const useDictionaryStore = defineStore('dictionary', () => {
     if (dictionaryMap.value[type] && dictionaryMap.value[type].length) {
       return dictionaryMap.value[type]
     } else {
-      const res = await findSysDictionary({ type })
+      const res = await findDictionary({ type })
       if (res.code === 0) {
         const dictionaryRes = {}
         const dict = []
-        res.data.resysDictionary.sysDictionaryDetails && res.data.resysDictionary.sysDictionaryDetails.forEach(item => {
+        res.data.reDictionary.DictionaryDetails && res.data.reDictionary.DictionaryDetails.forEach(item => {
           dict.push({
             label: item.label,
             value: item.value
           })
         })
-        dictionaryRes[res.data.resysDictionary.type] = dict
+        dictionaryRes[res.data.reDictionary.type] = dict
         setDictionaryMap(dictionaryRes)
         return dictionaryMap.value[type]
       }
