@@ -3,7 +3,10 @@ package system
 import (
 	"database/sql/driver"
 	"encoding/json"
+	"errors"
+	"fmt"
 
+	"github.com/duke-git/lancet/v2/convertor"
 	"github.com/jianyuezhexue/MagicAdmin/model"
 )
 
@@ -20,17 +23,6 @@ type Api struct {
 	Route string `json:"route"` // 路由地址
 }
 
-// Api json字符串转结构体
-func (item *Api) Scan(val interface{}) error {
-	str, _ := val.([]byte)
-	return json.Unmarshal(str, &item)
-}
-
-// Api 结构体转字符串
-func (item Api) Value() (value driver.Value, err error) {
-	return json.Marshal(item)
-}
-
 // 拓展权限结构
 type ExtAuth struct {
 	Type string `json:"type"`  // 权限类型:按钮权限，数据权限
@@ -38,40 +30,54 @@ type ExtAuth struct {
 	Val  string `json:"value"` // 字段值
 }
 
-// ExtAuth json字符串转结构体
-func (item *ExtAuth) Scan(val interface{}) error {
-	b, _ := val.([]byte)
-	return json.Unmarshal(b, item)
+type Array[T Api | ExtAuth] []T
+
+// 字符串转成数组返回
+func (a *Array[T]) Scan(value interface{}) error {
+	bytes, ok := value.([]byte)
+	if !ok {
+		return errors.New(fmt.Sprint("Failed to scan Array value:", value))
+	}
+	if len(bytes) > 0 {
+		return json.Unmarshal(bytes, a)
+	}
+	*a = make([]T, 0)
+	return nil
 }
 
-// ExtAuth 结构体转字符串
-func (item ExtAuth) Value() (value driver.Value, err error) {
-	return json.Marshal(item)
+// 数组转成字符串存储
+func (a Array[T]) Value() (driver.Value, error) {
+	if a == nil {
+		return "[]", nil
+	}
+	return convertor.ToString(a), nil
 }
 
 // Menu 后台菜单
 type Menu struct {
 	model.BaseOrm
 	Meta      `json:"meta"`
-	ParentId  uint      `json:"parentId"`            // 父菜单ID
-	Path      string    `json:"path"`                // 路由path
-	Name      string    `json:"name"`                // 路由name
-	Hidden    bool      `json:"hidden"`              // 是否在列表隐藏
-	Component string    `json:"component"`           // 对应前端文件路径
-	Sort      int       `json:"sort"`                // 排序标记
-	Apis      []Api     `josn:"apis" gorm:"json"`    // 菜单下的路由
-	ExtAuth   []ExtAuth `josn:"extAuth" gorm:"json"` // 菜单下的拓展权限
-	Children  []Menu    `json:"children" gorm:"-"`
+	ParentId  uint   `json:"parentId"`  // 父菜单ID
+	Path      string `json:"path"`      // 路由path
+	Name      string `json:"name"`      // 路由name
+	Hidden    bool   `json:"hidden"`    // 是否在列表隐藏
+	Component string `json:"component"` // 对应前端文件路径
+	Sort      int    `json:"sort"`      // 排序标记
+	// Apis      Array[Api]     `josn:"apis"`      // 菜单下的路由
+	// ExtAuth   Array[ExtAuth] `josn:"extAuth"`   // 菜单下的拓展权限
+	Apis     string `josn:"apis"`    // 菜单下的路由
+	ExtAuth  string `josn:"extAuth"` // 菜单下的拓展权限
+	Children []Menu `json:"children" gorm:"-"`
 }
 
 type FormMenu struct {
-	ParentId        uint      `json:"parentId" form:"parentId" binding:"numeric"`    // 父菜单ID
-	Path            string    `json:"path" form:"path" binding:"required,max=40"`    // 路由path
-	Name            string    `json:"name" form:"name" binding:"required,max=40"`    // 路由name
-	Hidden          bool      `json:"hidden" form:"hidden"`                          // 是否在列表隐藏
-	Component       string    `json:"component" form:"component" binding:"required"` // 对应前端文件路径
-	Sort            int       `json:"sort" form:"sort" binding:"numeric"`            // 排序标记
-	Apis            []Api     `josn:"apis"`                                          // 菜单下的路由
-	ExpandAuthority []ExtAuth `josn:"expandAuthority"`                               // 菜单下的拓展权限
-	Meta            Meta      `json:"meta" gorm:"embedded"`                          // 附加属性
+	ParentId  uint           `json:"parentId" form:"parentId" binding:"numeric"`    // 父菜单ID
+	Path      string         `json:"path" form:"path" binding:"required,max=40"`    // 路由path
+	Name      string         `json:"name" form:"name" binding:"required,max=40"`    // 路由name
+	Hidden    bool           `json:"hidden" form:"hidden"`                          // 是否在列表隐藏
+	Component string         `json:"component" form:"component" binding:"required"` // 对应前端文件路径
+	Sort      int            `json:"sort" form:"sort" binding:"numeric"`            // 排序标记
+	Apis      Array[Api]     `josn:"apis" gorm:"apis"`                              // 菜单下的路由
+	ExtAuth   Array[ExtAuth] `josn:"extAuth" gorm:"extAuth"`                        // 菜单下的拓展权限
+	Meta      Meta           `json:"meta" gorm:"embedded"`                          // 附加属性
 }

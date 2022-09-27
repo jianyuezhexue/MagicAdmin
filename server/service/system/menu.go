@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/duke-git/lancet/v2/convertor"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
@@ -81,6 +82,7 @@ func FindMenu(id model.GetById) (res system.Menu, err error) {
 	if err != nil {
 		return res, err
 	}
+	magic.Logger.Info(convertor.ToString(menu))
 
 	return menu, err
 }
@@ -125,7 +127,7 @@ func CreateMenu(menu system.Menu) (res system.Menu, err error) {
 	return menu, err
 }
 
-//  删除菜单
+// 删除菜单
 func DeleteMenu(id model.GetById) (err error) {
 	// 查询是否存在
 	var menu system.Menu

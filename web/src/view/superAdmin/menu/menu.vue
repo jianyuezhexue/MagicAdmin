@@ -126,10 +126,10 @@
           </el-table-column>
         </el-table>
 
-        <el-button style="margin-top:12px" size="small" type="primary" icon="edit" @click="addExpandAuthority(form)">
+        <el-button style="margin-top:12px" size="small" type="primary" icon="edit" @click="addExtAuth(form)">
           新增拓展权限
         </el-button>
-        <el-table :data="form.expandAuthority" style="width: 100%">
+        <el-table :data="form.extAuth" style="width: 100%">
           <el-table-column align="left" prop="type" label="请求类型" width="180">
             <template #default="scope">
               <el-select v-model="scope.row.type" placeholder="请选择">
@@ -155,8 +155,7 @@
           <el-table-column align="left">
             <template #default="scope">
               <div>
-                <el-button type="danger" size="small" icon="delete"
-                  @click="deleteExpandAuthority(form.expandAuthority,scope.$index)">删除
+                <el-button type="danger" size="small" icon="delete" @click="deleteextAuth(form.extAuth,scope.$index)">删除
                 </el-button>
               </div>
             </template>
@@ -234,18 +233,18 @@ const deleteParameter = (apis, index) => {
 }
 
 // 新增菜单拓展[按钮+数据]权限
-const addExpandAuthority = (form) => {
-  if (!form.expandAuthority) {
-    form.expandAuthority = []
+const addExtAuth = (form) => {
+  if (!form.extAuth) {
+    form.extAuth = []
   }
-  form.expandAuthority.push({
+  form.extAuth.push({
     type: '0',
     name: '',
     val: '',
   })
 }
 // 删除菜单数据权限
-const deleteExpandAuthority = async (expands, index) => {
+const deleteextAuth = async (expands, index) => {
   expands.splice(index, 1)
 }
 
@@ -265,7 +264,7 @@ const form = ref({
   },
   sort: 50,
   apis: [],
-  expandAuthority: []
+  extAuth: []
 })
 
 // 修改path名字
@@ -330,7 +329,9 @@ const initForm = () => {
       defaultMenu: false,
       closeTab: false,
       keepAlive: false
-    }
+    },
+    apis: [],
+    extAuth: []
   }
 }
 
@@ -421,6 +422,9 @@ const editMenu = async (id) => {
   dialogTitle.value = '编辑菜单'
   const res = await getBaseMenuById(id)
   form.value = res.data
+  console.log('--------------')
+  console.log(form.value)
+  console.log('--------------')
   isEdit.value = true
   setOptions()
   dialogFormVisible.value = true

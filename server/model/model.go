@@ -16,9 +16,6 @@ type BaseOrm struct {
 	DeletedAt gorm.DeletedAt `json:"-" gorm:"index;"`      // 删除时间
 }
 
-// 数组类型的存储
-type Array[T any] []T
-
 // LocalTime 格式化时间
 type LocalTime struct {
 	time.Time
