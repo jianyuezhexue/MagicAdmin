@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
+	"github.com/jianyuezhexue/MagicAdmin/model"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
 	serviceSystem "github.com/jianyuezhexue/MagicAdmin/service/system"
 )
@@ -52,6 +53,27 @@ func (d *DictionaryCtr) List(c *gin.Context) {
 	magic.Success(c, "分页查询字典目录成功", res)
 }
 
+// 单条目录
+func (d *DictionaryCtr) Item(c *gin.Context) {
+	// 参数校验
+	var id model.GetById
+	err := c.ShouldBindUri(&id)
+	if err != nil {
+		magic.Fail(c, http.StatusBadRequest, err.Error(), id)
+		return
+	}
+
+	// 逻辑处理
+	res, err := serviceSystem.DictionaryApp.Item(id)
+	if err != nil {
+		magic.Fail(c, 1202, err.Error(), res)
+		return
+	}
+
+	// 返回结果
+	magic.Success(c, "查询单条字典目录成功", res)
+}
+
 // 更新目录
 func (d *DictionaryCtr) Update(c *gin.Context) {
 	magic.Success(c, "更新字典目录成功", "")
@@ -60,9 +82,4 @@ func (d *DictionaryCtr) Update(c *gin.Context) {
 // 删除目录
 func (d *DictionaryCtr) Delete(c *gin.Context) {
 	magic.Success(c, "删除字典目录成功", "")
-}
-
-// 单条目录
-func (d *DictionaryCtr) Item(c *gin.Context) {
-	magic.Success(c, "查询单条字典目录成功", "")
 }

@@ -113,7 +113,7 @@ import {
   updateDictionary,
   findDictionary,
   getDictionaryList,
-} from '@/api/Dictionary' // 此处请自行替换地址
+} from '@/api/dictionary' // 此处请自行替换地址
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -206,7 +206,7 @@ const toDetail = (row) => {
   router.push({
     name: 'dictionaryDetail',
     params: {
-      id: row.ID,
+      id: row.id,
     },
   })
 }
@@ -214,7 +214,7 @@ const toDetail = (row) => {
 const dialogFormVisible = ref(false)
 const type = ref('')
 const updateDictionaryFunc = async (row) => {
-  const res = await findDictionary({ ID: row.ID, status: row.status })
+  const res = await findDictionary(row.id)
   type.value = 'update'
   if (res.code === 0) {
     formData.value = res.data.reDictionary

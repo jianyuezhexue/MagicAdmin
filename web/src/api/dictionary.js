@@ -40,7 +40,6 @@ export const updateDictionary = (data) => {
 export const findDictionary = (id) => {
   return service({
     url: `/dictionary/${id}`,
-    method: 'GET',
-    params
+    method: 'GET'
   })
 }

@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/jianyuezhexue/MagicAdmin/magic"
+	"github.com/jianyuezhexue/MagicAdmin/model"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
 )
 
@@ -76,5 +77,12 @@ func (d DictionaryServer) List(data system.SearchDictionary) (res magic.PageResu
 	}
 
 	// 返回数据
+	return res, err
+}
+
+// ID查询目录
+func (d DictionaryServer) Item(id model.GetById) (res system.Dictionary, err error) {
+	// 查询数据
+	err = magic.Orm.Where("id = ?", id.ID).Find(&res).Error
 	return res, err
 }
