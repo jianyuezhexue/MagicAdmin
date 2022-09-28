@@ -93,15 +93,15 @@ func UpdateMenu(c *gin.Context) {
 // 创建菜单
 func CreateMenu(c *gin.Context) {
 	// 参数校验
-	var form system.Menu
-	err := c.ShouldBind(&form)
+	var param system.Menu
+	err := c.ShouldBind(&param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), form)
+		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
 		return
 	}
 
 	// 逻辑处理
-	res, err := serviceSystem.CreateMenu(form)
+	res, err := serviceSystem.CreateMenu(param)
 	if err != nil {
 		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
 		return

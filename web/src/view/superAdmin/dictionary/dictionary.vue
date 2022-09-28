@@ -38,11 +38,11 @@
 
         <el-table-column align="left" label="字典名（中）" prop="name" width="160" />
 
-        <el-table-column align="left" label="字典名（英）" prop="type" width="120" />
+        <el-table-column align="left" label="字典名（英）" prop="value" width="120" />
 
-        <el-table-column align="left" label="状态" prop="status" width="120">
+        <el-table-column align="left" label="超管" prop="status" width="120">
           <template #default="scope">{{
-          formatBoolean(scope.row.status)
+          formatBoolean(scope.row.super)
           }}</template>
         </el-table-column>
 

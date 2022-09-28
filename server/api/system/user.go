@@ -44,15 +44,15 @@ func Captcha(c *gin.Context) {
 // Register 用户注册账号
 func Register(c *gin.Context) {
 	// 表单验证
-	var form system.FormRegister
-	err := c.ShouldBind(&form)
+	var param system.FormRegister
+	err := c.ShouldBind(&param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), form)
+		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
 		return
 	}
 
 	// 逻辑处理
-	res, err := serviceSystem.Register(form)
+	res, err := serviceSystem.Register(param)
 	if err != nil {
 		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
 		return
@@ -65,21 +65,21 @@ func Register(c *gin.Context) {
 // Login 用户登录
 func Login(c *gin.Context) {
 	// 参数校验
-	var form system.FormLogin
-	err := c.ShouldBind(&form)
+	var param system.FormLogin
+	err := c.ShouldBind(&param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), form)
+		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
 		return
 	}
 
 	// 验证码校验
-	if !store.Verify(form.CaptchaId, form.Captcha, true) {
-		magic.Fail(c, 1202, "验证码错误", form)
+	if !store.Verify(param.CaptchaId, param.Captcha, true) {
+		magic.Fail(c, 1202, "验证码错误", param)
 		return
 	}
 
 	// 逻辑实现
-	res, err := serviceSystem.Login(form)
+	res, err := serviceSystem.Login(param)
 	if err != nil {
 		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
 		return

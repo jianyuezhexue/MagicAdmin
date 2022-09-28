@@ -112,14 +112,17 @@ func UpdateMenu(menu system.Menu) (res system.Menu, err error) {
 
 // 创建菜单
 func CreateMenu(menu system.Menu) (res system.Menu, err error) {
-	// 查重名称
-	err = magic.Orm.Where("name = ?", menu.Name).Find(&system.Menu{}).Error
+	// 先查数据
+	find := system.Menu{}
+	err = magic.Orm.Where("name = ?", menu.Name).Find(&find).Error
 	fmt.Println("查出来的错误是:", err)
 	if err != nil {
-		if !errors.Is(err, gorm.ErrRecordNotFound) {
-			return res, errors.New("存在重复name,请修改name")
-		}
 		return res, errors.New("数据库跪了")
+	}
+
+	// 重名异常
+	if menu.Name == find.Name {
+		return res, errors.New("存在重复name,请修改name")
 	}
 
 	// 保存数据
