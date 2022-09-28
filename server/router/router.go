@@ -44,11 +44,11 @@ func Routers() *gin.Engine {
 		PrivateGroup.DELETE("/menu", system.DeleteMenu) // 删除菜单
 
 		// 字典-目录
-		PrivateGroup.POST("/dictionary", system.DictionaryApi.Create)   // 新增字典目录
-		PrivateGroup.GET("/dictionary", system.DictionaryApi.List)      // 分页字典目录
-		PrivateGroup.GET("/dictionary/:id", system.DictionaryApi.Item)  // 查询字典目录
-		PrivateGroup.PUT("/dictionary", system.DictionaryApi.Update)    // 更新字典目录
-		PrivateGroup.DELETE("/dictionary", system.DictionaryApi.Delete) // 删除字典目录
+		PrivateGroup.POST("/dictionary", system.DictionaryApi.Create)       // 新增字典目录
+		PrivateGroup.GET("/dictionary", system.DictionaryApi.List)          // 分页字典目录
+		PrivateGroup.GET("/dictionary/:id", system.DictionaryApi.Item)      // 查询字典目录
+		PrivateGroup.PUT("/dictionary", system.DictionaryApi.Update)        // 更新字典目录
+		PrivateGroup.DELETE("/dictionary/:id", system.DictionaryApi.Delete) // 删除字典目录
 	}
 
 	magic.Logger.Info("router register success")

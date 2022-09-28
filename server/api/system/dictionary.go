@@ -76,10 +76,41 @@ func (d *DictionaryCtr) Item(c *gin.Context) {
 
 // 更新目录
 func (d *DictionaryCtr) Update(c *gin.Context) {
-	magic.Success(c, "更新字典目录成功", "")
+	// 参数校验
+	var param system.Dictionary
+	err := c.ShouldBind(&param)
+	if err != nil {
+		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
+		return
+	}
+
+	// 逻辑处理
+	res, err := serviceSystem.DictionaryApp.Update(param)
+	if err != nil {
+		magic.Fail(c, http.StatusBadRequest, err.Error(), res)
+		return
+	}
+
+	// 返回结果
+	magic.Success(c, "更新字典目录成功", res)
 }
 
 // 删除目录
 func (d *DictionaryCtr) Delete(c *gin.Context) {
+	// 参数校验
+	var id model.GetById
+	err := c.ShouldBindUri(&id)
+	if err != nil {
+		magic.Fail(c, http.StatusBadRequest, err.Error(), id)
+		return
+	}
+
+	// 逻辑处理
+	res, err := serviceSystem.DictionaryApp.Delete(id)
+	if err != nil {
+		magic.Fail(c, 1202, err.Error(), res)
+		return
+	}
+
 	magic.Success(c, "删除字典目录成功", "")
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
+	"gorm.io/gorm"
 )
 
 type DictionaryServer struct{}
@@ -14,7 +15,7 @@ type DictionaryServer struct{}
 var DictionaryApp = new(DictionaryServer)
 
 // 新建目录
-func (d DictionaryServer) Create(data system.Dictionary) (system.Dictionary, error) {
+func (d *DictionaryServer) Create(data system.Dictionary) (system.Dictionary, error) {
 	// 查重Value值
 	find := system.Dictionary{}
 	err := magic.Orm.Where("value = ?", data.Value).Find(&find).Error
@@ -33,7 +34,7 @@ func (d DictionaryServer) Create(data system.Dictionary) (system.Dictionary, err
 }
 
 // 分页查询
-func (d DictionaryServer) List(data system.SearchDictionary) (res magic.PageResult, err error) {
+func (d *DictionaryServer) List(data system.SearchDictionary) (res magic.PageResult, err error) {
 	// 初始化DB
 	db := magic.Orm.Model(&system.Dictionary{})
 
@@ -81,8 +82,49 @@ func (d DictionaryServer) List(data system.SearchDictionary) (res magic.PageResu
 }
 
 // ID查询目录
-func (d DictionaryServer) Item(id model.GetById) (res system.Dictionary, err error) {
+func (d *DictionaryServer) Item(id model.GetById) (res system.Dictionary, err error) {
 	// 查询数据
 	err = magic.Orm.Where("id = ?", id.ID).Find(&res).Error
 	return res, err
+}
+
+// 更新目录
+func (d *DictionaryServer) Update(data system.Dictionary) (res system.Dictionary, err error) {
+	// 查询数据
+	err = magic.Orm.Where("id = ?", data.Id).Find(&res).Error
+	if err != nil {
+		magic.Logger.Info(err.Error())
+		return res, errors.New("系统繁忙，请稍后再试!")
+	}
+
+	// 查询条目不存在
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		magic.Logger.Info(err.Error())
+		return res, errors.New("编辑的目标不存在!")
+	}
+
+	// 更新数据
+	err = magic.Orm.Updates(data).Error
+	return data, err
+}
+
+// 删除目录
+func (d *DictionaryServer) Delete(id model.GetById) (res system.Dictionary, err error) {
+	// 查询数据
+	var find system.Dictionary
+	err = magic.Orm.Where("id = ?", id.ID).Find(&find).Error
+	if err != nil {
+		magic.Logger.Info(err.Error())
+		return res, errors.New("系统繁忙，请稍后再试!")
+	}
+
+	// 查询条目不存在
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		magic.Logger.Info(err.Error())
+		return res, errors.New("删除的目标不存在!")
+	}
+
+	// 更新数据
+	err = magic.Orm.Delete(&find).Error
+	return find, err
 }

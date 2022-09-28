@@ -24,31 +24,21 @@
       <div class="gva-btn-list">
         <el-button size="small" type="primary" icon="plus" @click="openDialog">新增字典项</el-button>
       </div>
-      <el-table
-        ref="multipleTable"
-        :data="tableData"
-        style="width: 100%"
-        tooltip-effect="dark"
-        row-key="ID"
-      >
+      <el-table ref="multipleTable" :data="tableData" style="width: 100%" tooltip-effect="dark" row-key="ID">
         <el-table-column type="selection" width="55" />
         <el-table-column align="left" label="日期" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
-
         <el-table-column align="left" label="展示值" prop="label" width="120" />
-
         <el-table-column align="left" label="字典值" prop="value" width="120" />
-
         <el-table-column align="left" label="启用状态" prop="status" width="120">
           <template #default="scope">{{ formatBoolean(scope.row.status) }}</template>
         </el-table-column>
-
         <el-table-column align="left" label="排序标记" prop="sort" width="120" />
-
         <el-table-column align="left" label="按钮组">
           <template #default="scope">
-            <el-button size="small" type="primary" link icon="edit" @click="updateDictionaryDetailFunc(scope.row)">变更</el-button>
+            <el-button size="small" type="primary" link icon="edit" @click="updateDictionaryDetailFunc(scope.row)">变更
+            </el-button>
             <el-popover v-model="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
@@ -56,7 +46,8 @@
                 <el-button type="primary" size="small" @click="deleteDictionaryDetailFunc(scope.row)">确定</el-button>
               </div>
               <template #reference>
-                <el-button type="primary" link icon="delete" size="small" @click="scope.row.visible = true">删除</el-button>
+                <el-button type="primary" link icon="delete" size="small" @click="scope.row.visible = true">删除
+                </el-button>
               </template>
             </el-popover>
           </template>
@@ -64,37 +55,20 @@
       </el-table>
 
       <div class="gva-pagination">
-        <el-pagination
-          :current-page="page"
-          :page-size="pageSize"
-          :page-sizes="[10, 30, 50, 100]"
-          :total="total"
-          layout="total, sizes, prev, pager, next, jumper"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange"
-        />
+        <el-pagination :current-page="page" :page-size="pageSize" :page-sizes="[10, 30, 50, 100]" :total="total"
+          layout="total, sizes, prev, pager, next, jumper" @current-change="handleCurrentChange"
+          @size-change="handleSizeChange" />
       </div>
     </div>
 
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
       <el-form ref="dialogForm" :model="formData" :rules="rules" size="medium" label-width="110px">
         <el-form-item label="展示值" prop="label">
-          <el-input
-            v-model="formData.label"
-            placeholder="请输入展示值"
-            clearable
-            :style="{width: '100%'}"
-          />
+          <el-input v-model="formData.label" placeholder="请输入展示值" clearable :style="{width: '100%'}" />
         </el-form-item>
         <el-form-item label="字典值" prop="value">
-          <el-input-number
-            v-model.number="formData.value"
-            step-strictly
-            :step="1"
-            placeholder="请输入字典值"
-            clearable
-            :style="{width: '100%'}"
-          />
+          <el-input-number v-model.number="formData.value" step-strictly :step="1" placeholder="请输入字典值" clearable
+            :style="{width: '100%'}" />
         </el-form-item>
         <el-form-item label="启用状态" prop="status" required>
           <el-switch v-model="formData.status" active-text="开启" inactive-text="停用" />
@@ -199,7 +173,7 @@ const handleCurrentChange = (val) => {
 }
 
 // 查询
-const getTableData = async() => {
+const getTableData = async () => {
   const table = await getDictionaryDetailList({
     page: page.value,
     pageSize: pageSize.value,
@@ -217,7 +191,7 @@ getTableData()
 
 const type = ref('')
 const dialogFormVisible = ref(false)
-const updateDictionaryDetailFunc = async(row) => {
+const updateDictionaryDetailFunc = async (row) => {
   const res = await findDictionaryDetail({ ID: row.ID })
   type.value = 'update'
   if (res.code === 0) {
@@ -236,7 +210,7 @@ const closeDialog = () => {
     DictionaryID: ''
   }
 }
-const deleteDictionaryDetailFunc = async(row) => {
+const deleteDictionaryDetailFunc = async (row) => {
   row.visible = false
   const res = await deleteDictionaryDetail({ ID: row.ID })
   if (res.code === 0) {
@@ -252,7 +226,7 @@ const deleteDictionaryDetailFunc = async(row) => {
 }
 
 const dialogForm = ref(null)
-const enterDialog = async() => {
+const enterDialog = async () => {
   formData.value.DictionaryID = Number(route.params.id)
   dialogForm.value.validate(async valid => {
     if (!valid) return
@@ -286,4 +260,5 @@ const openDialog = () => {
 </script>
 
 <style>
+
 </style>

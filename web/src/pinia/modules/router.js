@@ -39,7 +39,7 @@ export const useRouterStore = defineStore('router', () => {
   const keepAliveRouters = ref(keepAliveRoutersArr)
   const routeMap = ({})
   // 从后台获取动态路由
-  const SetAsyncRouter = async() => {
+  const SetAsyncRouter = async () => {
     const baseRouter = [{
       path: '/layout',
       name: 'layout',
@@ -79,12 +79,12 @@ export const useRouterStore = defineStore('router', () => {
     })
     asyncRouterHandle(baseRouter)
     KeepAliveFilter(asyncRouter)
+    console.log(333, asyncRouter)
     asyncRouters.value = baseRouter
     routerList.value = routerListArr
     keepAliveRouters.value = keepAliveRoutersArr
     return true
   }
-
   return {
     asyncRouters,
     routerList,

@@ -19,11 +19,10 @@ export const createDictionary = (data) => {
 }
 
 // 删除字典目录
-export const deleteDictionary = (data) => {
+export const deleteDictionary = (id) => {
   return service({
-    url: '/dictionary',
-    method: 'DELETE',
-    data
+    url: `/dictionary/${id}`,
+    method: 'DELETE'
   })
 }
 
