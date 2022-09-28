@@ -36,7 +36,7 @@ func (d *DictionaryCtr) Create(c *gin.Context) {
 // 分页目录
 func (d *DictionaryCtr) List(c *gin.Context) {
 	// 参数校验
-	var param system.SearchInfo
+	var param system.SearchDictionary
 	err := c.ShouldBind(&param)
 	if err != nil {
 		magic.Fail(c, http.StatusBadRequest, err.Error(), param)

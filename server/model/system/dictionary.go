@@ -16,7 +16,7 @@ type Dictionary struct {
 }
 
 // 分页查询
-type SearchInfo struct {
+type SearchDictionary struct {
 	model.PageInfo
 	Dictionary
 }

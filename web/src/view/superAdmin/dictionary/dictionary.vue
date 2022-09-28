@@ -30,11 +30,11 @@
       </div>
       <el-table ref="multipleTable" :data="tableData" style="width: 100%" tooltip-effect="dark" row-key="ID">
         <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="日期" width="180">
+        <!-- <el-table-column align="left" label="日期" width="180">
           <template #default="scope">{{
           formatDate(scope.row.CreatedAt)
           }}</template>
-        </el-table-column>
+        </el-table-column> -->
 
         <el-table-column align="left" label="字典名（中）" prop="name" width="160" />
 

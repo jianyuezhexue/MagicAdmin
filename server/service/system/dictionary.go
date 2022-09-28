@@ -32,13 +32,14 @@ func (d DictionaryServer) Create(data system.Dictionary) (system.Dictionary, err
 }
 
 // 分页查询
-func (d DictionaryServer) List(data system.SearchInfo) (res magic.PageResult, err error) {
+func (d DictionaryServer) List(data system.SearchDictionary) (res magic.PageResult, err error) {
 	// 初始化DB
 	db := magic.Orm.Model(&system.Dictionary{})
 
 	// 组合搜索条件 | 可以用循环简化代码
 	if data.Pid != 0 {
 		db = db.Where("`name` LIKE ?", "%"+strconv.Itoa(data.Pid)+"%")
+		// db = db.Where("`name` LIKE ?", "%"+convertor.ToString(data.Pid)+"%")
 	}
 	if data.Name != "" {
 		db = db.Where("`name` LIKE ?", "%"+data.Name+"%")
