@@ -33,9 +33,7 @@
         <el-table-column align="left" label="字典名（中）" prop="name" width="160" />
         <el-table-column align="left" label="字典名（英）" prop="value" width="120" />
         <el-table-column align="left" label="超管" prop="status" width="120">
-          <template #default="scope">{{
-          formatBoolean(scope.row.super)
-          }}</template>
+          <template #default="scope">{{formatBoolean(scope.row.super)}}</template>
         </el-table-column>
         <el-table-column align="left" label="描述" prop="desc" width="280" />
         <el-table-column align="left" label="按钮组">
@@ -71,6 +69,9 @@
         </el-form-item>
         <el-form-item label="字典名（英）" prop="type">
           <el-input v-model="formData.value" placeholder="请输入字典名（英）" clearable :style="{ width: '100%' }" />
+        </el-form-item>
+        <el-form-item label="超管权限" prop="super">
+          <el-switch v-model="formData.super" :active-value=1 :inactive-value=2 class="ml-2" />
         </el-form-item>
         <el-form-item label="排序" prop="sort">
           <el-input-number v-model="formData.sort" :min="1" :max="100" />
@@ -113,7 +114,7 @@ const router = useRouter()
 
 const formData = ref({
   pid: 0,
-  super: 0,
+  super: 1,
   name: "",
   value: "",
   sort: 50,

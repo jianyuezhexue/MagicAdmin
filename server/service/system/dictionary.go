@@ -50,7 +50,7 @@ func (d *DictionaryServer) List(data system.SearchDictionary) (res magic.PageRes
 		db = db.Where("`name` LIKE ?", "%"+data.Value+"%")
 	}
 	if data.Super != 0 {
-		db = db.Where("`name` LIKE ?", "%"+strconv.Itoa(data.Super)+"%")
+		db = db.Where("`super` LIKE ?", "%1%")
 	}
 	if data.Desc != "" {
 		db = db.Where("`desc` LIKE ?", "%"+data.Desc+"%")
@@ -91,7 +91,8 @@ func (d *DictionaryServer) Item(id model.GetById) (res system.Dictionary, err er
 // 更新目录
 func (d *DictionaryServer) Update(data system.Dictionary) (res system.Dictionary, err error) {
 	// 查询数据
-	err = magic.Orm.Where("id = ?", data.Id).Find(&res).Error
+	var find system.Dictionary
+	err = magic.Orm.Where("id = ?", data.Id).Find(&find).Error
 	if err != nil {
 		magic.Logger.Info(err.Error())
 		return res, errors.New("系统繁忙，请稍后再试!")

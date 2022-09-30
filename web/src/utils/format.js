@@ -3,7 +3,7 @@ import { getDict } from '@/utils/dictionary'
 
 export const formatBoolean = (bool) => {
   if (bool !== null) {
-    return bool ? '是' : '否'
+    return bool == 1 ? '是' : '否'
   } else {
     return ''
   }
@@ -22,7 +22,7 @@ export const filterDict = (value, options) => {
   return rowLabel && rowLabel[0] && rowLabel[0].label
 }
 
-export const getDictFunc = async(type) => {
+export const getDictFunc = async (type) => {
   const dicts = await getDict(type)
   return dicts
 }
