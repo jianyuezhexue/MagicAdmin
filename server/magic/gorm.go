@@ -71,6 +71,10 @@ func initGorm() *gorm.DB {
 	sqlDB, _ := db.DB()
 	sqlDB.SetMaxIdleConns(config.MaxIdleConns)
 	sqlDB.SetMaxOpenConns(config.MaxOpenConns)
-	sqlDB.SetConnMaxLifetime(time.Hour * 4)
+
+	// 查询和设置自动断开链接的时间
+	// SHOW VARIABLES LIKE '%timeout%';
+	// wait_timeout = 120
+	sqlDB.SetConnMaxLifetime(time.Second * 110)
 	return db
 }

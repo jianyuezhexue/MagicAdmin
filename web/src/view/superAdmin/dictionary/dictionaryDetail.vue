@@ -67,8 +67,7 @@
           <el-input v-model="formData.label" placeholder="请输入展示值" clearable :style="{width: '100%'}" />
         </el-form-item>
         <el-form-item label="字典值" prop="value">
-          <el-input-number v-model.number="formData.value" step-strictly :step="1" placeholder="请输入字典值" clearable
-            :style="{width: '100%'}" />
+          <el-input v-model="formData.value" placeholder="请输入展示值" clearable :style="{width: '100%'}" />
         </el-form-item>
         <el-form-item label="启用状态" prop="status" required>
           <el-switch v-model="formData.status" active-text="开启" inactive-text="停用" />
@@ -108,7 +107,7 @@ import { formatBoolean, formatDate } from '@/utils/format'
 const route = useRoute()
 
 watch(() => route.params.id, (id) => {
-  searchInfo.value.DictionaryID = Number(id)
+  searchInfo.value.pid = Number(id)
   getTableData()
 })
 
@@ -116,7 +115,7 @@ const formData = ref({
   label: null,
   value: null,
   status: true,
-  sort: null
+  sort: 50
 })
 const rules = ref({
   label: [
@@ -146,9 +145,9 @@ const page = ref(1)
 const total = ref(0)
 const pageSize = ref(10)
 const tableData = ref([])
-const searchInfo = ref({ DictionaryID: Number(route.params.id) })
+const searchInfo = ref({ pid: Number(route.params.id) })
 const onReset = () => {
-  searchInfo.value = { DictionaryID: Number(route.params.id) }
+  searchInfo.value = { pid: Number(route.params.id) }
 }
 
 // 条件搜索前端看此方法
@@ -207,7 +206,7 @@ const closeDialog = () => {
     value: null,
     status: true,
     sort: null,
-    DictionaryID: ''
+    pid: ''
   }
 }
 const deleteDictionaryDetailFunc = async (row) => {
@@ -227,7 +226,7 @@ const deleteDictionaryDetailFunc = async (row) => {
 
 const dialogForm = ref(null)
 const enterDialog = async () => {
-  formData.value.DictionaryID = Number(route.params.id)
+  formData.value.pid = Number(route.params.id)
   dialogForm.value.validate(async valid => {
     if (!valid) return
     let res
