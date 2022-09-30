@@ -15,8 +15,25 @@ type Dictionary struct {
 	Desc  string `json:"desc"`
 }
 
-// 分页查询
+// 分页查询字典目录
 type SearchDictionary struct {
 	model.PageInfo
 	Dictionary
+}
+
+// 数据字典详情表
+type DictionaryDetail struct {
+	model.BaseOrm
+	Pid   int    `json:"pid"`
+	Name  string `json:"name"`
+	Value string `json:"value"`
+	Super int    `json:"super"`
+	Sort  uint   `json:"sort"`
+	Desc  string `json:"desc"`
+}
+
+// 分页查询字典详情
+type SearchDictionaryDetail struct {
+	model.PageInfo
+	DictionaryDetail
 }

@@ -100,7 +100,7 @@ import {
   updateDictionaryDetail,
   findDictionaryDetail,
   getDictionaryDetailList
-} from '@/api/DictionaryDetail' // 此处请自行替换地址
+} from '@/api/dictionaryDetail' // 此处请自行替换地址
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'

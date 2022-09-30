@@ -49,6 +49,13 @@ func Routers() *gin.Engine {
 		PrivateGroup.GET("/dictionary/:id", system.DictionaryApi.Item)      // 查询字典目录
 		PrivateGroup.PUT("/dictionary", system.DictionaryApi.Update)        // 更新字典目录
 		PrivateGroup.DELETE("/dictionary/:id", system.DictionaryApi.Delete) // 删除字典目录
+
+		// 字典-详情
+		PrivateGroup.POST("/dictionaryDetail", system.DictionaryDetailApi.Create)       // 新增字典目录
+		PrivateGroup.GET("/dictionaryDetail", system.DictionaryDetailApi.List)          // 分页字典目录
+		PrivateGroup.GET("/dictionaryDetail/:id", system.DictionaryDetailApi.Item)      // 查询字典目录
+		PrivateGroup.PUT("/dictionaryDetail", system.DictionaryDetailApi.Update)        // 更新字典目录
+		PrivateGroup.DELETE("/dictionaryDetail/:id", system.DictionaryDetailApi.Delete) // 删除字典目录
 	}
 
 	magic.Logger.Info("router register success")
