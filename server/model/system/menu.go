@@ -57,7 +57,7 @@ func (a Array[T]) Value() (driver.Value, error) {
 type Menu struct {
 	model.BaseOrm
 	Meta      `json:"meta"`
-	ParentId  uint           `json:"parentId"`  // 父菜单ID
+	ParentId  uint64         `json:"parentId"`  // 父菜单ID
 	Path      string         `json:"path"`      // 路由path
 	Name      string         `json:"name"`      // 路由name
 	Hidden    bool           `json:"hidden"`    // 是否在列表隐藏

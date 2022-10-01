@@ -17,7 +17,7 @@ type JWT struct {
 // BaseClaims struct
 type BaseClaims struct {
 	UUID        uuid.UUID
-	ID          uint
+	ID          uint64
 	UserName    string
 	NickName    string
 	AuthorityId string

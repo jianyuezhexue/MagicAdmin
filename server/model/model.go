@@ -10,7 +10,7 @@ import (
 
 // BaseOrm ORM默认字段
 type BaseOrm struct {
-	Id        uint           `json:"id" gorm:"primarykey"` // 主键ID
+	Id        uint64         `json:"id" gorm:"primarykey"` // 主键ID
 	CreatedAt LocalTime      `json:"-"`                    // 创建时间
 	UpdatedAt LocalTime      `json:"-"`                    // 更新时间
 	DeletedAt gorm.DeletedAt `json:"-" gorm:"index;"`      // 删除时间
