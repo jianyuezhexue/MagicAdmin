@@ -39,7 +39,7 @@ func (d *DictionaryDetailServer) List(data system.SearchDictionaryDetail) (res m
 
 	// 组合搜索条件 | 可以用循环简化代码
 	if data.Pid != 0 {
-		db = db.Debug().Where("`pid` = ?", data.Pid)
+		db = db.Where("`pid` = ?", data.Pid)
 	}
 	if data.Name != "" {
 		db = db.Where("`name` LIKE ?", "%"+data.Name+"%")
@@ -62,7 +62,7 @@ func (d *DictionaryDetailServer) List(data system.SearchDictionaryDetail) (res m
 	limit := data.PageSize
 	offset := (data.Page - 1) * data.PageSize
 	var list []system.DictionaryDetail
-	err = db.Debug().Limit(limit).Offset(offset).Find(&list).Error
+	err = db.Limit(limit).Offset(offset).Find(&list).Error
 
 	// 组合返回数据
 	res = magic.PageResult{
