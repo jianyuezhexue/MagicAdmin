@@ -1,19 +1,16 @@
 package system
 
 import (
-	"time"
+	"github.com/jianyuezhexue/MagicAdmin/model"
 )
 
 // Authority 授权
 type Authority struct {
-	CreatedAt     time.Time  // 创建时间
-	UpdatedAt     time.Time  // 更新时间
-	DeletedAt     *time.Time `sql:"index"`
-	AuthorityId   string     `json:"authorityId"`   // 角色ID
-	AuthorityName string     `json:"authorityName"` // 角色名
-	ParentId      string     `json:"parentId"`      // 父角色ID
-	// DataAuthorityId []Authority `json:"dataAuthorityId"  gorm:"-"`
-	Children      []Authority `json:"children" gorm:"-"`
-	DefaultRouter string      `json:"defaultRouter"` // 默认菜单(默认dashboard)
-	MenuIds       string      `json:"menuIds"`       // 权限下的ID
+	model.BaseOrm
+	AuthorityId   uint64       `json:"authorityId" form:"authorityId"`     // 角色ID
+	AuthorityName string       `json:"authorityName" form:"authorityName"` // 角色名
+	Pid           uint64       `json:"pid" form:"pid"`                     // 父角色ID
+	DefaultRouter string       `json:"defaultRouter" form:"DefaultRouter"` // 默认菜单(默认dashboard)
+	MenuIds       string       `json:"menuIds" form:"menuIds"`             // 权限下的ID
+	Children      []*Authority `json:"children" gorm:"-"`
 }

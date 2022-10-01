@@ -1,85 +1,54 @@
 import service from '@/utils/request'
-// @Router /authority/getAuthorityList [post]
+// 获取角色列表
 export const getAuthorityList = (data) => {
   return service({
-    url: '/authority/getAuthorityList',
-    method: 'post',
+    url: '/authorityTree',
+    method: 'GET',
     data
   })
 }
 
-// @Summary 删除角色
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body {authorityId uint} true "删除角色"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /authority/deleteAuthority [post]
+// 删除角色
 export const deleteAuthority = (data) => {
   return service({
     url: '/authority/deleteAuthority',
-    method: 'post',
+    method: 'DELETE',
     data
   })
 }
 
-// @Summary 创建角色
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body api.CreateAuthorityPatams true "创建角色"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /authority/createAuthority [post]
+// 创建角色
 export const createAuthority = (data) => {
   return service({
     url: '/authority/createAuthority',
-    method: 'post',
+    method: 'POST',
     data
   })
 }
 
-// @Tags authority
-// @Summary 拷贝角色
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body api.CreateAuthorityPatams true "拷贝角色"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"拷贝成功"}"
-// @Router /authority/copyAuthority [post]
+// 拷贝角色
 export const copyAuthority = (data) => {
   return service({
     url: '/authority/copyAuthority',
-    method: 'post',
+    method: 'POST',
     data
   })
 }
 
-// @Summary 设置角色资源权限
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body sysModel.SysAuthority true "设置角色资源权限"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"设置成功"}"
-// @Router /authority/setDataAuthority [post]
+// 设置角色资源权限
 export const setDataAuthority = (data) => {
   return service({
     url: '/authority/setDataAuthority',
-    method: 'post',
+    method: 'POST',
     data
   })
 }
 
-// @Summary 修改角色
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body model.SysAuthority true "修改角色"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"设置成功"}"
-// @Router /authority/setDataAuthority [post]
+// 修改角色
 export const updateAuthority = (data) => {
   return service({
     url: '/authority/updateAuthority',
-    method: 'put',
+    method: 'PUT',
     data
   })
 }

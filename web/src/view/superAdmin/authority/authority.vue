@@ -5,51 +5,19 @@
       <div class="gva-btn-list">
         <el-button size="small" type="primary" icon="plus" @click="addAuthority(0)">新增角色</el-button>
       </div>
-      <el-table
-        :data="tableData"
-        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-        row-key="authorityId"
-        style="width: 100%"
-      >
-        <el-table-column label="角色ID" min-width="180" prop="authorityId" />
+      <el-table :data="tableData" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" row-key="authorityId"
+        style="width: 100%">
         <el-table-column align="left" label="角色名称" min-width="180" prop="authorityName" />
+        <el-table-column label="角色ID" min-width="180" prop="authorityId" />
         <el-table-column align="left" label="操作" width="460">
           <template #default="scope">
-            <el-button
-              icon="setting"
-              size="small"
-              type="primary"
-              link
-              @click="opdendrawer(scope.row)"
-            >设置权限</el-button>
-            <el-button
-              icon="plus"
-              size="small"
-              type="primary"
-              link
-              @click="addAuthority(scope.row.authorityId)"
-            >新增子角色</el-button>
-            <el-button
-              icon="copy-document"
-              size="small"
-              type="primary"
-              link
-              @click="copyAuthorityFunc(scope.row)"
-            >拷贝</el-button>
-            <el-button
-              icon="edit"
-              size="small"
-              type="primary"
-              link
-              @click="editAuthority(scope.row)"
-            >编辑</el-button>
-            <el-button
-              icon="delete"
-              size="small"
-              type="primary"
-              link
-              @click="deleteAuth(scope.row)"
-            >删除</el-button>
+            <el-button icon="setting" size="small" type="primary" link @click="opdendrawer(scope.row)">设置权限</el-button>
+            <el-button icon="plus" size="small" type="primary" link @click="addAuthority(scope.row.authorityId)">新增子角色
+            </el-button>
+            <el-button icon="copy-document" size="small" type="primary" link @click="copyAuthorityFunc(scope.row)">拷贝
+            </el-button>
+            <el-button icon="edit" size="small" type="primary" link @click="editAuthority(scope.row)">编辑</el-button>
+            <el-button icon="delete" size="small" type="primary" link @click="deleteAuth(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -58,15 +26,10 @@
     <el-dialog v-model="dialogFormVisible" :title="dialogTitle">
       <el-form ref="authorityForm" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="父级角色" prop="parentId">
-          <el-cascader
-            v-model="form.parentId"
-            style="width:100%"
-            :disabled="dialogType=='add'"
+          <el-cascader v-model="form.parentId" style="width:100%" :disabled="dialogType=='add'"
             :options="AuthorityOption"
             :props="{ checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
-            :show-all-levels="false"
-            filterable
-          />
+            :show-all-levels="false" filterable />
         </el-form-item>
         <el-form-item label="角色ID" prop="authorityId">
           <el-input v-model="form.authorityId" :disabled="dialogType=='edit'" autocomplete="off" />
@@ -163,7 +126,7 @@ const tableData = ref([])
 const searchInfo = ref({})
 
 // 查询
-const getTableData = async() => {
+const getTableData = async () => {
   const table = await getAuthorityList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
   if (table.code === 0) {
     tableData.value = table.data.list
@@ -212,7 +175,7 @@ const deleteAuth = (row) => {
     cancelButtonText: '取消',
     type: 'warning'
   })
-    .then(async() => {
+    .then(async () => {
       const res = await deleteAuthority({ authorityId: row.authorityId })
       if (res.code === 0) {
         ElMessage({
@@ -333,29 +296,29 @@ const setOptions = () => {
 const setAuthorityOptions = (AuthorityData, optionsData, disabled) => {
   form.value.authorityId = String(form.value.authorityId)
   AuthorityData &&
-        AuthorityData.forEach(item => {
-          if (item.children && item.children.length) {
-            const option = {
-              authorityId: item.authorityId,
-              authorityName: item.authorityName,
-              disabled: disabled || item.authorityId === form.value.authorityId,
-              children: []
-            }
-            setAuthorityOptions(
-              item.children,
-              option.children,
-              disabled || item.authorityId === form.value.authorityId
-            )
-            optionsData.push(option)
-          } else {
-            const option = {
-              authorityId: item.authorityId,
-              authorityName: item.authorityName,
-              disabled: disabled || item.authorityId === form.value.authorityId
-            }
-            optionsData.push(option)
-          }
-        })
+    AuthorityData.forEach(item => {
+      if (item.children && item.children.length) {
+        const option = {
+          authorityId: item.authorityId,
+          authorityName: item.authorityName,
+          disabled: disabled || item.authorityId === form.value.authorityId,
+          children: []
+        }
+        setAuthorityOptions(
+          item.children,
+          option.children,
+          disabled || item.authorityId === form.value.authorityId
+        )
+        optionsData.push(option)
+      } else {
+        const option = {
+          authorityId: item.authorityId,
+          authorityName: item.authorityName,
+          disabled: disabled || item.authorityId === form.value.authorityId
+        }
+        optionsData.push(option)
+      }
+    })
 }
 // 增加角色
 const addAuthority = (parentId) => {
@@ -391,19 +354,21 @@ export default {
 .authority {
   .el-input-number {
     margin-left: 15px;
+
     span {
       display: none;
     }
   }
 }
-.tree-content{
+
+.tree-content {
   overflow: auto;
   height: calc(100vh - 100px);
   margin-top: 10px;
 }
 
-.auth-drawer{
-  .el-drawer__body{
+.auth-drawer {
+  .el-drawer__body {
     overflow: hidden;
   }
 }

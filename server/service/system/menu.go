@@ -16,7 +16,6 @@ func TreeTransform(data []system.Menu) (trees []system.Menu) {
 	// 一级找子集
 	for index := range data {
 		if data[index].ParentId == 0 {
-			// todo:性能结合实际业务待优化
 			trees = append(trees, FindChild(data[index], data))
 		}
 	}

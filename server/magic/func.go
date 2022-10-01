@@ -39,6 +39,12 @@ func Fail(c *gin.Context, code int, msg string, data interface{}) {
 	c.JSON(http.StatusOK, gin.H{"code": code, "msg": msg, "data": data})
 }
 
+// 调试打印数据
+func Print(data any) {
+	toJson, _ := json.MarshalIndent(data, "", "  ")
+	fmt.Println(string(toJson))
+}
+
 // PathExists 判断文件目录是否存在
 func PathExists(path string) (bool, error) {
 	_, err := os.Stat(path)

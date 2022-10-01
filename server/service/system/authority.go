@@ -1,6 +1,7 @@
 package system
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 
@@ -36,4 +37,44 @@ func MenuIds(authorityId int) (res []string, err error) {
 	// 字符串解析
 	slice := strings.Split(menuIds, ",")
 	return slice, nil
+}
+
+type AuthorityServer struct{}
+
+var AuthorityApp = new(AuthorityServer)
+
+// 列表转树形
+func MakeTrees(listData []*system.Authority, Pid uint64) []*system.Authority {
+	trees := make([]*system.Authority, 0)
+	for _, item := range listData {
+		if item.Pid == Pid {
+			item.Children = MakeTrees(listData, item.AuthorityId)
+			trees = append(trees, item)
+		}
+	}
+	return trees
+}
+
+// 查询树形列表
+func (d *AuthorityServer) TreeList() (res magic.PageResult, err error) {
+	// 初始化DB
+	var list []*system.Authority
+	err = magic.Orm.Order("authorityId").Find(&list).Error
+	if err != nil {
+		return res, errors.New("数据库请求失败")
+	}
+
+	// 树形转化
+	tree := MakeTrees(list, 0)
+
+	// 组合返回数据
+	res = magic.PageResult{
+		List:     tree,
+		Total:    999,
+		Page:     1,
+		PageSize: 10,
+	}
+
+	// 返回数据
+	return res, err
 }
