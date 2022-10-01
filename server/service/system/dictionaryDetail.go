@@ -2,7 +2,6 @@ package system
 
 import (
 	"errors"
-	"strconv"
 
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model"
@@ -40,20 +39,7 @@ func (d *DictionaryDetailServer) List(data system.SearchDictionaryDetail) (res m
 
 	// 组合搜索条件 | 可以用循环简化代码
 	if data.Pid != 0 {
-		db = db.Where("`name` LIKE ?", "%"+strconv.Itoa(data.Pid)+"%")
-		// db = db.Where("`name` LIKE ?", "%"+convertor.ToString(data.Pid)+"%")
-	}
-	if data.Name != "" {
-		db = db.Where("`name` LIKE ?", "%"+data.Name+"%")
-	}
-	if data.Value != "" {
-		db = db.Where("`name` LIKE ?", "%"+data.Value+"%")
-	}
-	if data.Super != 0 {
-		db = db.Where("`super` LIKE ?", "%1%")
-	}
-	if data.Desc != "" {
-		db = db.Where("`desc` LIKE ?", "%"+data.Desc+"%")
+		db = db.Debug().Where("`pid` = ?", data.Pid)
 	}
 
 	// 查询总数
@@ -67,7 +53,7 @@ func (d *DictionaryDetailServer) List(data system.SearchDictionaryDetail) (res m
 	limit := data.PageSize
 	offset := (data.Page - 1) * data.PageSize
 	var list []system.DictionaryDetail
-	err = db.Limit(limit).Offset(offset).Find(&list).Error
+	err = db.Debug().Limit(limit).Offset(offset).Find(&list).Error
 
 	// 组合返回数据
 	res = magic.PageResult{
@@ -95,13 +81,13 @@ func (d *DictionaryDetailServer) Update(data system.DictionaryDetail) (res syste
 	err = magic.Orm.Where("id = ?", data.Id).Find(&find).Error
 	if err != nil {
 		magic.Logger.Info(err.Error())
-		return res, errors.New("系统繁忙，请稍后再试!")
+		return res, errors.New("系统繁忙，请稍后再试")
 	}
 
 	// 查询条目不存在
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		magic.Logger.Info(err.Error())
-		return res, errors.New("编辑的目标不存在!")
+		return res, errors.New("编辑的目标不存在")
 	}
 
 	// 更新数据
@@ -116,13 +102,13 @@ func (d *DictionaryDetailServer) Delete(id model.GetById) (res system.Dictionary
 	err = magic.Orm.Where("id = ?", id.ID).Find(&find).Error
 	if err != nil {
 		magic.Logger.Info(err.Error())
-		return res, errors.New("系统繁忙，请稍后再试!")
+		return res, errors.New("系统繁忙，请稍后再试")
 	}
 
 	// 查询条目不存在
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		magic.Logger.Info(err.Error())
-		return res, errors.New("删除的目标不存在!")
+		return res, errors.New("删除的目标不存在")
 	}
 
 	// 更新数据

@@ -26,10 +26,10 @@
       </div>
       <el-table ref="multipleTable" :data="tableData" style="width: 100%" tooltip-effect="dark" row-key="ID">
         <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="日期" width="180">
+        <!-- <el-table-column align="left" label="日期" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
-        </el-table-column>
-        <el-table-column align="left" label="展示值" prop="label" width="120" />
+        </el-table-column> -->
+        <el-table-column align="left" label="展示值" prop="name" width="120" />
         <el-table-column align="left" label="字典值" prop="value" width="120" />
         <el-table-column align="left" label="启用状态" prop="status" width="120">
           <template #default="scope">{{ formatBoolean(scope.row.status) }}</template>
@@ -63,8 +63,8 @@
 
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
       <el-form ref="dialogForm" :model="formData" :rules="rules" size="medium" label-width="110px">
-        <el-form-item label="展示值" prop="label">
-          <el-input v-model="formData.label" placeholder="请输入展示值" clearable :style="{width: '100%'}" />
+        <el-form-item label="展示值" prop="name">
+          <el-input v-model="formData.name" placeholder="请输入展示值" clearable :style="{width: '100%'}" />
         </el-form-item>
         <el-form-item label="字典值" prop="value">
           <el-input v-model="formData.value" placeholder="请输入展示值" clearable :style="{width: '100%'}" />
@@ -112,13 +112,13 @@ watch(() => route.params.id, (id) => {
 })
 
 const formData = ref({
-  label: null,
+  name: null,
   value: null,
   status: true,
   sort: 50
 })
 const rules = ref({
-  label: [
+  name: [
     {
       required: true,
       message: '请输入展示值',

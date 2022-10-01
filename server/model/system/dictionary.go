@@ -24,12 +24,12 @@ type SearchDictionary struct {
 // 数据字典详情表
 type DictionaryDetail struct {
 	model.BaseOrm
-	Pid   int    `json:"pid"`
-	Name  string `json:"name"`
-	Value string `json:"value"`
-	Super int    `json:"super"`
-	Sort  uint   `json:"sort"`
-	Desc  string `json:"desc"`
+	Pid   int    `json:"pid" form:"pid"`
+	Name  string `json:"name" form:"name"`
+	Value string `json:"value" form:"value"`
+	Super int    `json:"super" form:"super"`
+	Sort  uint   `json:"sort" form:"sort"`
+	Desc  string `json:"desc" form:"desc"`
 }
 
 // 分页查询字典详情

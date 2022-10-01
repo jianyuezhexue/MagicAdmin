@@ -95,13 +95,13 @@ func (d *DictionaryServer) Update(data system.Dictionary) (res system.Dictionary
 	err = magic.Orm.Where("id = ?", data.Id).Find(&find).Error
 	if err != nil {
 		magic.Logger.Info(err.Error())
-		return res, errors.New("系统繁忙，请稍后再试!")
+		return res, errors.New("系统繁忙，请稍后再试")
 	}
 
 	// 查询条目不存在
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		magic.Logger.Info(err.Error())
-		return res, errors.New("编辑的目标不存在!")
+		return res, errors.New("编辑的目标不存在")
 	}
 
 	// 更新数据
@@ -116,13 +116,13 @@ func (d *DictionaryServer) Delete(id model.GetById) (res system.Dictionary, err 
 	err = magic.Orm.Where("id = ?", id.ID).Find(&find).Error
 	if err != nil {
 		magic.Logger.Info(err.Error())
-		return res, errors.New("系统繁忙，请稍后再试!")
+		return res, errors.New("系统繁忙，请稍后再试")
 	}
 
 	// 查询条目不存在
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		magic.Logger.Info(err.Error())
-		return res, errors.New("删除的目标不存在!")
+		return res, errors.New("删除的目标不存在")
 	}
 
 	// 更新数据
