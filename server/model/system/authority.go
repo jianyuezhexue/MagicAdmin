@@ -7,8 +7,8 @@ import (
 // Authority 授权
 type Authority struct {
 	model.BaseOrm
-	AuthorityId   uint64       `json:"authorityId" form:"authorityId"`     // 角色ID
-	AuthorityName string       `json:"authorityName" form:"authorityName"` // 角色名
+	Id            uint64       `json:"id" form:"id"`                       // 主键ID
+	Name          string       `json:"name" form:"name"`                   // 角色名
 	Desc          string       `json:"desc" form:"desc"`                   // 简介
 	Pid           uint64       `json:"pid" form:"pid"`                     // 父角色ID
 	DefaultRouter string       `json:"defaultRouter" form:"DefaultRouter"` // 默认菜单(默认dashboard)

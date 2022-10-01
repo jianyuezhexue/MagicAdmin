@@ -58,7 +58,11 @@ func Routers() *gin.Engine {
 		PrivateGroup.DELETE("/dictionaryDetail/:id", system.DictionaryDetailApi.Delete) // 删除字典目录
 
 		// 角色
-		PrivateGroup.GET("/authorityTree", system.AuthorityAPI.TreeList) // 角色树形列表
+		PrivateGroup.GET("/authorityTree", system.AuthorityAPI.TreeList)  // 角色树形列表
+		PrivateGroup.POST("/authority", system.AuthorityAPI.Create)       // 创建角色
+		PrivateGroup.PUT("/authority", system.AuthorityAPI.Update)        // 修改角色
+		PrivateGroup.DELETE("/authority/:id", system.AuthorityAPI.Delete) // 删除角色
+
 	}
 
 	magic.Logger.Info("router register success")

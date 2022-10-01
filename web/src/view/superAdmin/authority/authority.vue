@@ -5,14 +5,14 @@
       <div class="gva-btn-list">
         <el-button size="small" type="primary" icon="plus" @click="addAuthority(0)">新增角色</el-button>
       </div>
-      <el-table :data="tableData" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" row-key="authorityId"
+      <el-table :data="tableData" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" row-key="id"
         style="width: 100%">
-        <el-table-column align="left" label="角色名称" min-width="180" prop="authorityName" />
+        <el-table-column align="left" label="角色名称" min-width="180" prop="name" />
         <el-table-column label="角色简介" min-width="240" prop="desc" />
         <el-table-column align="left" label="操作" width="460">
           <template #default="scope">
             <el-button icon="setting" size="small" type="primary" link @click="opdendrawer(scope.row)">设置权限</el-button>
-            <el-button icon="plus" size="small" type="primary" link @click="addAuthority(scope.row.authorityId)">新增子角色
+            <el-button icon="plus" size="small" type="primary" link @click="addAuthority(scope.row.id)">新增子角色
             </el-button>
             <el-button icon="copy-document" size="small" type="primary" link @click="copyAuthorityFunc(scope.row)">拷贝
             </el-button>
@@ -25,17 +25,16 @@
     <!-- 新增角色弹窗 -->
     <el-dialog v-model="dialogFormVisible" :title="dialogTitle">
       <el-form ref="authorityForm" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="父级角色" prop="parentId">
-          <el-cascader v-model="form.parentId" style="width:100%" :disabled="dialogType=='add'"
-            :options="AuthorityOption"
-            :props="{ checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
+        <el-form-item label="父级角色" prop="pid">
+          <el-cascader v-model="form.pid" style="width:100%" :disabled="dialogType=='add'" :options="AuthorityOption"
+            :props="{ checkStrictly: true,label:'name',value:'id',disabled:'disabled',emitPath:false}"
             :show-all-levels="false" filterable />
         </el-form-item>
-        <el-form-item label="角色ID" prop="authorityId">
-          <el-input v-model="form.authorityId" :disabled="dialogType=='edit'" autocomplete="off" />
+        <el-form-item label="角色姓名" prop="name">
+          <el-input v-model="form.name" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="角色姓名" prop="authorityName">
-          <el-input v-model="form.authorityName" autocomplete="off" />
+        <el-form-item label="角色介绍" prop="desc">
+          <el-input v-model="form.desc" autocomplete="off" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -54,9 +53,9 @@
         <el-tab-pane label="角色api">
           <Apis ref="apis" :row="activeRow" @changeRow="changeRow" />
         </el-tab-pane>
-        <el-tab-pane label="资源权限">
+        <!-- <el-tab-pane label="资源权限">
           <Datas ref="datas" :authority="tableData" :row="activeRow" @changeRow="changeRow" />
-        </el-tab-pane>
+        </el-tab-pane> -->
       </el-tabs>
     </el-drawer>
   </div>
@@ -88,8 +87,8 @@ const mustUint = (rule, value, callback) => {
 
 const AuthorityOption = ref([
   {
-    authorityId: 0,
-    authorityName: '根角色'
+    id: 0,
+    name: '根角色'
   }
 ])
 const drawer = ref(false)
@@ -102,19 +101,20 @@ const apiDialogFlag = ref(false)
 const copyForm = ref({})
 
 const form = ref({
-  authorityId: 0,
-  authorityName: '',
-  parentId: 0
+  id: 0,
+  name: '',
+  pid: 0,
+  desc: ''
 })
 const rules = ref({
-  authorityId: [
+  id: [
     { required: true, message: '请输入角色ID', trigger: 'blur' },
     { validator: mustUint, trigger: 'blur', message: '必须为正整数' }
   ],
-  authorityName: [
+  name: [
     { required: true, message: '请输入角色名', trigger: 'blur' }
   ],
-  parentId: [
+  pid: [
     { required: true, message: '请选择父角色', trigger: 'blur' },
   ]
 })
@@ -174,26 +174,24 @@ const deleteAuth = (row) => {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
-  })
-    .then(async () => {
-      const res = await deleteAuthority({ authorityId: row.authorityId })
-      if (res.code === 0) {
-        ElMessage({
-          type: 'success',
-          message: '删除成功!'
-        })
-        if (tableData.value.length === 1 && page.value > 1) {
-          page.value--
-        }
-        getTableData()
-      }
-    })
-    .catch(() => {
+  }).then(async () => {
+    const res = await deleteAuthority(row.id)
+    if (res.code === 0) {
       ElMessage({
-        type: 'info',
-        message: '已取消删除'
+        type: 'success',
+        message: '删除成功!'
       })
+      if (tableData.value.length === 1 && page.value > 1) {
+        page.value--
+      }
+      getTableData()
+    }
+  }).catch(() => {
+    ElMessage({
+      type: 'info',
+      message: '已取消删除'
     })
+  })
 }
 // 初始化表单
 const authorityForm = ref(null)
@@ -202,9 +200,10 @@ const initForm = () => {
     authorityForm.value.resetFields()
   }
   form.value = {
-    authorityId: 0,
-    authorityName: '',
-    parentId: 0
+    id: 0,
+    name: '',
+    pid: 0,
+    desc: ''
   }
 }
 // 关闭窗口
@@ -213,17 +212,10 @@ const closeDialog = () => {
   dialogFormVisible.value = false
   apiDialogFlag.value = false
 }
-// 确定弹窗
 
+// 确定弹窗
 const enterDialog = () => {
-  form.value.authorityId = Number(form.value.authorityId)
-  if (form.value.authorityId === 0) {
-    ElMessage({
-      type: 'error',
-      message: '角色id不能为0'
-    })
-    return false
-  }
+  form.value.id = Number(form.value.id)
   authorityForm.value.validate(async valid => {
     if (valid) {
       switch (dialogType.value) {
@@ -246,7 +238,7 @@ const enterDialog = () => {
             if (res.code === 0) {
               ElMessage({
                 type: 'success',
-                message: '添加成功!'
+                message: '编辑成功!'
               })
               getTableData()
               closeDialog()
@@ -256,18 +248,18 @@ const enterDialog = () => {
         case 'copy': {
           const data = {
             authority: {
-              authorityId: 0,
-              authorityName: '',
-              datauthorityId: [],
-              parentId: 0
+              id: 0,
+              name: '',
+              datid: [],
+              pid: 0
             },
-            oldAuthorityId: 0
+            oldid: 0
           }
-          data.authority.authorityId = form.value.authorityId
-          data.authority.authorityName = form.value.authorityName
-          data.authority.parentId = form.value.parentId
-          data.authority.dataAuthorityId = copyForm.value.dataAuthorityId
-          data.oldAuthorityId = copyForm.value.authorityId
+          data.authority.id = form.value.id
+          data.authority.name = form.value.name
+          data.authority.pid = form.value.pid
+          data.authority.dataid = copyForm.value.dataid
+          data.oldid = copyForm.value.id
           const res = await copyAuthority(data)
           if (res.code === 0) {
             ElMessage({
@@ -287,45 +279,45 @@ const enterDialog = () => {
 const setOptions = () => {
   AuthorityOption.value = [
     {
-      authorityId: 0,
-      authorityName: '根角色'
+      id: 0,
+      name: '根角色'
     }
   ]
   setAuthorityOptions(tableData.value, AuthorityOption.value, false)
 }
 const setAuthorityOptions = (AuthorityData, optionsData, disabled) => {
-  form.value.authorityId = String(form.value.authorityId)
+  form.value.id = String(form.value.id)
   AuthorityData &&
     AuthorityData.forEach(item => {
       if (item.children && item.children.length) {
         const option = {
-          authorityId: item.authorityId,
-          authorityName: item.authorityName,
-          disabled: disabled || item.authorityId === form.value.authorityId,
+          id: item.id,
+          name: item.name,
+          disabled: disabled || item.id === form.value.id,
           children: []
         }
         setAuthorityOptions(
           item.children,
           option.children,
-          disabled || item.authorityId === form.value.authorityId
+          disabled || item.id === form.value.id
         )
         optionsData.push(option)
       } else {
         const option = {
-          authorityId: item.authorityId,
-          authorityName: item.authorityName,
-          disabled: disabled || item.authorityId === form.value.authorityId
+          id: item.id,
+          name: item.name,
+          disabled: disabled || item.id === form.value.id
         }
         optionsData.push(option)
       }
     })
 }
 // 增加角色
-const addAuthority = (parentId) => {
+const addAuthority = (pid) => {
   initForm()
   dialogTitle.value = '新增角色'
   dialogType.value = 'add'
-  form.value.parentId = parentId
+  form.value.pid = pid
   setOptions()
   dialogFormVisible.value = true
 }

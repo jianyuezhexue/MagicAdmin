@@ -9,19 +9,27 @@ export const getAuthorityList = (data) => {
 }
 
 // 删除角色
-export const deleteAuthority = (data) => {
+export const deleteAuthority = (id) => {
   return service({
-    url: '/authority/deleteAuthority',
-    method: 'DELETE',
-    data
+    url: `/authority/${id}`,
+    method: 'DELETE'
   })
 }
 
 // 创建角色
 export const createAuthority = (data) => {
   return service({
-    url: '/authority/createAuthority',
+    url: '/authority',
     method: 'POST',
+    data
+  })
+}
+
+// 修改角色
+export const updateAuthority = (data) => {
+  return service({
+    url: '/authority',
+    method: 'PUT',
     data
   })
 }
@@ -44,11 +52,3 @@ export const setDataAuthority = (data) => {
   })
 }
 
-// 修改角色
-export const updateAuthority = (data) => {
-  return service({
-    url: '/authority/updateAuthority',
-    method: 'PUT',
-    data
-  })
-}

@@ -8,7 +8,9 @@ import (
 	"github.com/gomodule/redigo/redis"
 	"github.com/jianyuezhexue/MagicAdmin/config"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
+	"github.com/jianyuezhexue/MagicAdmin/model"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
+	"gorm.io/gorm"
 )
 
 // MenuIds 通过权限ID查出所有菜单ID
@@ -48,7 +50,7 @@ func MakeTrees(listData []*system.Authority, Pid uint64) []*system.Authority {
 	trees := make([]*system.Authority, 0)
 	for _, item := range listData {
 		if item.Pid == Pid {
-			item.Children = MakeTrees(listData, item.AuthorityId)
+			item.Children = MakeTrees(listData, item.Id)
 			trees = append(trees, item)
 		}
 	}
@@ -56,10 +58,10 @@ func MakeTrees(listData []*system.Authority, Pid uint64) []*system.Authority {
 }
 
 // 查询树形列表
-func (d *AuthorityServer) TreeList() (res magic.PageResult, err error) {
+func (a *AuthorityServer) TreeList() (res magic.PageResult, err error) {
 	// 初始化DB
 	var list []*system.Authority
-	err = magic.Orm.Order("authorityId").Find(&list).Error
+	err = magic.Orm.Order("id").Find(&list).Error
 	if err != nil {
 		return res, errors.New("数据库请求失败")
 	}
@@ -77,4 +79,61 @@ func (d *AuthorityServer) TreeList() (res magic.PageResult, err error) {
 
 	// 返回数据
 	return res, err
+}
+
+// 创建角色
+func (a *AuthorityServer) Create(data system.Authority) (res system.Authority, err error) {
+	// 角色名查重
+	var find system.Authority
+	err = magic.Orm.Where("name = ?", data.Name).Find(&find).Error
+	if err != nil {
+		return find, err
+	}
+
+	// 重名提醒
+	if data.Name == find.Name {
+		return find, errors.New("角色名有重复，请检查")
+	}
+
+	// 保存数据
+	err = magic.Orm.Create(&data).Error
+	return data, err
+}
+
+// 修改角色
+func (a *AuthorityServer) Update(data system.Authority) (res system.Authority, err error) {
+	// 查询是否存在
+	var find system.Authority
+	err = magic.Orm.Where("id = ?", data.Id).Find(&find).Error
+	if err != nil {
+		return find, err
+	}
+
+	// 异常提醒
+	if err == gorm.ErrRecordNotFound {
+		return find, errors.New("您编辑的角色不存在")
+	}
+
+	// 更新数据
+	err = magic.Orm.Updates(&data).Error
+	return data, err
+}
+
+// 删除角色
+func (a *AuthorityServer) Delete(id model.GetById) (res system.Authority, err error) {
+	// 查询是否存在
+	var find system.Authority
+	err = magic.Orm.Where("id = ?", id.ID).Find(&find).Error
+	if err != nil {
+		return find, err
+	}
+
+	// 异常提醒
+	if err == gorm.ErrRecordNotFound {
+		return find, errors.New("您删除的角色不存在")
+	}
+
+	// 更新数据
+	err = magic.Orm.Delete(&find).Error
+	return find, err
 }
