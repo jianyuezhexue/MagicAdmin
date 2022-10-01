@@ -41,6 +41,15 @@ func (d *DictionaryDetailServer) List(data system.SearchDictionaryDetail) (res m
 	if data.Pid != 0 {
 		db = db.Debug().Where("`pid` = ?", data.Pid)
 	}
+	if data.Name != "" {
+		db = db.Where("`name` LIKE ?", "%"+data.Name+"%")
+	}
+	if data.Value != "" {
+		db = db.Where("`value` LIKE ?", "%"+data.Value+"%")
+	}
+	if data.Super != 0 {
+		db = db.Where("`super` = ?", data.Super)
+	}
 
 	// 查询总数
 	var total int64

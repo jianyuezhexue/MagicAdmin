@@ -3,15 +3,15 @@
     <div class="gva-search-box">
       <el-form :inline="true" :model="searchInfo">
         <el-form-item label="展示值">
-          <el-input v-model="searchInfo.label" placeholder="搜索条件" />
+          <el-input v-model="searchInfo.name" placeholder="搜索条件" />
         </el-form-item>
         <el-form-item label="字典值">
           <el-input v-model="searchInfo.value" placeholder="搜索条件" />
         </el-form-item>
         <el-form-item label="超管权限" prop="super">
           <el-select v-model="searchInfo.super" placeholder="请选择">
-            <el-option key="true" label="是" value="true" />
-            <el-option key="false" label="否" value="false" />
+            <el-option key="true" label="是" value="1" />
+            <el-option key="false" label="否" value="2" />
           </el-select>
         </el-form-item>
         <el-form-item>

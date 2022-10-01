@@ -40,20 +40,16 @@ func (d *DictionaryServer) List(data system.SearchDictionary) (res magic.PageRes
 
 	// 组合搜索条件 | 可以用循环简化代码
 	if data.Pid != 0 {
-		db = db.Where("`name` LIKE ?", "%"+strconv.Itoa(data.Pid)+"%")
-		// db = db.Where("`name` LIKE ?", "%"+convertor.ToString(data.Pid)+"%")
+		db = db.Where("`pid` = ?", strconv.Itoa(data.Pid))
 	}
 	if data.Name != "" {
 		db = db.Where("`name` LIKE ?", "%"+data.Name+"%")
 	}
 	if data.Value != "" {
-		db = db.Where("`name` LIKE ?", "%"+data.Value+"%")
+		db = db.Where("`value` LIKE ?", "%"+data.Value+"%")
 	}
 	if data.Super != 0 {
-		db = db.Where("`super` LIKE ?", "%1%")
-	}
-	if data.Desc != "" {
-		db = db.Where("`desc` LIKE ?", "%"+data.Desc+"%")
+		db = db.Where("`super` = ?", data.Super)
 	}
 
 	// 查询总数

@@ -7,17 +7,17 @@
           <el-input v-model="searchInfo.name" placeholder="搜索条件" />
         </el-form-item>
         <el-form-item label="字典名（英）">
-          <el-input v-model="searchInfo.type" placeholder="搜索条件" />
+          <el-input v-model="searchInfo.value" placeholder="搜索条件" />
         </el-form-item>
         <el-form-item label="超管权限" prop="status">
-          <el-select v-model="searchInfo.status" clear placeholder="请选择">
-            <el-option key="true" label="是" value="true" />
-            <el-option key="false" label="否" value="false" />
+          <el-select v-model="searchInfo.super" clear placeholder="请选择">
+            <el-option key="true" label="是" value="1" />
+            <el-option key="false" label="否" value="2" />
           </el-select>
         </el-form-item>
-        <el-form-item label="描述">
+        <!-- <el-form-item label="描述">
           <el-input v-model="searchInfo.desc" placeholder="搜索条件" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button size="small" type="primary" icon="search" @click="onSubmit">查询</el-button>
           <el-button size="small" icon="refresh" @click="onReset">重置</el-button>
