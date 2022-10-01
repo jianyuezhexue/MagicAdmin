@@ -8,7 +8,7 @@
       <el-table :data="tableData" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" row-key="authorityId"
         style="width: 100%">
         <el-table-column align="left" label="角色名称" min-width="180" prop="authorityName" />
-        <el-table-column label="角色ID" min-width="180" prop="authorityId" />
+        <el-table-column label="角色简介" min-width="240" prop="desc" />
         <el-table-column align="left" label="操作" width="460">
           <template #default="scope">
             <el-button icon="setting" size="small" type="primary" link @click="opdendrawer(scope.row)">设置权限</el-button>
