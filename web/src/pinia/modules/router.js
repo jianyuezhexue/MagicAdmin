@@ -13,7 +13,8 @@ const formatRouter = (routes, routeMap) => {
       routerListArr.push({ label: item.meta.title, value: item.name })
     }
     item.meta.btns = item.btns
-    item.meta.hidden = item.hidden
+    item.meta.hidden = item.hidden                   // 在菜单栏中不显示
+    item.meta.closeTab = item.hidden ? true : false  // 失焦自动关闭tab
     routeMap[item.name] = item
     if (item.children && item.children.length > 0) {
       formatRouter(item.children, routeMap)
@@ -79,7 +80,6 @@ export const useRouterStore = defineStore('router', () => {
     })
     asyncRouterHandle(baseRouter)
     KeepAliveFilter(asyncRouter)
-    console.log(333, asyncRouter)
     asyncRouters.value = baseRouter
     routerList.value = routerListArr
     keepAliveRouters.value = keepAliveRoutersArr

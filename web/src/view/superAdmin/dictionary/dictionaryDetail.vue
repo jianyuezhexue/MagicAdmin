@@ -8,8 +8,8 @@
         <el-form-item label="字典值">
           <el-input v-model="searchInfo.value" placeholder="搜索条件" />
         </el-form-item>
-        <el-form-item label="启用状态" prop="status">
-          <el-select v-model="searchInfo.status" placeholder="请选择">
+        <el-form-item label="超管权限" prop="super">
+          <el-select v-model="searchInfo.super" placeholder="请选择">
             <el-option key="true" label="是" value="true" />
             <el-option key="false" label="否" value="false" />
           </el-select>
@@ -31,10 +31,11 @@
         </el-table-column> -->
         <el-table-column align="left" label="展示值" prop="name" width="120" />
         <el-table-column align="left" label="字典值" prop="value" width="120" />
-        <el-table-column align="left" label="启用状态" prop="status" width="120">
-          <template #default="scope">{{ formatBoolean(scope.row.status) }}</template>
+        <el-table-column align="left" label="超管权限" prop="super" width="120">
+          <template #default="scope">{{formatBoolean(scope.row.super)}}</template>
         </el-table-column>
         <el-table-column align="left" label="排序标记" prop="sort" width="120" />
+        <el-table-column align="left" label="展示值" prop="desc" width="240" />
         <el-table-column align="left" label="按钮组">
           <template #default="scope">
             <el-button size="small" type="primary" link icon="edit" @click="updateDictionaryDetailFunc(scope.row)">变更
@@ -62,18 +63,21 @@
     </div>
 
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
-      <el-form ref="dialogForm" :model="formData" :rules="rules" size="medium" label-width="110px">
+      <el-form ref="dialogForm" :model="formData" :rules="rules" size="default" label-width="110px">
         <el-form-item label="展示值" prop="name">
           <el-input v-model="formData.name" placeholder="请输入展示值" clearable :style="{width: '100%'}" />
         </el-form-item>
         <el-form-item label="字典值" prop="value">
           <el-input v-model="formData.value" placeholder="请输入展示值" clearable :style="{width: '100%'}" />
         </el-form-item>
-        <el-form-item label="启用状态" prop="status" required>
-          <el-switch v-model="formData.status" active-text="开启" inactive-text="停用" />
+        <el-form-item label="超管权限" prop="super">
+          <el-switch v-model="formData.super" :active-value=1 :inactive-value=2 class="ml-2" />
         </el-form-item>
         <el-form-item label="排序标记" prop="sort">
           <el-input-number v-model.number="formData.sort" placeholder="排序标记" />
+        </el-form-item>
+        <el-form-item label="描述" prop="desc">
+          <el-input v-model="formData.desc" placeholder="请输入描述" clearable :style="{width: '100%'}" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -106,16 +110,12 @@ import { ElMessage } from 'element-plus'
 import { formatBoolean, formatDate } from '@/utils/format'
 const route = useRoute()
 
-watch(() => route.params.id, (id) => {
-  searchInfo.value.pid = Number(id)
-  getTableData()
-})
-
 const formData = ref({
-  name: null,
-  value: null,
-  status: true,
-  sort: 50
+  name: "",
+  value: "",
+  super: 0,
+  sort: 50,
+  desc: ""
 })
 const rules = ref({
   name: [
@@ -154,8 +154,8 @@ const onReset = () => {
 const onSubmit = () => {
   page.value = 1
   pageSize.value = 10
-  if (searchInfo.value.status === '') {
-    searchInfo.value.status = null
+  if (searchInfo.value.super === '') {
+    searchInfo.value.super = null
   }
   getTableData()
 }
@@ -191,10 +191,10 @@ getTableData()
 const type = ref('')
 const dialogFormVisible = ref(false)
 const updateDictionaryDetailFunc = async (row) => {
-  const res = await findDictionaryDetail({ ID: row.ID })
+  const res = await findDictionaryDetail(row.id)
   type.value = 'update'
   if (res.code === 0) {
-    formData.value = res.data.reDictionaryDetail
+    formData.value = res.data
     dialogFormVisible.value = true
   }
 }
@@ -202,16 +202,16 @@ const updateDictionaryDetailFunc = async (row) => {
 const closeDialog = () => {
   dialogFormVisible.value = false
   formData.value = {
-    label: null,
-    value: null,
-    status: true,
-    sort: null,
-    pid: ''
+    name: "",
+    value: "",
+    super: 0,
+    sort: 50,
+    desc: ""
   }
 }
 const deleteDictionaryDetailFunc = async (row) => {
   row.visible = false
-  const res = await deleteDictionaryDetail({ ID: row.ID })
+  const res = await deleteDictionaryDetail(row.id)
   if (res.code === 0) {
     ElMessage({
       type: 'success',

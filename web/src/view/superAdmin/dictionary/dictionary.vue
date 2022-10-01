@@ -9,7 +9,7 @@
         <el-form-item label="字典名（英）">
           <el-input v-model="searchInfo.type" placeholder="搜索条件" />
         </el-form-item>
-        <el-form-item label="状态" prop="status">
+        <el-form-item label="超管权限" prop="status">
           <el-select v-model="searchInfo.status" clear placeholder="请选择">
             <el-option key="true" label="是" value="true" />
             <el-option key="false" label="否" value="false" />
@@ -32,7 +32,7 @@
         <el-table-column type="selection" width="55" />
         <el-table-column align="left" label="字典名（中）" prop="name" width="160" />
         <el-table-column align="left" label="字典名（英）" prop="value" width="120" />
-        <el-table-column align="left" label="超管" prop="status" width="120">
+        <el-table-column align="left" label="超管权限" prop="status" width="120">
           <template #default="scope">{{formatBoolean(scope.row.super)}}</template>
         </el-table-column>
         <el-table-column align="left" label="描述" prop="desc" width="280" />
