@@ -45,10 +45,6 @@ const init = async () => {
 
     data.value = res.data
     selected.value = props.row.menuIds.split(",")
-    console.log(selected.value)
-    console.log(treeRef)
-
-    console.log(res)
     //   menuTreeData.value = res.data.menus
     //   const res1 = await getMenuAuthority({ authorityId: props.row.authorityId })
     //   const menus = res1.data.menus
