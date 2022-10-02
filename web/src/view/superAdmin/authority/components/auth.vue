@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div class="clearfix sticky-button">
-            <el-input v-model="filterText" class="fitler" placeholder="关键词搜索" />
-            <el-button class="fl-right" size="small" type="primary" @click="relation">确 定</el-button>
-        </div>
-        <el-tree ref="treeRef" class="filter-tree" show-checkbox :data="data" :props="menuDefaultProps"
-            :filter-node-method="filterNode" @check-change="handleCheckChange" />
+        <el-input v-model="filterText" class="fitler" placeholder="关键词搜索" />
+        <el-button class="fl-right" size="small" type="primary" @click="relation">确 定</el-button>
     </div>
+    <br>
+    <el-tree ref="treeRef" class="filter-tree" show-checkbox :data="data" :props="menuDefaultProps"
+        :filter-node-method="filterNode" node-key="id" :default-checked-keys="selected" :highlight-current="true"
+        :accordion="true" :check-on-click-node="true" @check-change="handleCheckChange" />
 </template>
   
 <script setup>
@@ -27,15 +27,27 @@ const props = defineProps({
 })
 
 const filterText = ref('')
-const treeRef = ref()
-const data = ref([]) // 数据
+const treeRef = ref()    // 关联树
+const data = ref([])     // 数据
+const dataNew = ref([])     // 数据
+const selected = ref([]) // 已有权限
+
+// 按照树形结构
 
 // 初始化查询所有菜单和权限
 const init = async () => {
+    // 角色ID
+    console.log(props.row.id)
     const res = await getBaseMenuTree()
     // TODO:重新处理数据:API,其他权限拿处理
+    // id,lable,children
+    
 
     data.value = res.data
+    selected.value = props.row.menuIds.split(",")
+    console.log(selected.value)
+    console.log(treeRef)
+
     console.log(res)
     //   menuTreeData.value = res.data.menus
     //   const res1 = await getMenuAuthority({ authorityId: props.row.authorityId })

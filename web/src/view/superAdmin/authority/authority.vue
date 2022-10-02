@@ -47,7 +47,7 @@
     </el-dialog>
 
     <!-- 权限配置弹窗 -->
-    <el-drawer v-if="drawer" v-model="drawer" custom-class="auth-drawer" :with-header="false" size="40%" title="角色配置">
+    <el-drawer v-if="drawer" v-model="drawer" custom-class="auth-drawer" :with-header="false" size="45%" title="角色配置">
       <!-- <el-tabs :before-leave="autoEnter" type="border-card">
         <el-tab-pane label="角色菜单">
           <Menus ref="menus" :row="activeRow" @changeRow="changeRow" />
@@ -58,7 +58,7 @@
       </el-tabs> -->
       <el-tabs :before-leave="autoEnter" type="border-card">
         <el-tab-pane label="权限设置">
-          <Auth />
+          <Auth  ref="auth" :row="activeRow" />
         </el-tab-pane>
       </el-tabs>
     </el-drawer>

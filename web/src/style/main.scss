@@ -1216,3 +1216,7 @@ $mainHight: 100vh;
 .el-dialog{
     width: 60%;
 }
+
+.el-tree-node__content{
+    user-select: none;
+}

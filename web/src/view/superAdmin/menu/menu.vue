@@ -423,6 +423,8 @@ const editMenu = async (id) => {
   dialogTitle.value = '编辑菜单'
   const res = await getBaseMenuById(id)
   form.value = res.data
+  form.value.parentId = String(form.value.parentId)
+
   isEdit.value = true
   setOptions()
   dialogFormVisible.value = true
