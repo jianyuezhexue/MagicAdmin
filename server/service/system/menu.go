@@ -11,29 +11,41 @@ import (
 	"gorm.io/gorm"
 )
 
-// 菜单树型转换
-func TreeTransform(data []system.Menu) (trees []system.Menu) {
-	// 一级找子集
-	for index := range data {
-		if data[index].ParentId == 0 {
-			trees = append(trees, FindChild(data[index], data))
+type MenuServer struct{}
+
+var MenuApp = new(MenuServer)
+
+// 转树形结构
+func (m *MenuServer) MakeTree(datas []system.Menu, ParentId uint64) []system.Menu {
+	trees := make([]system.Menu, 0)
+
+	for _, item := range datas {
+		if item.ParentId == ParentId {
+			item.Children = MenuApp.MakeTree(datas, item.Id)
+			trees = append(trees, item)
 		}
 	}
 	return trees
 }
 
-// 菜单树型转换-子集找子集
-func FindChild(node system.Menu, data []system.Menu) system.Menu {
-	for index := range data {
-		if node.Id == data[index].ParentId {
-			node.Children = append(node.Children, FindChild(data[index], data))
-		}
+// 菜单树
+func (m *MenuServer) MenuTree() (menus []system.Menu, err error) {
+
+	// 查询所有菜单
+	err = magic.Orm.Find(&menus).Error
+	if err != nil {
+		return nil, err
 	}
-	return node
+
+	// 树形转换
+	treeMenuus := MenuApp.MakeTree(menus, 0)
+
+	// 返回数据
+	return treeMenuus, err
 }
 
 // 获取动态菜单树
-func MyMenu(authorityId int) (menus []system.Menu, err error) {
+func (m *MenuServer) MyMenu(authorityId int) (menus []system.Menu, err error) {
 	// 查权限[防击穿]
 	menuIds, err, _ := magic.SingleFlight.Do("ServiceMenu", func() (any, error) {
 		return MenuIds(authorityId)
@@ -50,12 +62,12 @@ func MyMenu(authorityId int) (menus []system.Menu, err error) {
 	}
 
 	// 树形转换
-	treeMenuus := TreeTransform(myMenus)
+	treeMenuus := MenuApp.MakeTree(myMenus, 0)
 	return treeMenuus, err
 }
 
 // 分页获取菜单列表
-func Menus(pageInfo model.PageInfo) (list model.ResPageData, err error) {
+func (m *MenuServer) Menus(pageInfo model.PageInfo) (list model.ResPageData, err error) {
 	// 查菜单
 	var menus []system.Menu
 	err = magic.Orm.Order("sort").Find(&menus).Error
@@ -63,7 +75,7 @@ func Menus(pageInfo model.PageInfo) (list model.ResPageData, err error) {
 		return list, err
 	}
 	// 树形转换
-	treeMenuus := TreeTransform(menus)
+	treeMenuus := MenuApp.MakeTree(menus, 0)
 
 	// 数据封装
 	list.List = treeMenuus
@@ -74,7 +86,7 @@ func Menus(pageInfo model.PageInfo) (list model.ResPageData, err error) {
 }
 
 // 根据id查询菜单
-func FindMenu(id model.GetById) (res system.Menu, err error) {
+func (m *MenuServer) FindMenu(id model.GetById) (res system.Menu, err error) {
 	// 查询数据
 	var menu system.Menu
 	err = magic.Orm.Where("id = ?", id.ID).Find(&menu).Error
@@ -87,7 +99,7 @@ func FindMenu(id model.GetById) (res system.Menu, err error) {
 }
 
 // 更新菜单
-func UpdateMenu(menu system.Menu) (res system.Menu, err error) {
+func (m *MenuServer) UpdateMenu(menu system.Menu) (res system.Menu, err error) {
 	// 查询数据
 	var oldData system.Menu
 	err = magic.Orm.Where("id = ?", menu.Id).Find(&oldData).Error
@@ -110,7 +122,7 @@ func UpdateMenu(menu system.Menu) (res system.Menu, err error) {
 }
 
 // 创建菜单
-func CreateMenu(menu system.Menu) (res system.Menu, err error) {
+func (m *MenuServer) CreateMenu(menu system.Menu) (res system.Menu, err error) {
 	// 先查数据
 	find := system.Menu{}
 	err = magic.Orm.Where("name = ?", menu.Name).Find(&find).Error
@@ -130,7 +142,7 @@ func CreateMenu(menu system.Menu) (res system.Menu, err error) {
 }
 
 // 删除菜单
-func DeleteMenu(id model.GetById) (err error) {
+func (m *MenuServer) DeleteMenu(id model.GetById) (err error) {
 	// 查询是否存在
 	var menu system.Menu
 	err = magic.Orm.Where("id = ?", id.ID).Find(&menu).Error

@@ -47,16 +47,15 @@ export const updateMenu = (data) => {
 export const delMenu = (id) => {
   return service({
     url: `/menu/${id}`,
-    method: 'DELETE',
-    data
+    method: 'DELETE'
   })
 }
 
 // 获取基础路由列表
 export const getBaseMenuTree = () => {
   return service({
-    url: '/menu/getBaseMenuTree',
-    method: 'POST'
+    url: '/menuTree',
+    method: 'GET'
   })
 }
 

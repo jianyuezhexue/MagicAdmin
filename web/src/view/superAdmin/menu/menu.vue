@@ -301,7 +301,8 @@ const deleteMenu = (id) => {
       }
       getTableData()
     }
-  }).catch(() => {
+  }).catch((err) => {
+    console.log(err)
     ElMessage({
       type: 'info',
       message: '已取消删除'
@@ -422,9 +423,6 @@ const editMenu = async (id) => {
   dialogTitle.value = '编辑菜单'
   const res = await getBaseMenuById(id)
   form.value = res.data
-  console.log('--------------')
-  console.log(form.value)
-  console.log('--------------')
   isEdit.value = true
   setOptions()
   dialogFormVisible.value = true

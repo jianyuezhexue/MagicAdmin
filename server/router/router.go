@@ -20,7 +20,6 @@ func Routers() *gin.Engine {
 		})
 		// 调试-查询配置
 		PublicGroup.GET("/configInfo", system.ConfigInfo)
-
 		// 系统-获取验证码
 		PublicGroup.POST("/user/captcha", system.Captcha)
 		// 系统-用户登录
@@ -36,12 +35,13 @@ func Routers() *gin.Engine {
 		PrivateGroup.GET("/user/info", system.UserInfo) // 用户信息
 
 		// 系统-菜单
-		PrivateGroup.GET("/myMenu", system.MyMenu)      // 权限菜单
-		PrivateGroup.GET("/menus", system.Menus)        // 树型菜单
-		PrivateGroup.GET("/menu/:id", system.FindMenu)  // 查询菜单
-		PrivateGroup.PUT("/menu", system.UpdateMenu)    // 编辑菜单
-		PrivateGroup.POST("/menu", system.CreateMenu)   // 新增菜单
-		PrivateGroup.DELETE("/menu", system.DeleteMenu) // 删除菜单
+		PrivateGroup.GET("/myMenu", system.MenuApi.MyMenu)          // 我的菜单
+		PrivateGroup.GET("/menus", system.MenuApi.Menus)            // 树型菜单
+		PrivateGroup.GET("/menu/:id", system.MenuApi.FindMenu)      // 查询菜单
+		PrivateGroup.PUT("/menu", system.MenuApi.UpdateMenu)        // 编辑菜单
+		PrivateGroup.POST("/menu", system.MenuApi.CreateMenu)       // 新增菜单
+		PrivateGroup.DELETE("/menu/:id", system.MenuApi.DeleteMenu) // 删除菜单
+		PrivateGroup.GET("/menuTree", system.MenuApi.MenuTree)      // 树形菜单
 
 		// 字典-目录
 		PrivateGroup.POST("/dictionary", system.DictionaryApi.Create)       // 新增字典目录

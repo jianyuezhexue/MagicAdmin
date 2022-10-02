@@ -45,7 +45,7 @@
       </template>
     </el-dialog>
 
-    <el-drawer v-if="drawer" v-model="drawer" custom-class="auth-drawer" :with-header="false" size="40%" title="角色配置">
+    <el-drawer v-if="drawer" v-model="drawer" custom-class="auth-drawer" :with-header="false" size="50%" title="角色配置">
       <el-tabs :before-leave="autoEnter" type="border-card">
         <el-tab-pane label="角色菜单">
           <Menus ref="menus" :row="activeRow" @changeRow="changeRow" />
