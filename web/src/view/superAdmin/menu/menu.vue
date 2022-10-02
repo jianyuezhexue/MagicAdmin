@@ -349,6 +349,7 @@ const enterDialog = async () => {
     if (valid) {
       let res
       if (isEdit.value) {
+        form.value.parentId = Number(form.value.parentId)
         res = await updateMenu(form.value)
       } else {
         res = await createMenu(form.value)
@@ -382,30 +383,29 @@ const setOptions = () => {
   setMenuOptions(tableData.value, menuOption.value, false)
 }
 const setMenuOptions = (menuData, optionsData, disabled) => {
-  menuData &&
-    menuData.forEach(item => {
-      if (item.children && item.children.length) {
-        const option = {
-          title: item.meta.title,
-          id: String(item.id),
-          disabled: disabled || item.id === form.value.id,
-          children: []
-        }
-        setMenuOptions(
-          item.children,
-          option.children,
-          disabled || item.id === form.value.id
-        )
-        optionsData.push(option)
-      } else {
-        const option = {
-          title: item.meta.title,
-          id: String(item.id),
-          disabled: disabled || item.id === form.value.id
-        }
-        optionsData.push(option)
+  menuData && menuData.forEach(item => {
+    if (item.children && item.children.length) {
+      const option = {
+        title: item.meta.title,
+        id: String(item.id),
+        disabled: disabled || item.id === form.value.id,
+        children: []
       }
-    })
+      setMenuOptions(
+        item.children,
+        option.children,
+        disabled || item.id === form.value.id
+      )
+      optionsData.push(option)
+    } else {
+      const option = {
+        title: item.meta.title,
+        id: String(item.id),
+        disabled: disabled || item.id === form.value.id
+      }
+      optionsData.push(option)
+    }
+  })
 }
 
 // 添加菜单方法，id为 0则为添加根菜单

@@ -29,7 +29,7 @@ const props = defineProps({
 const filterText = ref('')
 const treeRef = ref()    // 关联树
 const data = ref([])     // 数据
-const dataNew = ref([])     // 数据
+const dataNew = ref([])  // 新数据
 const selected = ref([]) // 已有权限
 
 // 按照树形结构
