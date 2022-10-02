@@ -4,6 +4,7 @@
     <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button size="small" type="primary" icon="plus" @click="addAuthority(0)">新增角色</el-button>
+        <el-button size="small" type="primary" icon="plus" @click="setPower()">新权限配置页面</el-button>
       </div>
       <el-table :data="tableData" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" row-key="id"
         style="width: 100%">
@@ -45,19 +46,27 @@
       </template>
     </el-dialog>
 
-    <el-drawer v-if="drawer" v-model="drawer" custom-class="auth-drawer" :with-header="false" size="50%" title="角色配置">
-      <el-tabs :before-leave="autoEnter" type="border-card">
+    <!-- 权限配置弹窗 -->
+    <el-drawer v-if="drawer" v-model="drawer" custom-class="auth-drawer" :with-header="false" size="40%" title="角色配置">
+      <!-- <el-tabs :before-leave="autoEnter" type="border-card">
         <el-tab-pane label="角色菜单">
           <Menus ref="menus" :row="activeRow" @changeRow="changeRow" />
         </el-tab-pane>
         <el-tab-pane label="角色api">
           <Apis ref="apis" :row="activeRow" @changeRow="changeRow" />
         </el-tab-pane>
-        <!-- <el-tab-pane label="资源权限">
-          <Datas ref="datas" :authority="tableData" :row="activeRow" @changeRow="changeRow" />
-        </el-tab-pane> -->
+      </el-tabs> -->
+      <el-tabs :before-leave="autoEnter" type="border-card">
+        <el-tab-pane label="权限设置">
+          <Auth />
+        </el-tab-pane>
       </el-tabs>
     </el-drawer>
+
+    <!-- 新角色配置弹窗 -->
+    <el-dialog v-model="dialogFormVisible2" width="100%" title="权限配置">
+      <Auth />
+    </el-dialog>
   </div>
 </template>
 
@@ -72,7 +81,7 @@ import {
 
 import Menus from '@/view/superAdmin/authority/components/menus.vue'
 import Apis from '@/view/superAdmin/authority/components/apis.vue'
-import Datas from '@/view/superAdmin/authority/components/datas.vue'
+import Auth from '@/view/superAdmin/authority/components/auth.vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 
 import { ref } from 'vue'
@@ -91,14 +100,42 @@ const AuthorityOption = ref([
     name: '根角色'
   }
 ])
+
+// 抽屉
 const drawer = ref(false)
 const dialogType = ref('add')
 const activeRow = ref({})
 
+// 表单
 const dialogTitle = ref('新增角色')
 const dialogFormVisible = ref(false)
 const apiDialogFlag = ref(false)
 const copyForm = ref({})
+
+// 权限配置
+const setPower = function () {
+  dialogFormVisible2.value = true
+}
+const dialogFormVisible2 = ref(false)
+const closeDialog2 = () => {
+  dialogFormVisible2.value = false
+}
+
+const checkAll = ref(false)
+const isIndeterminate = ref(true)
+const checkedCities = ref(['字典列表', '新增目录'])
+const cities = ['字典列表', '新增目录', '编辑目录', '删除目录']
+
+const handleCheckAllChange = (val) => {
+  checkedCities.value = val ? cities : []
+  isIndeterminate.value = false
+}
+const handleCheckedCitiesChange = (value) => {
+  const checkedCount = value.length
+  checkAll.value = checkedCount === cities.length
+  isIndeterminate.value = checkedCount > 0 && checkedCount < cities.length
+}
+// 权限配置
 
 const form = ref({
   id: 0,
