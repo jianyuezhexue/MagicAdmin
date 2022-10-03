@@ -16,13 +16,6 @@ type Meta struct {
 	Icon  string `json:"icon" form:"icon" binding:"required,max=20"`   // 菜单图标
 }
 
-// Api属性
-type Api struct {
-	Type  string `json:"type"`  // 请求类型
-	Name  string `json:"name"`  // 中文名
-	Route string `json:"route"` // 路由地址
-}
-
 // 拓展权限结构
 type ExtAuth struct {
 	Type string `json:"type"` // 权限类型:按钮权限，数据权限
@@ -57,25 +50,25 @@ func (a Array[T]) Value() (driver.Value, error) {
 type Menu struct {
 	model.BaseOrm
 	Meta      `json:"meta"`
-	ParentId  uint64         `json:"parentId"`  // 父菜单ID
-	Path      string         `json:"path"`      // 路由path
-	Name      string         `json:"name"`      // 路由name
-	Hidden    bool           `json:"hidden"`    // 是否在列表隐藏
-	Component string         `json:"component"` // 对应前端文件路径
-	Sort      int            `json:"sort"`      // 排序标记
-	Apis      Array[Api]     `json:"apis"`      // 菜单下的路由
-	ExtAuth   Array[ExtAuth] `json:"extAuth"`   // 菜单下的拓展权限
-	Children  []Menu         `json:"children" gorm:"-"`
-}
-
-type FormMenu struct {
-	ParentId  uint           `json:"parentId" form:"parentId" binding:"numeric"`    // 父菜单ID
+	ParentId  uint64         `json:"parentId" form:"parentId" binding:"numeric"`    // 父菜单ID
 	Path      string         `json:"path" form:"path" binding:"required,max=40"`    // 路由path
 	Name      string         `json:"name" form:"name" binding:"required,max=40"`    // 路由name
 	Hidden    bool           `json:"hidden" form:"hidden"`                          // 是否在列表隐藏
 	Component string         `json:"component" form:"component" binding:"required"` // 对应前端文件路径
 	Sort      int            `json:"sort" form:"sort" binding:"numeric"`            // 排序标记
-	Apis      Array[Api]     `json:"apis" gorm:"apis"`                              // 菜单下的路由
+	Apis      []Api          `json:"apis" form:"apis" gorm:"-"`                     // 菜单下的路由
 	ExtAuth   Array[ExtAuth] `json:"extAuth" gorm:"extAuth"`                        // 菜单下的拓展权限
-	Meta      Meta           `json:"meta" gorm:"embedded"`                          // 附加属性
+	Children  []Menu         `json:"children" gorm:"-"`
 }
+
+// type FormMenu struct {
+// 	ParentId  uint           `json:"parentId" form:"parentId" binding:"numeric"`    // 父菜单ID
+// 	Path      string         `json:"path" form:"path" binding:"required,max=40"`    // 路由path
+// 	Name      string         `json:"name" form:"name" binding:"required,max=40"`    // 路由name
+// 	Hidden    bool           `json:"hidden" form:"hidden"`                          // 是否在列表隐藏
+// 	Component string         `json:"component" form:"component" binding:"required"` // 对应前端文件路径
+// 	Sort      int            `json:"sort" form:"sort" binding:"numeric"`            // 排序标记
+// 	Apis      Array[Api]     `json:"apis" gorm:"apis"`                              // 菜单下的路由
+// 	ExtAuth   Array[ExtAuth] `json:"extAuth" gorm:"extAuth"`                        // 菜单下的拓展权限
+// 	Meta      Meta           `json:"meta" gorm:"embedded"`                          // 附加属性
+// }

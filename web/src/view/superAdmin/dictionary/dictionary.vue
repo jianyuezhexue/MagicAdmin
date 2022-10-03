@@ -194,7 +194,6 @@ getTableData()
 
 // 打开详情页
 const toDetail = (row) => {
-  console.log(router)
   router.push({
     name: 'dictionaryDetail',
     // name: 'person',

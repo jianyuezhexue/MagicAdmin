@@ -40,7 +40,6 @@ const selected = ref([]) // 已有权限
 // 初始化查询所有菜单和权限
 const init = async () => {
     // 角色ID
-    console.log(props.row.id)
     const res = await getBaseMenuTree()
     // TODO:重新处理数据:API,其他权限拿处理
     // id,lable,children

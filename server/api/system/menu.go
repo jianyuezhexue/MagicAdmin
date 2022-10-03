@@ -28,7 +28,7 @@ func (m *MenuCtr) MenuTree(c *gin.Context) {
 	magic.Success(c, "获取树形菜单成功", res)
 }
 
-// 获取用户动态路由
+// 我的菜单
 func (m *MenuCtr) MyMenu(c *gin.Context) {
 	// 参数获取
 	userInfo := magic.TokenInfo(c)
@@ -145,7 +145,3 @@ func (m *MenuCtr) DeleteMenu(c *gin.Context) {
 	}
 	magic.Success(c, "删除菜单成功", 1)
 }
-
-// 增加menu和角色关联关系
-
-// 获取指定角色menu

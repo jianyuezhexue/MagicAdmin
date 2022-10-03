@@ -302,7 +302,6 @@ const deleteMenu = (id) => {
       getTableData()
     }
   }).catch((err) => {
-    console.log(err)
     ElMessage({
       type: 'info',
       message: '已取消删除'

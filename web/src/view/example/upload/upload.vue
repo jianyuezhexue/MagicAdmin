@@ -175,7 +175,6 @@ const editFileNameFunc = async(row) => {
     inputValue: row.name
   }).then(async({ value }) => {
     row.name = value
-    // console.log(row)
     const res = await editFileName(row)
     if (res.code === 0) {
       ElMessage({

@@ -13,7 +13,7 @@ export const viteLogo = (env) => {
     const chalk = require('chalk')
     console.log(
       chalk.green(
-        `> 欢迎使用Gin-Vue-Admin，开源地址：https://github.com/flipped-aurora/gin-vue-admin`
+        `> 欢迎使用MagicAdmin`
       )
     )
   }

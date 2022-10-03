@@ -172,7 +172,6 @@ const enterDialog = async () => {
 
 const filterNode = (value, data) => {
   if (!value) return true
-  // console.log(data.mate.title)
   return data.meta.title.indexOf(value) !== -1
 }
 

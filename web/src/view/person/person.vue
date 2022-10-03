@@ -297,7 +297,6 @@ const enterEdit = async () => {
 }
 
 const handleClick = (tab, event) => {
-  console.log(tab, event)
 }
 
 const changePhoneFlag = ref(false)
