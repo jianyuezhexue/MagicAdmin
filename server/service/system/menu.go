@@ -2,7 +2,6 @@ package system
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model"
@@ -108,29 +107,30 @@ func (m *MenuServer) UpdateMenu(menu system.Menu) (res system.Menu, err error) {
 		return res, errors.New("您编辑的菜单不存在！")
 	}
 
-	// 清除关联关系
-
-	// 开启事务
-	tx := magic.Orm.Begin()
-
-	// 更新菜单
-	err = tx.Debug().Updates(menu).Error
+	// TODO:这里重新实现
+	// 校验路由名[route]重复
+	routes := make([]string, 0)
+	for _, api := range menu.Api {
+		routes = append(routes, api.Route)
+	}
+	apis := []system.Api{}
+	err = magic.Orm.Debug().Where("route", routes).Find(&apis).Error
 	if err != nil {
-		tx.Rollback()
-		return res, err
+		return res, errors.New("数据库跪了")
 	}
 
-	// 更新API
-	// todo
+	// 非当前菜单包含算重复
+	for _, item := range apis {
+		if item.MenuId != menu.Id {
+			return res, errors.New("路由名有重复，请检查")
+		}
+	}
 
-	// 提交事务
-	tx.Commit()
-
-	// // 更新数据
-	// err = magic.Orm.Debug().Updates(menu).Error
-	// if err != nil {
-	// 	return res, err
-	// }
+	// 更新数据|FullSaveAssociations模式更新
+	err = magic.Orm.Debug().Session(&gorm.Session{FullSaveAssociations: true}).Updates(menu).Error
+	if err != nil {
+		return res, err
+	}
 
 	return menu, err
 }
@@ -140,14 +140,28 @@ func (m *MenuServer) CreateMenu(menu system.Menu) (res system.Menu, err error) {
 	// 先查数据
 	find := system.Menu{}
 	err = magic.Orm.Where("name = ?", menu.Name).Find(&find).Error
-	fmt.Println("查出来的错误是:", err)
 	if err != nil {
 		return res, errors.New("数据库跪了")
 	}
 
 	// 重名异常
 	if menu.Name == find.Name {
-		return res, errors.New("存在重复name,请修改name")
+		return res, errors.New("菜单名有重复，请修改")
+	}
+
+	// TODO:这里重新实现
+	// 校验路由名[route]重复
+	routes := make([]string, 0)
+	for _, api := range menu.Api {
+		routes = append(routes, api.Route)
+	}
+	apis := []system.Api{}
+	err = magic.Orm.Where("route", routes).Find(&apis).Error
+	if err != nil {
+		return res, errors.New("数据库跪了")
+	}
+	if err != gorm.ErrRecordNotFound {
+		return res, errors.New("路由名有重复，请检查")
 	}
 
 	// 保存数据
@@ -167,7 +181,22 @@ func (m *MenuServer) DeleteMenu(id model.GetById) (err error) {
 		return err
 	}
 
+	tx := magic.Orm.Begin()
 	// 删除菜单
-	err = magic.Orm.Delete(&menu).Error
+	err = tx.Debug().Delete(&menu).Error
+	if err != nil {
+		tx.Rollback()
+		return errors.New("DB跪了")
+	}
+	// 删除API ｜ Unscoped 硬删除
+	var api []system.Api
+	err = tx.Debug().Where("menuId = ?", menu.Id).Unscoped().Delete(&api).Error
+	if err != nil {
+		tx.Rollback()
+		return errors.New("DB跪了")
+	}
+	tx.Commit()
+
+	// 返回结果
 	return err
 }
