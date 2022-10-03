@@ -107,3 +107,7 @@ CREATE TABLE `menu2` (
  - 设置权限 -> 拿到所有的API信息，存储到casein表
  - 回显用户权限，查菜单ID，权限ID【有被删除的，过滤掉不存在的】
  - 搞定！
+
+
+
+https://api.github.com/repos/jianyuezhexue/MagicAdmin/commits?page=0

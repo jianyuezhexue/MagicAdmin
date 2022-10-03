@@ -1,12 +1,15 @@
 <template>
-    <div>
-        <el-input v-model="filterText" class="fitler" placeholder="关键词搜索" />
-        <el-button class="fl-right" size="small" type="primary" @click="relation">确 定</el-button>
+    <div class="continer">
+        <div>
+            <el-input v-model="filterText" class="fitler" placeholder="关键词搜索" />
+            <el-button class="fl-right" size="small" type="primary" @click="relation">确 定</el-button>
+        </div>
+        <br>
+        <el-tree ref="treeRef" class="filter-tree" show-checkbox :data="data" :props="menuDefaultProps"
+            :filter-node-method="filterNode" node-key="id" :default-checked-keys="selected" :highlight-current="true"
+            :accordion="true" :check-on-click-node="true" @check-change="handleCheckChange" />
     </div>
-    <br>
-    <el-tree ref="treeRef" class="filter-tree" show-checkbox :data="data" :props="menuDefaultProps"
-        :filter-node-method="filterNode" node-key="id" :default-checked-keys="selected" :highlight-current="true"
-        :accordion="true" :check-on-click-node="true" @check-change="handleCheckChange" />
+
 </template>
   
 <script setup>
@@ -41,7 +44,7 @@ const init = async () => {
     const res = await getBaseMenuTree()
     // TODO:重新处理数据:API,其他权限拿处理
     // id,lable,children
-    
+
 
     data.value = res.data
     selected.value = props.row.menuIds.split(",")
@@ -105,7 +108,7 @@ export default { name: 'Auth' }
 @import "@/style/button.scss";
 
 .continer {
-    padding: 1.5rem 0;
+    padding: 0 1.5rem;
 }
 </style>
     
