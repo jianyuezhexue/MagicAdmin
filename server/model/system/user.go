@@ -19,7 +19,7 @@ type User struct {
 	AuthorityId string    `json:"authorityId"` // 用户角色ID
 	Token       string    `json:"token" gorm:"-"`
 	Authority   Authority `json:"authority" gorm:"foreignKey:Id;references:Id;comment:用户角色"`
-	// Authorities []SysAuthority `json:"authorities" gorm:"many2many:sys_user_authority;"`
+	// Authorities []Authority `json:"authorities" gorm:"many2many:sys_user_authority;"`
 }
 
 // 注册表单提交数据结构

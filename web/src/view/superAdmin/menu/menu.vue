@@ -90,7 +90,7 @@
       </el-form>
       <div>
         <el-button size="small" type="primary" icon="edit" @click="addApi(form)">新增API权限</el-button>
-        <el-table :data="form.apis" style="width: 100%">
+        <el-table :data="form.api" style="width: 100%">
           <el-table-column align="left" prop="type" label="请求类型" width="180">
             <template #default="scope">
               <el-select v-model="scope.row.type" placeholder="请选择">
@@ -119,7 +119,7 @@
           <el-table-column align="left">
             <template #default="scope">
               <div>
-                <el-button type="danger" size="small" icon="delete" @click="deleteParameter(form.apis,scope.$index)">删除
+                <el-button type="danger" size="small" icon="delete" @click="deleteParameter(form.api,scope.$index)">删除
                 </el-button>
               </div>
             </template>
@@ -186,6 +186,7 @@ import { canRemoveAuthorityBtnApi } from '@/api/authorityBtn'
 import { reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
+// 验证规则
 const rules = reactive({
   path: [{ required: true, message: '请输入菜单name', trigger: 'blur' }],
   component: [
@@ -201,7 +202,8 @@ const total = ref(0)
 const pageSize = ref(999)
 const tableData = ref([])
 const searchInfo = ref({})
-// 查询
+
+// 查询列表
 const getTableData = async () => {
   const table = await getMenuList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
   if (table.code === 0) {
@@ -217,19 +219,18 @@ getTableData()
 
 // 新增API配置
 const addApi = (form) => {
-  if (!form.apis) {
-    form.apis = []
+  if (!form.api) {
+    form.api = []
   }
-  form.apis.push({
+  form.api.push({
     type: 'GET',
     route: '',
     name: ''
   })
 }
-
 // 删除API配置
-const deleteParameter = (apis, index) => {
-  apis.splice(index, 1)
+const deleteParameter = (api, index) => {
+  api.splice(index, 1)
 }
 
 // 新增菜单拓展[按钮+数据]权限
@@ -248,6 +249,7 @@ const deleteextAuth = async (expands, index) => {
   expands.splice(index, 1)
 }
 
+// 表单数据
 const form = ref({
   id: 0,
   path: '',
@@ -263,7 +265,7 @@ const form = ref({
     keepAlive: false
   },
   sort: 50,
-  apis: [],
+  api: [],
   extAuth: []
 })
 
@@ -330,7 +332,7 @@ const initForm = () => {
       closeTab: false,
       keepAlive: false
     },
-    apis: [],
+    api: [],
     extAuth: []
   }
 }

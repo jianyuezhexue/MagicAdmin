@@ -44,7 +44,6 @@ const init = async () => {
     // TODO:重新处理数据:API,其他权限拿处理
     // id,lable,children
 
-
     data.value = res.data
     selected.value = props.row.menuIds.split(",")
     //   menuTreeData.value = res.data.menus

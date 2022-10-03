@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/duke-git/lancet/v2/convertor"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
@@ -28,11 +27,10 @@ func (m *MenuServer) MakeTree(datas []system.Menu, ParentId uint64) []system.Men
 	return trees
 }
 
-// 菜单树
+// 全部菜单树
 func (m *MenuServer) MenuTree() (menus []system.Menu, err error) {
-
 	// 查询所有菜单
-	err = magic.Orm.Find(&menus).Error
+	err = magic.Orm.Preload("Api").Find(&menus).Error
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +42,7 @@ func (m *MenuServer) MenuTree() (menus []system.Menu, err error) {
 	return treeMenuus, err
 }
 
-// 获取动态菜单树
+// 我的菜单树
 func (m *MenuServer) MyMenu(authorityId int) (menus []system.Menu, err error) {
 	// 查权限[防击穿]
 	menuIds, err, _ := magic.SingleFlight.Do("ServiceMenu", func() (any, error) {
@@ -56,7 +54,7 @@ func (m *MenuServer) MyMenu(authorityId int) (menus []system.Menu, err error) {
 
 	// 查菜单
 	var myMenus []system.Menu
-	err = magic.Orm.Where("id IN ?", menuIds).Order("sort").Find(&myMenus).Error
+	err = magic.Orm.Where("id IN ?", menuIds).Order("sort").Preload("Api").Find(&myMenus).Error
 	if err != nil {
 		return nil, err
 	}
@@ -89,12 +87,10 @@ func (m *MenuServer) Menus(pageInfo model.PageInfo) (list model.ResPageData, err
 func (m *MenuServer) FindMenu(id model.GetById) (res system.Menu, err error) {
 	// 查询数据
 	var menu system.Menu
-	err = magic.Orm.Where("id = ?", id.ID).Find(&menu).Error
+	err = magic.Orm.Where("id = ?", id.ID).Preload("Api").Find(&menu).Error
 	if err != nil {
 		return res, err
 	}
-	magic.Logger.Info(convertor.ToString(menu))
-
 	return menu, err
 }
 
@@ -112,11 +108,29 @@ func (m *MenuServer) UpdateMenu(menu system.Menu) (res system.Menu, err error) {
 		return res, errors.New("您编辑的菜单不存在！")
 	}
 
-	// 更新数据
-	err = magic.Orm.Updates(menu).Error
+	// 清除关联关系
+
+	// 开启事务
+	tx := magic.Orm.Begin()
+
+	// 更新菜单
+	err = tx.Debug().Updates(menu).Error
 	if err != nil {
+		tx.Rollback()
 		return res, err
 	}
+
+	// 更新API
+	// todo
+
+	// 提交事务
+	tx.Commit()
+
+	// // 更新数据
+	// err = magic.Orm.Debug().Updates(menu).Error
+	// if err != nil {
+	// 	return res, err
+	// }
 
 	return menu, err
 }
@@ -152,9 +166,6 @@ func (m *MenuServer) DeleteMenu(id model.GetById) (err error) {
 		}
 		return err
 	}
-
-	// todo这里的权限系统要重新设计
-	// 设计权限相关的操作
 
 	// 删除菜单
 	err = magic.Orm.Delete(&menu).Error
