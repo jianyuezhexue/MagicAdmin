@@ -17,7 +17,7 @@ import { ref, watch } from 'vue'
 import { ElTree } from 'element-plus'
 
 // API接口
-import { getBaseMenuTree, getMenuAuthority, addMenuAuthority } from '@/api/menu'
+import { getBaseMenuTree} from '@/api/menu'
 
 // 接收角色信息
 const props = defineProps({
@@ -83,17 +83,18 @@ const handleCheckChange = (data, checked, indeterminate) => {
 
 // 请求设置权限
 const relation = async () => {
-    const checkArr = menuTree.value.getCheckedNodes(false, true)
-    const res = await addMenuAuthority({
-        menus: checkArr,
-        authorityId: props.row.authorityId
-    })
-    if (res.code === 0) {
-        ElMessage({
-            type: 'success',
-            message: '菜单设置成功!'
-        })
-    }
+    alert("发请求接口")
+    // const checkArr = menuTree.value.getCheckedNodes(false, true)
+    // const res = await addMenuAuthority({
+    //     menus: checkArr,
+    //     authorityId: props.row.authorityId
+    // })
+    // if (res.code === 0) {
+    //     ElMessage({
+    //         type: 'success',
+    //         message: '菜单设置成功!'
+    //     })
+    // }
 }
 
 </script>

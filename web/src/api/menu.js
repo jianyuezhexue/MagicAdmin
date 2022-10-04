@@ -21,7 +21,7 @@ export const getMenuList = (data) => {
 export const getBaseMenuById = (id) => {
   return service({
     url: `/menu/${id}`,
-    method: 'get'
+    method: 'GET'
   })
 }
 
@@ -58,6 +58,9 @@ export const getBaseMenuTree = () => {
     method: 'GET'
   })
 }
+
+
+// --------------------------------------
 
 // 添加用户menu关联关系
 export const addMenuAuthority = (data) => {

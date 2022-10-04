@@ -96,8 +96,6 @@ func (m *MenuCtr) UpdateMenu(c *gin.Context) {
 		return
 	}
 
-	// 校验路由自己名字不能重复
-
 	// 逻辑处理
 	res, err := serviceSystem.MenuApp.UpdateMenu(menu)
 	if err != nil {
@@ -118,8 +116,6 @@ func (m *MenuCtr) CreateMenu(c *gin.Context) {
 		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
 		return
 	}
-
-	// 校验路由自己名字不能重复
 
 	// 逻辑处理
 	res, err := serviceSystem.MenuApp.CreateMenu(param)
