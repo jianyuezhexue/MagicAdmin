@@ -4,10 +4,21 @@
             <el-input v-model="filterText" class="fitler" placeholder="关键词搜索" />
             <el-button class="fl-right" size="small" type="primary" @click="relation">确 定</el-button>
         </div>
-        <br>
-        <el-tree ref="treeRef" class="filter-tree" show-checkbox :data="data" :props="menuDefaultProps"
-            :filter-node-method="filterNode" node-key="id" :default-checked-keys="selected" :highlight-current="true"
-            :accordion="true" :check-on-click-node="true" @check-change="handleCheckChange" />
+        <el-row>
+            <el-col :span="5">
+                <el-divider content-position="left">菜单权限</el-divider>
+                <el-tree ref="treeRef" class="filter-tree" show-checkbox :data="data" :props="menuDefaultProps"
+                    :filter-node-method="filterNode" node-key="id" :default-checked-keys="selected"
+                    :highlight-current="true" :accordion="true" @check-change="handleCheckChange" />
+            </el-col>
+            <el-col :span="1">
+            </el-col>
+            <el-col :span="18">
+                <el-divider content-position="left">操作/数据/按钮权限</el-divider>
+                <!-- 回显API -->
+            </el-col>
+        </el-row>
+
     </div>
 
 </template>
@@ -15,9 +26,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { ElTree } from 'element-plus'
-
-// API接口
-import { getBaseMenuTree} from '@/api/menu'
+import { getBaseMenuTree } from '@/api/menu'
 
 // 接收角色信息
 const props = defineProps({
@@ -31,32 +40,26 @@ const props = defineProps({
 
 const filterText = ref('')
 const treeRef = ref()    // 关联树
-const data = ref([])     // 数据
-const dataNew = ref([])  // 新数据
-const selected = ref([]) // 已有权限
-
-// 按照树形结构
+const data = ref([])     // 菜单数据
+const selected = ref([]) // 已有菜单权限
 
 // 初始化查询所有菜单和权限
 const init = async () => {
-    // 角色ID
+    // 回显菜单数据
     const res = await getBaseMenuTree()
-    // TODO:重新处理数据:API,其他权限拿处理
-    // id,lable,children
+    let menus = res.data
+    data.value = menus
 
-    data.value = res.data
-    selected.value = props.row.menuIds.split(",")
-    //   menuTreeData.value = res.data.menus
-    //   const res1 = await getMenuAuthority({ authorityId: props.row.authorityId })
-    //   const menus = res1.data.menus
-    //   const arr = []
-    //   menus.forEach(item => {
-    //     // 防止直接选中父级造成全选
-    //     if (!menus.some(same => same.parentId === item.menuId)) {
-    //       arr.push(Number(item.menuId))
-    //     }
-    //   })
-    //   menuTreeIds.value = arr
+    // 回显选中
+    let selectedArr = props.row.menuIds.split(",")
+    menus.forEach(item => {
+        if (item.children.length > 0) { // 防止父级选中子集全选
+            selectedArr = selectedArr.filter(val => val != item.id)
+        }
+    })
+    selected.value = selectedArr
+
+    // 回显API，数据，按钮
 }
 init()
 
@@ -67,7 +70,6 @@ const menuDefaultProps = ref({
         return data.meta.title
     }
 })
-
 // 监听&关键字过滤
 watch(filterText, (val) => {
     treeRef.value.filter(val)
@@ -76,7 +78,6 @@ const filterNode = (value, data) => {
     if (!value) return true
     return data.meta.title.indexOf(value) !== -1
 }
-
 // 监听选择
 const handleCheckChange = (data, checked, indeterminate) => {
 }
@@ -84,7 +85,6 @@ const handleCheckChange = (data, checked, indeterminate) => {
 // 请求设置权限
 const relation = async () => {
     alert("发请求接口")
-    ///// 
     // const checkArr = menuTree.value.getCheckedNodes(false, true)
     // const res = await addMenuAuthority({
     //     menus: checkArr,
@@ -109,6 +109,10 @@ export default { name: 'Auth' }
 
 .continer {
     padding: 0 1.5rem;
+}
+
+.el-drawer__title {
+    font-size: 1.5rem;
 }
 </style>
     
