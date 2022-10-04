@@ -133,8 +133,8 @@
           <el-table-column align="left" prop="type" label="请求类型" width="180">
             <template #default="scope">
               <el-select v-model="scope.row.type" placeholder="请选择">
-                <el-option key="数据权限" value="0" label="数据权限" />
-                <el-option key="按钮权限" value="1" label="按钮权限" />
+                <el-option key="数据权限" value="filed" label="数据权限" />
+                <el-option key="按钮权限" value="type" label="按钮权限" />
               </el-select>
             </template>
           </el-table-column>
@@ -239,7 +239,7 @@ const addExtAuth = (form) => {
     form.extAuth = []
   }
   form.extAuth.push({
-    type: '0',
+    type: 'filed',
     name: '',
     val: '',
   })

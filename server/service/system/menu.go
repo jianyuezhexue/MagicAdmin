@@ -108,22 +108,24 @@ func (m *MenuServer) UpdateMenu(menu system.Menu) (res system.Menu, err error) {
 	}
 
 	// 校验[idx_type_route]重复
-	routes := make([][]any, 0)
-	for _, api := range menu.Api {
-		item := make([]any, 0)
-		item = append(item, api.Type, api.Route)
-		routes = append(routes, item)
-	}
-	apis := []system.Api{}
-	err = magic.Orm.Debug().Where("(type,route) IN ?", routes).Find(&apis).Error
-	if err != nil {
-		return res, errors.New("数据库跪了")
-	}
+	if len(menu.Api) > 0 {
+		routes := make([][]any, 0)
+		for _, api := range menu.Api {
+			item := make([]any, 0)
+			item = append(item, api.Type, api.Route)
+			routes = append(routes, item)
+		}
+		apis := []system.Api{}
+		err = magic.Orm.Debug().Where("(type,route) IN ?", routes).Find(&apis).Error
+		if err != nil {
+			return res, errors.New("数据库跪了")
+		}
 
-	// 非当前菜单包含算重复
-	for _, item := range apis {
-		if item.MenuId != menu.Id {
-			return res, errors.New("路由有重复，请检查")
+		// 非当前菜单包含算重复
+		for _, item := range apis {
+			if item.MenuId != menu.Id {
+				return res, errors.New("路由有重复，请检查")
+			}
 		}
 	}
 
@@ -151,21 +153,23 @@ func (m *MenuServer) CreateMenu(menu system.Menu) (res system.Menu, err error) {
 	}
 
 	// 校验[idx_type_route]重复
-	routes := make([][]any, 0)
-	for _, api := range menu.Api {
-		item := make([]any, 0)
-		item = append(item, api.Type, api.Route)
-		routes = append(routes, item)
-	}
-	apis := []system.Api{}
-	err = magic.Orm.Where("(type,route) IN ?", routes).Find(&apis).Error
-	if err != nil {
-		return res, errors.New("数据库跪了")
-	}
+	if len(menu.Api) > 0 {
+		routes := make([][]any, 0)
+		for _, api := range menu.Api {
+			item := make([]any, 0)
+			item = append(item, api.Type, api.Route)
+			routes = append(routes, item)
+		}
+		apis := []system.Api{}
+		err = magic.Orm.Where("(type,route) IN ?", routes).Find(&apis).Error
+		if err != nil {
+			return res, errors.New("数据库跪了")
+		}
 
-	// 重复提醒
-	if len(apis) > 0 {
-		return res, errors.New("路由有重复，请检查")
+		// 重复提醒
+		if len(apis) > 0 {
+			return res, errors.New("路由有重复，请检查")
+		}
 	}
 
 	// 保存数据

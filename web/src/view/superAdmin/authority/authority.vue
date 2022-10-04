@@ -47,27 +47,21 @@
     </el-dialog>
 
     <!-- 权限配置弹窗 -->
-    <el-drawer v-if="drawer" v-model="drawer" title="权限配置" custom-class="auth-drawer" :with-header="true" size="84.5%">
-      <!-- <el-tabs :before-leave="autoEnter" type="border-card">
+    <el-drawer v-if="drawer" v-model="drawer" title="权限配置" custom-class="auth-drawer" :with-header="false" size="40%">
+      <el-tabs :before-leave="autoEnter" type="border-card">
         <el-tab-pane label="角色菜单">
           <Menus ref="menus" :row="activeRow" @changeRow="changeRow" />
         </el-tab-pane>
         <el-tab-pane label="角色api">
           <Apis ref="apis" :row="activeRow" @changeRow="changeRow" />
         </el-tab-pane>
-      </el-tabs> -->
-      <!-- <el-tabs :before-leave="autoEnter" type="border-card">
-        <el-tab-pane label="权限设置">
-          <Auth  ref="auth" :row="activeRow" />
-        </el-tab-pane>
-      </el-tabs> -->
-      <Auth  ref="auth" :row="activeRow" />
+      </el-tabs>
     </el-drawer>
 
     <!-- 新角色配置弹窗 -->
-    <el-dialog v-model="dialogFormVisible2" width="100%" title="权限配置">
-      <Auth />
-    </el-dialog>
+    <!-- <el-dialog v-model="dialogFormVisible2" width="100%" title="权限配置">
+      <Auth  :row="activeRow" />
+    </el-dialog> -->
   </div>
 </template>
 
@@ -82,7 +76,7 @@ import {
 
 import Menus from '@/view/superAdmin/authority/components/menus.vue'
 import Apis from '@/view/superAdmin/authority/components/apis.vue'
-import Auth from '@/view/superAdmin/authority/components/auth.vue'
+// import Auth from '@/view/superAdmin/authority/components/auth.vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 
 import { ref } from 'vue'
