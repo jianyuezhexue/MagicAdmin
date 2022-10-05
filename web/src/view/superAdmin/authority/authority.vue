@@ -47,21 +47,22 @@
     </el-dialog>
 
     <!-- 权限配置弹窗 -->
-    <el-drawer v-if="drawer" v-model="drawer" title="权限配置" custom-class="auth-drawer" :with-header="true" size="84.5%">
-      <!-- <el-tabs :before-leave="autoEnter" type="border-card">
+    <el-drawer v-if="drawer" v-model="drawer" title="权限配置" custom-class="auth-drawer" :with-header="false" size="40%">
+      <el-tabs :before-leave="autoEnter" type="border-card">
         <el-tab-pane label="角色菜单">
           <Menus ref="menus" :row="activeRow" @changeRow="changeRow" />
         </el-tab-pane>
-        <el-tab-pane label="角色api">
+        <!-- <el-tab-pane label="角色api">
           <Apis ref="apis" :row="activeRow" @changeRow="changeRow" />
-        </el-tab-pane>
-      </el-tabs> -->
-      <Auth  :row="activeRow" />
+        </el-tab-pane> -->
+      </el-tabs>
+      <!-- 暂停创新 -->
+      <!-- <Auth :row="activeRow" /> -->
     </el-drawer>
 
     <!-- 新角色配置弹窗 -->
     <el-dialog v-model="dialogFormVisible2" width="100%" title="权限配置">
-      <Auth  :row="activeRow" />
+      <Auth :row="activeRow" />
     </el-dialog>
   </div>
 </template>
@@ -384,12 +385,19 @@ export default {
       display: none;
     }
   }
+  .el-drawer__title {
+        font-size: 1.5rem;
+    }
 }
 
 .tree-content {
   overflow: auto;
   height: calc(100vh - 100px);
   margin-top: 10px;
+}
+
+.tree-content::-webkit-scrollbar {
+  width: 3px;
 }
 
 .auth-drawer {

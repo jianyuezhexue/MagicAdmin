@@ -6,21 +6,10 @@
     </div>
     <div class="tree-content">
       <el-tree ref="menuTree" :data="menuTreeData" :default-checked-keys="menuTreeIds" :props="menuDefaultProps"
-        default-expand-all highlight-current node-key="ID" show-checkbox :filter-node-method="filterNode"
-        @check="nodeChange">
+        highlight-current node-key="id" show-checkbox :filter-node-method="filterNode" @check="nodeChange">
         <template #default="{ node , data }">
           <span class="custom-tree-node">
             <span>{{ node.label }}</span>
-            <span>
-              <el-button type="primary" link size="small"
-                :style="{color:row.defaultRouter === data.name?'#E6A23C':'#85ce61'}" :disabled="!node.checked"
-                @click="() => setDefault(data)">
-                {{ row.defaultRouter === data.name?"首页":"设为首页" }}
-              </el-button>
-            </span>
-            <span v-if="data.menuBtn.length">
-              <el-button type="primary" link size="small" @click="() => OpenBtn(data)">分配按钮</el-button>
-            </span>
           </span>
         </template>
       </el-tree>
@@ -61,32 +50,31 @@ const props = defineProps({
 
 const emit = defineEmits(['changeRow'])
 const filterText = ref('')
-const menuTreeData = ref([])
-const menuTreeIds = ref([])
+const menuTreeData = ref([])    // 数据
+const menuTreeIds = ref([])     // 选中
 const needConfirm = ref(false)
-const menuDefaultProps = ref({
+const menuDefaultProps = ref({ // 取值规则
   children: 'children',
   label: function (data) {
     return data.meta.title
   }
 })
 
+// 初始化接口
 const init = async () => {
-  // 获取所有菜单树
+  // 回显菜单树
   const res = await getBaseMenuTree()
-  menuTreeData.value = res.data.menus
-  const res1 = await getMenuAuthority({ authorityId: props.row.authorityId })
-  const menus = res1.data.menus
-  const arr = []
-  menus.forEach(item => {
-    // 防止直接选中父级造成全选
-    if (!menus.some(same => same.parentId === item.menuId)) {
-      arr.push(Number(item.menuId))
+  menuTreeData.value = res.data
+
+  // 回显菜单选中
+  let selectedArr = props.row.menuIds.split(",")
+  res.data.forEach(item => {
+    if (item.children.length > 0) { // 防止父级选中子集全选
+      selectedArr = selectedArr.filter(val => val != item.id)
     }
   })
-  menuTreeIds.value = arr
+  menuTreeIds.value = selectedArr
 }
-
 init()
 
 const setDefault = async (data) => {
