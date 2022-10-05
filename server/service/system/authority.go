@@ -120,17 +120,26 @@ func (a *AuthorityServer) Update(data system.Authority) (res system.Authority, e
 }
 
 // 删除角色
-func (a *AuthorityServer) Delete(id model.GetById) (res system.Authority, err error) {
+func (a *AuthorityServer) Delete(id model.GetById) (res []system.Authority, err error) {
 	// 查询是否存在
-	var find system.Authority
-	err = magic.Orm.Where("id = ?", id.ID).Find(&find).Error
+	var find []system.Authority
+	err = magic.Orm.Where("id = ?", id.ID).Or("pid = ?", id.ID).Find(&find).Error
+	// err = magic.Orm.Debug().Where("pid = ?", id.ID).Find(&find).Error
 	if err != nil {
 		return find, err
 	}
 
+	// 验证是否有子角色
+	magic.Print(find)
+
 	// 异常提醒
 	if err == gorm.ErrRecordNotFound {
 		return find, errors.New("您删除的角色不存在")
+	}
+
+	// 包含子集提醒
+	if len(find) > 1 {
+		return find, errors.New("当前角色包含子角色")
 	}
 
 	// 更新数据
