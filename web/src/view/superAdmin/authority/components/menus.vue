@@ -31,7 +31,8 @@
 </template>
 
 <script setup>
-import { getBaseMenuTree, getMenuAuthority, addMenuAuthority } from '@/api/menu'
+import { getBaseMenuTree } from '@/api/menu'
+import {addMenuAuthority } from '@/api/authority'
 import {
   updateAuthority
 } from '@/api/authority'
@@ -77,13 +78,6 @@ const init = async () => {
 }
 init()
 
-const setDefault = async (data) => {
-  const res = await updateAuthority({ authorityId: props.row.authorityId, AuthorityName: props.row.authorityName, parentId: props.row.parentId, defaultRouter: data.name })
-  if (res.code === 0) {
-    ElMessage({ type: 'success', message: '设置成功' })
-    emit('changeRow', 'defaultRouter', res.data.authority.defaultRouter)
-  }
-}
 const nodeChange = () => {
   needConfirm.value = true
 }
@@ -95,9 +89,11 @@ const enterAndNext = () => {
 const menuTree = ref(null)
 const relation = async () => {
   const checkArr = menuTree.value.getCheckedNodes(false, true)
+  let menuIds = checkArr.map(item => String(item.id))
   const res = await addMenuAuthority({
-    menus: checkArr,
-    authorityId: props.row.authorityId
+    // menus: checkArr,
+    data:menuIds,
+    id: props.row.id
   })
   if (res.code === 0) {
     ElMessage({

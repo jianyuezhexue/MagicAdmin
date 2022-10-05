@@ -43,6 +43,15 @@ export const copyAuthority = (data) => {
   })
 }
 
+// 设置用户菜单权限
+export const addMenuAuthority = (data) => {
+  return service({
+    url: '/authority/menu',
+    method: 'PATCH',
+    data
+  })
+}
+
 // 设置角色资源权限
 export const setDataAuthority = (data) => {
   return service({

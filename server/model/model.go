@@ -63,3 +63,8 @@ type ResPageData struct {
 type GetById struct {
 	ID uint64 `json:"id" uri:"id" form:"id" binding:"required"` // 主键ID
 }
+
+// 传ID数组接收餐结构
+type IdArr struct {
+	Data []string `josn:"data" uri:"data" form:"data" binding:"required"`
+}

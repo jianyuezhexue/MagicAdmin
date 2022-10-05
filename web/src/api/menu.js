@@ -62,14 +62,6 @@ export const getBaseMenuTree = () => {
 
 // --------------------------------------
 
-// 添加用户menu关联关系
-export const addMenuAuthority = (data) => {
-  return service({
-    url: '/menu/addMenuAuthority',
-    method: 'POST',
-    data
-  })
-}
 
 // 获取用户menu关联关系
 export const getMenuAuthority = (data) => {

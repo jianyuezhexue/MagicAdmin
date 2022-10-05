@@ -15,3 +15,9 @@ type Authority struct {
 	MenuIds       string       `json:"menuIds" form:"menuIds"`             // 权限下的ID
 	Children      []*Authority `json:"children" gorm:"-"`
 }
+
+// 设置角色菜单
+type SetMenuAuth struct {
+	model.IdArr
+	Id uint64 `json:"id" form:"id" binding:"required"` // 主键ID
+}

@@ -25,7 +25,7 @@ func (a *AuthorityCtr) TreeList(c *gin.Context) {
 		return
 	}
 
-	magic.Success(c, "创建字典目录成功", res)
+	magic.Success(c, "获取角色列表成功", res)
 }
 
 // 创建角色
@@ -45,10 +45,10 @@ func (a *AuthorityCtr) Create(c *gin.Context) {
 		return
 	}
 
-	magic.Success(c, "创建字典目录成功", res)
+	magic.Success(c, "创建角色成功", res)
 }
 
-// 修改角色
+// 更新角色
 func (a AuthorityCtr) Update(c *gin.Context) {
 	// 接收参数
 	var param system.Authority
@@ -65,7 +65,7 @@ func (a AuthorityCtr) Update(c *gin.Context) {
 		return
 	}
 
-	magic.Success(c, "创建字典目录成功", res)
+	magic.Success(c, "更新角色成功", res)
 }
 
 // 删除角色
@@ -84,5 +84,25 @@ func (a AuthorityCtr) Delete(c *gin.Context) {
 		return
 	}
 
-	magic.Success(c, "创建字典目录成功", res)
+	magic.Success(c, "删除角色成功", res)
+}
+
+// 角色设置菜单权限
+func (a *AuthorityCtr) SetMenuAuth(c *gin.Context) {
+	// 接收参数
+	var form system.SetMenuAuth
+	err := c.ShouldBind(&form)
+	if err != nil {
+		magic.Fail(c, http.StatusBadRequest, err.Error(), form)
+		return
+	}
+
+	// 逻辑处理
+	res, err := serviceSystem.AuthorityApp.SetMenuAuth(form)
+	if err != nil {
+		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		return
+	}
+
+	magic.Success(c, "角色设置菜单权限成功", res)
 }
