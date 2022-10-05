@@ -9,7 +9,11 @@
           <el-input v-model="searchInfo.description" placeholder="描述" />
         </el-form-item>
         <el-form-item label="API组">
-          <el-input v-model="searchInfo.apiGroup" placeholder="api组" />
+          <!-- <el-input v-model="searchInfo.apiGroup" placeholder="api组" /> -->
+          <el-select v-model="searchInfo.apiGroup" clearable placeholder="请选择">
+            <el-option v-for="item in menuPotions" :key="item.id" :label="`${item.title}`"
+              :value="item.id" />
+          </el-select>
         </el-form-item>
         <el-form-item label="请求">
           <el-select v-model="searchInfo.method" clearable placeholder="请选择">
@@ -50,7 +54,11 @@
         </el-table-column>
         <el-table-column align="left" label="API路径" min-width="150" prop="route" sortable="custom" />
         <el-table-column align="left" label="API介绍" min-width="150" prop="name" sortable="custom" />
-        <el-table-column align="left" label="API分组" min-width="150" prop="menuName" sortable="custom" />
+        <el-table-column align="left" label="API分组" min-width="150" prop="menuName" sortable="custom">
+          <template #default="scope">
+            <div>{{ menuFilter(scope.row.menuId) }} </div>
+          </template>
+        </el-table-column>
         <el-table-column align="left" fixed="right" label="操作" width="200">
           <template #default="scope">
             <el-button icon="edit" size="small" type="primary" link @click="editApiFunc(scope.row)">编辑</el-button>
@@ -114,9 +122,16 @@ import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
+// 回显method中文名
 const methodFilter = (value) => {
   const target = methodOptions.value.filter(item => item.value === value)[0]
   return target && `${target.label}`
+}
+
+// 回显菜单中文名
+const menuFilter = (id) => {
+  const target = menuPotions.value.filter(item => item.id == id)[0]
+  return target.title
 }
 
 const apis = ref([])
@@ -126,6 +141,7 @@ const form = ref({
   method: '',
   description: ''
 })
+const menuPotions = ref([])
 const methodOptions = ref([
   {
     value: 'POST',
@@ -216,6 +232,7 @@ const getTableData = async () => {
     total.value = table.data.total
     page.value = table.data.page
     pageSize.value = table.data.pageSize
+    menuPotions.value = table.data.menuOption
   }
 }
 getTableData()
