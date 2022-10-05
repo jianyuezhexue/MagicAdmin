@@ -63,6 +63,6 @@ type Menu struct {
 
 // 菜单的ID和name
 type MenuOption struct {
-	Id   uint64 `json:"id"`   // 主键ID
-	Name string `json:"name"` // 路由name
+	Id    uint64 `json:"id"`    // 主键ID
+	Title string `json:"title"` // 菜单名
 }
