@@ -35,9 +35,11 @@ func (d *ApiServer) List(data system.SearchApi) (res system.ApiPageResult, err e
 	offset := (data.Page - 1) * data.PageSize
 	var list []system.Api
 	err = db.Limit(limit).Offset(offset).Find(&list).Error
+	if err != nil {
+		return res, errors.New("DB跪了")
+	}
 
 	// 查询菜单选项
-	// var menuOption system.MenuOption
 	menuOption, err := MenuApp.MenuOption()
 	if err != nil {
 		return res, errors.New("系统繁忙，请稍后再试")

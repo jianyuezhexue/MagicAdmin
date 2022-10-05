@@ -89,7 +89,7 @@ func (m *MenuServer) MenuOption() (res []system.MenuOption, err error) {
 	if err != nil {
 		return res, errors.New("DB跪了")
 	}
-	return res, err
+	return list, err
 }
 
 // 根据id查询菜单

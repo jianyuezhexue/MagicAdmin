@@ -22,9 +22,9 @@ type SearchApi struct {
 
 // 分页返回
 type ApiPageResult struct {
-	List       any   `json:"list"`
-	Total      int64 `json:"total"`
-	Page       int   `json:"page" form:"page"`         // 页码
-	PageSize   int   `json:"pageSize" form:"pageSize"` // 每页大小
-	MenuOption []MenuOption
+	List       any          `json:"list"`
+	Total      int64        `json:"total"`
+	Page       int          `json:"page" form:"page"`         // 页码
+	PageSize   int          `json:"pageSize" form:"pageSize"` // 每页大小
+	MenuOption []MenuOption `json:"menuOption"`
 }
