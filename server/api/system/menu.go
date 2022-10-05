@@ -44,7 +44,7 @@ func (m *MenuCtr) MyMenu(c *gin.Context) {
 	magic.Success(c, "获取我的菜单成功", res)
 }
 
-// 分页获取基础menu列表
+// 分页获取基础menu列表 ｜ 树形
 func (m *MenuCtr) Menus(c *gin.Context) {
 	// 参数获取
 	var pageInfo model.PageInfo

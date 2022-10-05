@@ -82,6 +82,16 @@ func (m *MenuServer) Menus(pageInfo model.PageInfo) (list model.ResPageData, err
 	return list, err
 }
 
+// 查询所有菜单的ID和name
+func (m *MenuServer) MenuOption() (res []system.MenuOption, err error) {
+	var list []system.MenuOption
+	err = magic.Orm.Model(&system.Menu{}).Find(&list).Error
+	if err != nil {
+		return res, errors.New("DB跪了")
+	}
+	return res, err
+}
+
 // 根据id查询菜单
 func (m *MenuServer) FindMenu(id model.GetById) (res system.Menu, err error) {
 	// 查询数据
