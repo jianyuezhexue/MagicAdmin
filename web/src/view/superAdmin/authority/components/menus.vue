@@ -32,7 +32,7 @@
 
 <script setup>
 import { getBaseMenuTree } from '@/api/menu'
-import {addMenuAuthority } from '@/api/authority'
+import { addMenuAuthority } from '@/api/authority'
 import {
   updateAuthority
 } from '@/api/authority'
@@ -64,12 +64,12 @@ const menuDefaultProps = ref({ // 取值规则
 // 初始化接口
 const init = async () => {
   // 回显菜单树
-  const res = await getBaseMenuTree()
-  menuTreeData.value = res.data
+  const res = await getBaseMenuTree({ id: props.row.id })
+  menuTreeData.value = res.data.treeMenus
 
   // 回显菜单选中
-  let selectedArr = props.row.menuIds.split(",")
-  res.data.forEach(item => {
+  let selectedArr = res.data.menuIds.split(",")
+  res.data.treeMenus.forEach(item => {
     if (item.children.length > 0) { // 防止父级选中子集全选
       selectedArr = selectedArr.filter(val => val != item.id)
     }
@@ -92,7 +92,7 @@ const relation = async () => {
   let menuIds = checkArr.map(item => String(item.id))
   const res = await addMenuAuthority({
     // menus: checkArr,
-    data:menuIds,
+    data: menuIds,
     id: props.row.id
   })
   if (res.code === 0) {

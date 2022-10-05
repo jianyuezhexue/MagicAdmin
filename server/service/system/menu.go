@@ -27,18 +27,29 @@ func (m *MenuServer) MakeTree(datas []system.Menu, ParentId uint64) []system.Men
 }
 
 // 全部菜单树
-func (m *MenuServer) MenuTree() (menus []system.Menu, err error) {
+func (m *MenuServer) MenuTree(id model.GetById) (res any, err error) {
 	// 查询所有菜单
+	var menus []system.Menu
 	err = magic.Orm.Preload("Api").Find(&menus).Error
 	if err != nil {
 		return nil, err
 	}
 
 	// 树形转换
-	treeMenuus := MenuApp.MakeTree(menus, 0)
+	treeMenus := MenuApp.MakeTree(menus, 0)
+
+	// 查询当前权限下所有的菜单id
+	var auth system.Authority
+	err = magic.Orm.Where("id = ?", id.ID).Find(&auth).Error
+	if err != nil {
+		return nil, err
+	}
 
 	// 返回数据
-	return treeMenuus, err
+	result := make(map[string]any)
+	result["treeMenus"] = treeMenus
+	result["menuIds"] = auth.MenuIds
+	return result, err
 }
 
 // 我的菜单树

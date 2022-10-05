@@ -17,8 +17,16 @@ var MenuApi = new(MenuCtr)
 
 // 树形菜单
 func (m *MenuCtr) MenuTree(c *gin.Context) {
+	// 接收参数
+	var id model.GetById
+	err := c.ShouldBind(&id)
+	if err != nil {
+		magic.Fail(c, http.StatusBadGateway, err.Error(), id)
+		return
+	}
+
 	// 逻辑处理
-	res, err := serviceSystem.MenuApp.MenuTree()
+	res, err := serviceSystem.MenuApp.MenuTree(id)
 	if err != nil {
 		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
 		return

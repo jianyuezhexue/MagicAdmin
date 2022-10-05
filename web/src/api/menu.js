@@ -51,11 +51,12 @@ export const delMenu = (id) => {
   })
 }
 
-// 获取基础路由列表
-export const getBaseMenuTree = () => {
+// 获取某角色的路由和已有权限
+export const getBaseMenuTree = (params) => {
   return service({
     url: '/menuTree',
-    method: 'GET'
+    method: 'GET',
+    params
   })
 }
 

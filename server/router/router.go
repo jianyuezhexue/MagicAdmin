@@ -41,7 +41,7 @@ func Routers() *gin.Engine {
 		PrivateGroup.PUT("/menu", system.MenuApi.UpdateMenu)        // 编辑菜单
 		PrivateGroup.POST("/menu", system.MenuApi.CreateMenu)       // 新增菜单
 		PrivateGroup.DELETE("/menu/:id", system.MenuApi.DeleteMenu) // 删除菜单
-		PrivateGroup.GET("/menuTree", system.MenuApi.MenuTree)      // 树形菜单
+		PrivateGroup.GET("/menuTree", system.MenuApi.MenuTree)      // 权限菜单
 
 		// 字典-目录
 		PrivateGroup.POST("/dictionary", system.DictionaryApi.Create)       // 新增字典目录

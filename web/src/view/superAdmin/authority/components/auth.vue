@@ -75,12 +75,13 @@ const apiChecks = ref([
 // 初始化查询所有菜单和权限
 const init = async () => {
     // 回显菜单数据
-    const res = await getBaseMenuTree()
-    let menus = res.data
+    // const res = await getBaseMenuTree({ id: props.row.id })
+    const res = await getBaseMenuTree({ id: 1 })
+    let menus = res.data.treeMenus
     data.value = menus
 
     // 回显菜单选中
-    let selectedArr = props.row.menuIds.split(",")
+    let selectedArr = res.data.menuIds.split(",")
     menus.forEach(item => {
         if (item.children.length > 0) { // 防止父级选中子集全选
             selectedArr = selectedArr.filter(val => val != item.id)
