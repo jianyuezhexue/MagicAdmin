@@ -40,10 +40,7 @@
       </div>
       <el-table :data="tableData" @sort-change="sortChange" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="id" min-width="60" prop="ID" sortable="custom" />
-        <el-table-column align="left" label="API路径" min-width="150" prop="path" sortable="custom" />
-        <el-table-column align="left" label="API分组" min-width="150" prop="apiGroup" sortable="custom" />
-        <el-table-column align="left" label="API简介" min-width="150" prop="description" sortable="custom" />
+        <el-table-column align="left" label="id" min-width="60" prop="id" sortable="custom" />
         <el-table-column align="left" label="请求" min-width="150" prop="method" sortable="custom">
           <template #default="scope">
             <div>
@@ -51,7 +48,9 @@
             </div>
           </template>
         </el-table-column>
-
+        <el-table-column align="left" label="API路径" min-width="150" prop="route" sortable="custom" />
+        <el-table-column align="left" label="API介绍" min-width="150" prop="name" sortable="custom" />
+        <el-table-column align="left" label="API分组" min-width="150" prop="menuName" sortable="custom" />
         <el-table-column align="left" fixed="right" label="操作" width="200">
           <template #default="scope">
             <el-button icon="edit" size="small" type="primary" link @click="editApiFunc(scope.row)">编辑</el-button>
@@ -64,7 +63,6 @@
           layout="total, sizes, prev, pager, next, jumper" @current-change="handleCurrentChange"
           @size-change="handleSizeChange" />
       </div>
-
     </div>
 
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="dialogTitle">
@@ -147,6 +145,11 @@ const methodOptions = ref([
   {
     value: 'DELETE',
     label: '删除',
+    type: 'danger'
+  },
+  {
+    value: 'PATCH',
+    label: '修改',
     type: 'danger'
   }
 ])
