@@ -84,6 +84,8 @@ func (m *MenuServer) Menus(pageInfo model.PageInfo) (list model.ResPageData, err
 
 // 查询所有菜单的ID和name
 func (m *MenuServer) MenuOption() (res []system.MenuOption, err error) {
+	// todo 这里用redis缓存
+
 	var list []system.MenuOption
 	err = magic.Orm.Model(&system.Menu{}).Find(&list).Error
 	if err != nil {
