@@ -1,11 +1,11 @@
 import service from '@/utils/request'
 
 // 分页获取角色列表
-export const getApiList = (data) => {
+export const getApiList = (params) => {
   return service({
-    url: '/api/getApiList',
-    method: 'post',
-    data
+    url: '/api',
+    method: 'GET',
+    params
   })
 }
 
@@ -55,11 +55,10 @@ export const getAllApis = (data) => {
 }
 
 // 删除指定api
-export const deleteApi = (data) => {
+export const deleteApi = (id) => {
   return service({
-    url: '/api/deleteApi',
-    method: 'post',
-    data
+    url: `/api/${id}`,
+    method: 'DELETE'
   })
 }
 

@@ -7,7 +7,13 @@ type Api struct {
 	model.BaseOrm
 	MenuId   uint64 `json:"menuId"`   // 菜单ID
 	MenuName string `json:"menuName"` // 菜单名称
-	Type     string `json:"type"`     // 请求类型
+	Method   string `json:"method"`   // 请求类型
 	Name     string `json:"name"`     // 中文名
 	Route    string `json:"route"`    // 路由地址
+}
+
+// 分页查询字典目录
+type SearchApi struct {
+	model.PageInfo
+	Api
 }

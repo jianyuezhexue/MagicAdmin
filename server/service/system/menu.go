@@ -112,11 +112,11 @@ func (m *MenuServer) UpdateMenu(menu system.Menu) (res system.Menu, err error) {
 		routes := make([][]any, 0)
 		for _, api := range menu.Api {
 			item := make([]any, 0)
-			item = append(item, api.Type, api.Route)
+			item = append(item, api.Method, api.Route)
 			routes = append(routes, item)
 		}
 		apis := []system.Api{}
-		err = magic.Orm.Debug().Where("(type,route) IN ?", routes).Find(&apis).Error
+		err = magic.Orm.Debug().Where("(method,route) IN ?", routes).Find(&apis).Error
 		if err != nil {
 			return res, errors.New("数据库跪了")
 		}
@@ -157,11 +157,11 @@ func (m *MenuServer) CreateMenu(menu system.Menu) (res system.Menu, err error) {
 		routes := make([][]any, 0)
 		for _, api := range menu.Api {
 			item := make([]any, 0)
-			item = append(item, api.Type, api.Route)
+			item = append(item, api.Method, api.Route)
 			routes = append(routes, item)
 		}
 		apis := []system.Api{}
-		err = magic.Orm.Where("(type,route) IN ?", routes).Find(&apis).Error
+		err = magic.Orm.Where("(method,route) IN ?", routes).Find(&apis).Error
 		if err != nil {
 			return res, errors.New("数据库跪了")
 		}

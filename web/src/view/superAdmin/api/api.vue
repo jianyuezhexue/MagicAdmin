@@ -13,12 +13,8 @@
         </el-form-item>
         <el-form-item label="请求">
           <el-select v-model="searchInfo.method" clearable placeholder="请选择">
-            <el-option
-              v-for="item in methodOptions"
-              :key="item.value"
-              :label="`${item.label}(${item.value})`"
-              :value="item.value"
-            />
+            <el-option v-for="item in methodOptions" :key="item.value" :label="`${item.label}(${item.value})`"
+              :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -37,15 +33,13 @@
             <el-button size="small" type="primary" @click="onDelete">确定</el-button>
           </div>
           <template #reference>
-            <el-button icon="delete" size="small" :disabled="!apis.length" style="margin-left: 10px;" @click="deleteVisible = true">删除</el-button>
+            <el-button icon="delete" size="small" :disabled="!apis.length" style="margin-left: 10px;"
+              @click="deleteVisible = true">删除</el-button>
           </template>
         </el-popover>
       </div>
       <el-table :data="tableData" @sort-change="sortChange" @selection-change="handleSelectionChange">
-        <el-table-column
-          type="selection"
-          width="55"
-        />
+        <el-table-column type="selection" width="55" />
         <el-table-column align="left" label="id" min-width="60" prop="ID" sortable="custom" />
         <el-table-column align="left" label="API路径" min-width="150" prop="path" sortable="custom" />
         <el-table-column align="left" label="API分组" min-width="150" prop="apiGroup" sortable="custom" />
@@ -60,33 +54,15 @@
 
         <el-table-column align="left" fixed="right" label="操作" width="200">
           <template #default="scope">
-            <el-button
-              icon="edit"
-              size="small"
-              type="primary"
-              link
-              @click="editApiFunc(scope.row)"
-            >编辑</el-button>
-            <el-button
-              icon="delete"
-              size="small"
-              type="primary"
-              link
-              @click="deleteApiFunc(scope.row)"
-            >删除</el-button>
+            <el-button icon="edit" size="small" type="primary" link @click="editApiFunc(scope.row)">编辑</el-button>
+            <el-button icon="delete" size="small" type="primary" link @click="deleteApiFunc(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
       <div class="gva-pagination">
-        <el-pagination
-          :current-page="page"
-          :page-size="pageSize"
-          :page-sizes="[10, 30, 50, 100]"
-          :total="total"
-          layout="total, sizes, prev, pager, next, jumper"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange"
-        />
+        <el-pagination :current-page="page" :page-size="pageSize" :page-sizes="[10, 30, 50, 100]" :total="total"
+          layout="total, sizes, prev, pager, next, jumper" @current-change="handleCurrentChange"
+          @size-change="handleSizeChange" />
       </div>
 
     </div>
@@ -99,12 +75,8 @@
         </el-form-item>
         <el-form-item label="请求" prop="method">
           <el-select v-model="form.method" placeholder="请选择" style="width:100%">
-            <el-option
-              v-for="item in methodOptions"
-              :key="item.value"
-              :label="`${item.label}(${item.value})`"
-              :value="item.value"
-            />
+            <el-option v-for="item in methodOptions" :key="item.value" :label="`${item.label}(${item.value})`"
+              :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item label="api分组" prop="apiGroup">
@@ -202,8 +174,8 @@ const searchInfo = ref({})
 const onReset = () => {
   searchInfo.value = {}
 }
-// 搜索
 
+// 搜索
 const onSubmit = () => {
   page.value = 1
   pageSize.value = 10
@@ -234,7 +206,7 @@ const sortChange = ({ prop, order }) => {
 }
 
 // 查询
-const getTableData = async() => {
+const getTableData = async () => {
   const table = await getApiList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
   if (table.code === 0) {
     tableData.value = table.data.list
@@ -243,7 +215,6 @@ const getTableData = async() => {
     pageSize.value = table.data.pageSize
   }
 }
-
 getTableData()
 
 // 批量操作
@@ -252,7 +223,7 @@ const handleSelectionChange = (val) => {
 }
 
 const deleteVisible = ref(false)
-const onDelete = async() => {
+const onDelete = async () => {
   const ids = apis.value.map(item => item.ID)
   const res = await deleteApisByIds({ ids })
   if (res.code === 0) {
@@ -301,13 +272,13 @@ const closeDialog = () => {
   dialogFormVisible.value = false
 }
 
-const editApiFunc = async(row) => {
+const editApiFunc = async (row) => {
   const res = await getApiById({ id: row.ID })
   form.value = res.data.api
   openDialog('edit')
 }
 
-const enterDialog = async() => {
+const enterDialog = async () => {
   apiForm.value.validate(async valid => {
     if (valid) {
       switch (type.value) {
@@ -355,13 +326,13 @@ const enterDialog = async() => {
   })
 }
 
-const deleteApiFunc = async(row) => {
+const deleteApiFunc = async (row) => {
   ElMessageBox.confirm('此操作将永久删除所有角色下该api, 是否继续?', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
   })
-    .then(async() => {
+    .then(async () => {
       const res = await deleteApi(row)
       if (res.code === 0) {
         ElMessage({
@@ -381,10 +352,12 @@ const deleteApiFunc = async(row) => {
 <style scoped lang="scss">
 .button-box {
   padding: 10px 20px;
+
   .el-button {
     float: right;
   }
 }
+
 .warning {
   color: #dc143c;
 }

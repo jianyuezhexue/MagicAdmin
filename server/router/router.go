@@ -63,6 +63,9 @@ func Routers() *gin.Engine {
 		PrivateGroup.PUT("/authority", system.AuthorityAPI.Update)        // 修改角色
 		PrivateGroup.DELETE("/authority/:id", system.AuthorityAPI.Delete) // 删除角色
 
+		// API
+		PrivateGroup.GET("/api", system.ApiAPI.List)          // 分页角色列表
+		PrivateGroup.DELETE("/api/:id", system.ApiAPI.Delete) // 删除角色
 	}
 
 	magic.Logger.Info("router register success")

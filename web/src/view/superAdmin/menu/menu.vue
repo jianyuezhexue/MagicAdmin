@@ -93,7 +93,7 @@
         <el-table :data="form.api" style="width: 100%">
           <el-table-column align="left" prop="type" label="请求类型" width="180">
             <template #default="scope">
-              <el-select v-model="scope.row.type" placeholder="请选择">
+              <el-select v-model="scope.row.method" placeholder="请选择">
                 <el-option key="GET" value="GET" label="GET" />
                 <el-option key="POST" value="POST" label="POST" />
                 <el-option key="PUT" value="PUT" label="PUT" />
@@ -119,7 +119,7 @@
           <el-table-column align="left">
             <template #default="scope">
               <div>
-                <el-button type="danger" size="small" icon="delete" @click="deleteParameter(form.api,scope.$index)">删除
+                <el-button type="danger" size="small" icon="delete" @click="deApi(form.api,scope.$index)">删除
                 </el-button>
               </div>
             </template>
@@ -180,6 +180,7 @@ import {
   delMenu,
   getBaseMenuById
 } from '@/api/menu'
+import { deleteApi } from '@/api/api'
 import icon from '@/view/superAdmin/menu/icon.vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { canRemoveAuthorityBtnApi } from '@/api/authorityBtn'
@@ -223,14 +224,24 @@ const addApi = (form) => {
     form.api = []
   }
   form.api.push({
-    type: 'GET',
+    id: 0,
+    method: 'GET',
     route: '',
-    name: ''
+    name: '',
   })
 }
 // 删除API配置
-const deleteParameter = (api, index) => {
-  api.splice(index, 1)
+const deApi = async (api, index) => {
+  let apiId = api[index].id
+  if (apiId === 0) {                 // 刚加的直接删
+    api.splice(index, 1)
+    return
+  }
+  const res = await deleteApi(apiId) // 库里的先删库里的
+  if (res.code === 0) {
+    api.splice(index, 1)
+    return
+  }
 }
 
 // 新增菜单拓展[按钮+数据]权限
@@ -377,7 +388,7 @@ const menuOption = ref([
 const setOptions = () => {
   menuOption.value = [
     {
-      id: 0,
+      id: "0",
       title: '根目录'
     }
   ]
