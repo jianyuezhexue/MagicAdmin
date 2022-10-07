@@ -12,7 +12,7 @@
         <el-table-column label="角色简介" min-width="240" prop="desc" />
         <el-table-column align="left" label="操作" width="460">
           <template #default="scope">
-            <el-button icon="setting" size="small" type="primary" link @click="opdendrawer(scope.row)">设置权限</el-button>
+            <el-button icon="setting" size="small" type="primary" link @click="openDrawer(scope.row)">设置权限</el-button>
             <el-button icon="plus" size="small" type="primary" link @click="addAuthority(scope.row.id)">新增子角色
             </el-button>
             <el-button icon="copy-document" size="small" type="primary" link @click="copyAuthorityFunc(scope.row)">拷贝
@@ -50,11 +50,11 @@
     <el-drawer v-if="drawer" v-model="drawer" title="权限配置" custom-class="auth-drawer" :with-header="false" size="40%">
       <el-tabs :before-leave="autoEnter" type="border-card">
         <el-tab-pane label="角色菜单">
-          <Menus ref="menus" :row="activeRow" @changeRow="changeRow" />
+          <Menus ref="menus" :row="activeRow" :menuTreeData="menuTreeData" :menuTreeIds="menuTreeIds" @changeRow="changeRow" />
         </el-tab-pane>
-        <!-- <el-tab-pane label="角色api">
+        <el-tab-pane label="角色api">
           <Apis ref="apis" :row="activeRow" @changeRow="changeRow" />
-        </el-tab-pane> -->
+        </el-tab-pane>
       </el-tabs>
       <!-- 暂停创新 -->
       <!-- <Auth :row="activeRow" /> -->
@@ -75,6 +75,7 @@ import {
   updateAuthority,
   copyAuthority
 } from '@/api/authority'
+import { getBaseMenuTree } from '@/api/menu'
 
 import Menus from '@/view/superAdmin/authority/components/menus.vue'
 import Apis from '@/view/superAdmin/authority/components/apis.vue'
@@ -132,8 +133,8 @@ const handleCheckedCitiesChange = (value) => {
   checkAll.value = checkedCount === cities.length
   isIndeterminate.value = checkedCount > 0 && checkedCount < cities.length
 }
-// 权限配置
 
+// 权限配置
 const form = ref({
   id: 0,
   name: '',
@@ -198,9 +199,33 @@ const copyAuthorityFunc = (row) => {
   copyForm.value = row
   dialogFormVisible.value = true
 }
-const opdendrawer = (row) => {
-  drawer.value = true
+
+// 打开抽屉
+const menuTreeData = ref([])    // 菜单数据
+const menuTreeIds = ref([])     // 选中菜单
+const openDrawer = async (row) => {
+  // 设置选中角色数据
   activeRow.value = row
+
+  // 查询菜单，API，拓展权限数据
+  // 回显菜单树
+  const res = await getBaseMenuTree({ id: row.id })
+  menuTreeData.value = res.data.treeMenus
+
+  // 回显菜单选中
+  let selectedArr = res.data.menuIds.split(",")
+  res.data.treeMenus.forEach(item => {
+    if (item.children.length > 0) { // 防止父级选中子集全选
+      selectedArr = selectedArr.filter(val => val != item.id)
+    }
+  })
+  menuTreeIds.value = selectedArr
+
+  // 回显API数据
+
+
+  // 打开抽屉
+  drawer.value = true
 }
 // 删除角色
 const deleteAuth = (row) => {
@@ -385,9 +410,10 @@ export default {
       display: none;
     }
   }
+
   .el-drawer__title {
-        font-size: 1.5rem;
-    }
+    font-size: 1.5rem;
+  }
 }
 
 .tree-content {

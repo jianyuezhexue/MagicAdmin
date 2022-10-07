@@ -90,7 +90,6 @@ const init = async () => {
     selected.value = selectedArr
 
     // 回显API，数据，按钮
-    console.log(menus)
 }
 init()
 
@@ -115,12 +114,10 @@ const handleCheckChange = (data, checked, indeterminate) => {
 
 // API/数据/按钮function
 const handleCheckAllChange = (val) => {  // 全选
-    console.log(val)
     checkedApis.value = val ? Apis : []
     isIndeterminate.value = false
 }
 const handleCheckedCitiesChange = (value) => { // 单选
-    console.log(apiChecks.value)
     const checkedCount = value.length
     checkAll.value = checkedCount === Apis.length
     isIndeterminate.value = checkedCount > 0 && checkedCount < Apis.length

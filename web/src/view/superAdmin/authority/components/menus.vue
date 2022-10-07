@@ -46,6 +46,19 @@ const props = defineProps({
       return {}
     },
     type: Object
+  },
+  menuTreeData: {
+    default: function () {
+      return {}
+    },
+    type: Object
+  },
+  menuTreeIds: {
+    default: function () {
+      return {}
+    },
+    // type: Object
+    type: Array
   }
 })
 
@@ -63,18 +76,10 @@ const menuDefaultProps = ref({ // 取值规则
 
 // 初始化接口
 const init = async () => {
-  // 回显菜单树
-  const res = await getBaseMenuTree({ id: props.row.id })
-  menuTreeData.value = res.data.treeMenus
-
+  // 回显菜单数据
+  menuTreeData.value = props.menuTreeData
   // 回显菜单选中
-  let selectedArr = res.data.menuIds.split(",")
-  res.data.treeMenus.forEach(item => {
-    if (item.children.length > 0) { // 防止父级选中子集全选
-      selectedArr = selectedArr.filter(val => val != item.id)
-    }
-  })
-  menuTreeIds.value = selectedArr
+  menuTreeIds.value = props.menuTreeIds
 }
 init()
 
