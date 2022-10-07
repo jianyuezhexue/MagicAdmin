@@ -139,7 +139,7 @@ func (m *MenuServer) UpdateMenu(menu system.Menu) (res system.Menu, err error) {
 			routes = append(routes, item)
 		}
 		apis := []system.Api{}
-		err = magic.Orm.Debug().Where("(method,route) IN ?", routes).Find(&apis).Error
+		err = magic.Orm.Where("(method,route) IN ?", routes).Find(&apis).Error
 		if err != nil {
 			return res, errors.New("数据库跪了")
 		}
@@ -153,7 +153,7 @@ func (m *MenuServer) UpdateMenu(menu system.Menu) (res system.Menu, err error) {
 	}
 
 	// 关联更新数据
-	err = magic.Orm.Debug().Session(&gorm.Session{FullSaveAssociations: true}).Updates(menu).Error
+	err = magic.Orm.Session(&gorm.Session{FullSaveAssociations: true}).Updates(menu).Error
 	if err != nil {
 		return res, err
 	}
@@ -214,14 +214,14 @@ func (m *MenuServer) DeleteMenu(id model.GetById) (err error) {
 
 	tx := magic.Orm.Begin()
 	// 删除菜单
-	err = tx.Debug().Delete(&menu).Error
+	err = tx.Delete(&menu).Error
 	if err != nil {
 		tx.Rollback()
 		return errors.New("DB跪了")
 	}
 	// 删除API ｜ Unscoped 硬删除
 	var api []system.Api
-	err = tx.Debug().Where("menuId = ?", menu.Id).Unscoped().Delete(&api).Error
+	err = tx.Where("menuId = ?", menu.Id).Unscoped().Delete(&api).Error
 	if err != nil {
 		tx.Rollback()
 		return errors.New("DB跪了")
