@@ -203,13 +203,20 @@ func (m *MenuServer) CreateMenu(menu system.Menu) (res system.Menu, err error) {
 // 删除菜单
 func (m *MenuServer) DeleteMenu(id model.GetById) (err error) {
 	// 查询是否存在
-	var menu system.Menu
-	err = magic.Orm.Where("id = ?", id.ID).Find(&menu).Error
+	var menu []system.Menu
+	err = magic.Orm.Where("id = ?", id.ID).Or("parentId = ?", id.ID).Find(&menu).Error
 	if err != nil {
-		if !errors.Is(err, gorm.ErrRecordNotFound) {
-			return errors.New("您要删除的菜单不存在")
-		}
 		return err
+	}
+
+	// 异常提醒
+	if err == gorm.ErrRecordNotFound {
+		return errors.New("您删除的菜单不存在")
+	}
+
+	// 包含子集提醒
+	if len(menu) > 1 {
+		return errors.New("当前菜单包含子菜单，请先删除子菜单")
 	}
 
 	tx := magic.Orm.Begin()
@@ -221,7 +228,7 @@ func (m *MenuServer) DeleteMenu(id model.GetById) (err error) {
 	}
 	// 删除API ｜ Unscoped 硬删除
 	var api []system.Api
-	err = tx.Where("menuId = ?", menu.Id).Unscoped().Delete(&api).Error
+	err = tx.Where("menuId = ?", menu[0].Id).Unscoped().Delete(&api).Error
 	if err != nil {
 		tx.Rollback()
 		return errors.New("DB跪了")

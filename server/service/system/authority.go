@@ -26,7 +26,7 @@ func MenuIds(authorityId int) (res []string, err error) {
 	// 没缓存查DB
 	if err == redis.ErrNil {
 		var authorites system.Authority
-		err = magic.Orm.Where("authorityId = ?", authorityId).First(&authorites).Error
+		err = magic.Orm.Where("id = ?", authorityId).First(&authorites).Error
 		if err != nil {
 			return nil, err
 		}
@@ -124,7 +124,6 @@ func (a *AuthorityServer) Delete(id model.GetById) (res []system.Authority, err 
 	// 查询是否存在
 	var find []system.Authority
 	err = magic.Orm.Where("id = ?", id.ID).Or("pid = ?", id.ID).Find(&find).Error
-	// err = magic.Orm.Debug().Where("pid = ?", id.ID).Find(&find).Error
 	if err != nil {
 		return find, err
 	}
