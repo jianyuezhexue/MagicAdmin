@@ -13,13 +13,13 @@ type MenuServer struct{}
 
 var MenuApp = new(MenuServer)
 
-// 转树形结构
-func (m *MenuServer) MakeTree(datas []system.Menu, ParentId uint64) []system.Menu {
+// 转树形结构|私有
+func (m *MenuServer) makeTree(datas []system.Menu, ParentId uint64) []system.Menu {
 	trees := make([]system.Menu, 0)
 
 	for _, item := range datas {
 		if item.ParentId == ParentId {
-			item.Children = MenuApp.MakeTree(datas, item.Id)
+			item.Children = MenuApp.makeTree(datas, item.Id)
 			trees = append(trees, item)
 		}
 	}
@@ -36,7 +36,7 @@ func (m *MenuServer) MenuTree(id model.GetById) (res any, err error) {
 	}
 
 	// 树形转换
-	treeMenus := MenuApp.MakeTree(menus, 0)
+	treeMenus := MenuApp.makeTree(menus, 0)
 
 	// 查询当前权限
 	var auth system.Authority
@@ -70,7 +70,7 @@ func (m *MenuServer) MyMenu(authorityId int) (menus []system.Menu, err error) {
 	}
 
 	// 树形转换
-	treeMenuus := MenuApp.MakeTree(myMenus, 0)
+	treeMenuus := MenuApp.makeTree(myMenus, 0)
 	return treeMenuus, err
 }
 
@@ -83,7 +83,7 @@ func (m *MenuServer) Menus(pageInfo model.PageInfo) (list model.ResPageData, err
 		return list, err
 	}
 	// 树形转换
-	treeMenuus := MenuApp.MakeTree(menus, 0)
+	treeMenuus := MenuApp.makeTree(menus, 0)
 
 	// 数据封装
 	list.List = treeMenuus
@@ -109,7 +109,7 @@ func (m *MenuServer) MenuOption() (res []system.MenuOption, err error) {
 func (m *MenuServer) FindMenu(id model.GetById) (res system.Menu, err error) {
 	// 查询数据
 	var menu system.Menu
-	err = magic.Orm.Where("id = ?", id.ID).Preload("Api").Find(&menu).Error
+	err = magic.Orm.Where("id = ?", id.ID).Preload("Api").Preload("ExtAuth").Find(&menu).Error
 	if err != nil {
 		return res, err
 	}
@@ -229,6 +229,13 @@ func (m *MenuServer) DeleteMenu(id model.GetById) (err error) {
 	// 删除API ｜ Unscoped 硬删除
 	var api []system.Api
 	err = tx.Where("menuId = ?", menu[0].Id).Unscoped().Delete(&api).Error
+	if err != nil {
+		tx.Rollback()
+		return errors.New("DB跪了")
+	}
+	// 删除extAuth |Unscoped 硬删除
+	var extAuth []system.ExtAuth
+	err = tx.Where("menuId = ?", menu[0].Id).Unscoped().Delete(&extAuth).Error
 	if err != nil {
 		tx.Rollback()
 		return errors.New("DB跪了")

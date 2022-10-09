@@ -6,7 +6,7 @@
     </div>
     <div class="tree-content">
       <el-tree ref="apiTree" :data="apiTreeData" :default-checked-keys="apiTreeIds" :props="apiDefaultProps"
-        default-expand-all highlight-current node-key="onlyId" show-checkbox :filter-node-method="filterNode"
+        default-expand-all highlight-current node-key="id" show-checkbox :filter-node-method="filterNode"
         @check="nodeChange" />
     </div>
   </div>
@@ -28,36 +28,37 @@ const props = defineProps({
       return {}
     },
     type: Object
+  },
+  apiTreeData: {
+    default: function () {
+      return {}
+    },
+    type: Object
+  },
+  apiTreeIds: {
+    default: function () {
+      return {}
+    },
+    // type: Object
+    type: Array
   }
 })
 
 const apiDefaultProps = ref({
   children: 'children',
-  label: 'description'
+  label: 'name'
 })
 const filterText = ref('')
 const apiTreeData = ref([])
 const apiTreeIds = ref([])
 const activeUserId = ref('')
 const init = async () => {
-  // const res2 = await getAllApis()
-  // const apis = res2.data.apis
-
-  // apiTreeData.value = buildApiTree(apis)
-  // const res = await getPolicyPathByAuthorityId({
-  //   authorityId: props.row.authorityId
-  // })
-  // activeUserId.value = props.row.authorityId
-  // apiTreeIds.value = []
-  // res.data.paths && res.data.paths.forEach(item => {
-  //   apiTreeIds.value.push('p:' + item.path + 'm:' + item.method)
-  // })
-
   // 回显API树
-  apiTreeData.value = []
+  apiTreeData.value = props.apiTreeData
+  console.log(apiTreeData.value)
 
   // 回显API选中
-  apiTreeIds.value = []
+  apiTreeIds.value = props.apiTreeIds
 }
 
 init()

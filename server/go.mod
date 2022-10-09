@@ -18,6 +18,7 @@ require (
 )
 
 require (
+	github.com/duke-git/lancet v1.3.2
 	github.com/duke-git/lancet/v2 v2.1.6 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect

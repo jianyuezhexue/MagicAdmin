@@ -62,6 +62,14 @@ export const deleteApi = (id) => {
   })
 }
 
+// 删除指定拓展权限
+export const deleteExtAuth = (id) => {
+  return service({
+    url: `/extAuth/${id}`,
+    method: 'DELETE'
+  })
+}
+
 // 删除选中Api
 export const deleteApisByIds = (data) => {
   return service({

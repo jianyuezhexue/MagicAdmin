@@ -67,6 +67,9 @@ func Routers() *gin.Engine {
 		// API
 		PrivateGroup.GET("/api", system.ApiAPI.List)          // 分页角色列表
 		PrivateGroup.DELETE("/api/:id", system.ApiAPI.Delete) // 删除角色
+
+		// 拓展权限
+		PrivateGroup.DELETE("/extAuth/:id", system.ExtAuthAPI.Delete) // 删除拓展权限
 	}
 
 	magic.Logger.Info("router register success")

@@ -54,7 +54,8 @@
             @changeRow="changeRow" />
         </el-tab-pane>
         <el-tab-pane label="角色api">
-          <Apis ref="apis" :row="activeRow" @changeRow="changeRow" />
+          <Apis ref="apis" :row="activeRow" :apiTreeData="apiTreeData" :apiTreeIds="apiTreeIds"
+            @changeRow="changeRow" />
         </el-tab-pane>
       </el-tabs>
       <!-- 暂停创新 -->
@@ -217,7 +218,6 @@ const openDrawer = async (row) => {
   // 回显菜单树
   const res = await getBaseMenuTree({ id: row.id })
   menuTreeData.value = res.data.treeMenus
-  console.log(res.data)
 
   // 回显菜单选中
   let selectedArr = res.data.auth.menuIds.split(",")
@@ -232,11 +232,8 @@ const openDrawer = async (row) => {
   apiAndExtAuthTree(res.data.treeMenus)
   // 回显API选中  
   apiTreeIds.value = res.data.auth.apiIds.split(",")
-  // 回显extAuth选中  
-  extAuthTreeIds.value = res.data.auth.extAuth.split(",")
-
-  console.log(apiTreeData.value)
-  console.log(extAuthTreeData.value)
+  // // 回显extAuth选中  
+  // extAuthTreeIds.value = res.data.auth.extAuth.split(",")
 
   // 打开抽屉
   drawer.value = true
@@ -247,14 +244,14 @@ const apiAndExtAuthTree = (menuTree) => {
   menuTree.forEach(item => {
     // API如果有值取出来
     if (item.api.length > 0) {
-      let menu = { 'id': item.id, 'name': item.meta.title, 'chideren': item.api }
+      let menu = { 'id': item.id, 'name': item.meta.title, 'children': item.api }
       apiTreeData.value.push(menu)
     }
-    // extAuth如果有值取出来
-    if (item.extAuth.length > 0) {
-      let menu = { 'id': item.id, 'name': item.meta.title, 'chideren': item.extAuth }
-      extAuthTreeData.value.push(menu)
-    }
+    // // extAuth如果有值取出来
+    // if (item.extAuth.length > 0) {
+    //   let menu = { 'id': item.id, 'name': item.meta.title, 'children': item.extAuth }
+    //   extAuthTreeData.value.push(menu)
+    // }
     // 有子集往下找
     if (item.children.length > 0) {
       apiAndExtAuthTree(item.children)

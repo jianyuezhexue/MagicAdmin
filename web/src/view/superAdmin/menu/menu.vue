@@ -133,8 +133,8 @@
           <el-table-column align="left" prop="type" label="请求类型" width="180">
             <template #default="scope">
               <el-select v-model="scope.row.type" placeholder="请选择">
-                <el-option key="数据权限" value="filed" label="数据权限" />
-                <el-option key="按钮权限" value="type" label="按钮权限" />
+                <el-option key="按钮权限" value="1" label="按钮权限" />
+                <el-option key="数据权限" value="2" label="数据权限" />
               </el-select>
             </template>
           </el-table-column>
@@ -155,7 +155,7 @@
           <el-table-column align="left">
             <template #default="scope">
               <div>
-                <el-button type="danger" size="small" icon="delete" @click="deleteextAuth(form.extAuth,scope.$index)">删除
+                <el-button type="danger" size="small" icon="delete" @click="delExtAuth(form.extAuth,scope.$index)">删除
                 </el-button>
               </div>
             </template>
@@ -180,7 +180,7 @@ import {
   delMenu,
   getBaseMenuById
 } from '@/api/menu'
-import { deleteApi } from '@/api/api'
+import { deleteApi, deleteExtAuth } from '@/api/api'
 import icon from '@/view/superAdmin/menu/icon.vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { canRemoveAuthorityBtnApi } from '@/api/authorityBtn'
@@ -250,14 +250,24 @@ const addExtAuth = (form) => {
     form.extAuth = []
   }
   form.extAuth.push({
-    type: 'filed',
+    id: 0,
+    type: '1',
     name: '',
     val: '',
   })
 }
 // 删除菜单数据权限
-const deleteextAuth = async (expands, index) => {
-  expands.splice(index, 1)
+const delExtAuth = async (expands, index) => {
+  let extAuthId = expands[index].id
+  if (extAuthId === 0) {                  // 刚加的直接删
+    expands.splice(index, 1)
+    return
+  }
+  const res = await deleteExtAuth(extAuthId) // 库里的先删库里的
+  if (res.code === 0) {
+    expands.splice(index, 1)
+    return
+  }
 }
 
 // 表单数据

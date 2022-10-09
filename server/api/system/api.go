@@ -54,3 +54,5 @@ func (a *ApiCtr) Delete(c *gin.Context) {
 	// 返回成功
 	magic.Success(c, "删除成功", res)
 }
+
+// 删除拓展权限
