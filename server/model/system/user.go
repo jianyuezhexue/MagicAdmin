@@ -18,6 +18,8 @@ type User struct {
 	ActiveColor  string      `json:"activeColor"`  // 活跃颜色
 	AuthorityId  string      `json:"authorityId"`  // 用户角色ID
 	AuthorityIds string      `json:"authorityIds"` // 用户角色ID
+	Phone        string      `json:"phone"`        // 用户手机号
+	Email        string      `json:"email"`        // 用户邮箱
 	Token        string      `json:"token" gorm:"-"`
 	Authority    Authority   `json:"authority" gorm:"foreignKey:Id;references:Id;comment:用户角色"`
 	Authorities  []Authority `json:"authorities" gorm:"-"`

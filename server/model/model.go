@@ -2,12 +2,9 @@ package model
 
 import (
 	"database/sql/driver"
-	"encoding/json"
-	"errors"
 	"fmt"
 	"time"
 
-	"github.com/duke-git/lancet/convertor"
 	"gorm.io/gorm"
 )
 
@@ -70,28 +67,4 @@ type GetById struct {
 // 传ID数组接收餐结构
 type IdArr struct {
 	Data []string `josn:"data" uri:"data" form:"data" binding:"required"`
-}
-
-// json字符串形式存储
-type Array[T any] []T
-
-// 字符串转成数组返回
-func (a *Array[T]) Scan(value interface{}) error {
-	bytes, ok := value.([]byte)
-	if !ok {
-		return errors.New(fmt.Sprint("Failed to scan Array value:", value))
-	}
-	if len(bytes) > 0 {
-		return json.Unmarshal(bytes, a)
-	}
-	*a = make([]T, 0)
-	return nil
-}
-
-// 数组转成字符串存储
-func (a Array[T]) Value() (driver.Value, error) {
-	if a == nil {
-		return "[]", nil
-	}
-	return convertor.ToString(a), nil
 }

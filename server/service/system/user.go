@@ -106,6 +106,7 @@ func (u *UserServer) UserInfo(uuid uuid.UUID) (user system.User, err error) {
 	// 查询角色数据
 	var auths []system.Authority
 	authIds := strings.Split(user.AuthorityIds, ".")
+	// authIds := user.AuthorityIds
 	err = magic.Orm.Where("id", authIds).Find(&auths).Error
 	if err != nil {
 		return user, errors.New("系统繁忙，请稍后再试")
