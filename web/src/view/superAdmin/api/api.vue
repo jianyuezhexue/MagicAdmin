@@ -44,7 +44,7 @@
       </div>
       <el-table :data="tableData" @sort-change="sortChange" @selection-change="handleSelectionChange">
         <!-- <el-table-column type="selection" width="55" /> -->
-        <el-table-column align="left" label="id" min-width="60" prop="id" sortable="custom" />
+        <!-- <el-table-column align="left" label="id" min-width="60" prop="id" sortable="custom" /> -->
         <el-table-column align="left" label="请求" min-width="150" prop="method" sortable="custom">
           <template #default="scope">
             <div>

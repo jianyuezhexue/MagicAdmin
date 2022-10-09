@@ -57,9 +57,11 @@
           <Apis ref="apis" :row="activeRow" :apiTreeData="apiTreeData" :apiTreeIds="apiTreeIds"
             @changeRow="changeRow" />
         </el-tab-pane>
+        <el-tab-pane label="角色拓展权限">
+          <ExtAuth ref="extAuth" :row="activeRow" :extAuthTreeData="extAuthTreeData" :extAuthTreeIds="extAuthTreeIds"
+            @changeRow="changeRow" />
+        </el-tab-pane>
       </el-tabs>
-      <!-- 暂停创新 -->
-      <!-- <Auth :row="activeRow" /> -->
     </el-drawer>
 
     <!-- 新角色配置弹窗 -->
@@ -81,6 +83,7 @@ import { getBaseMenuTree } from '@/api/menu'
 
 import Menus from '@/view/superAdmin/authority/components/menus.vue'
 import Apis from '@/view/superAdmin/authority/components/apis.vue'
+import ExtAuth from '@/view/superAdmin/authority/components/extAuth.vue'
 import Auth from '@/view/superAdmin/authority/components/auth.vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 
@@ -113,27 +116,9 @@ const apiDialogFlag = ref(false)
 const copyForm = ref({})
 
 // 权限配置
+const dialogFormVisible2 = ref(false)
 const setPower = function () {
   dialogFormVisible2.value = true
-}
-const dialogFormVisible2 = ref(false)
-const closeDialog2 = () => {
-  dialogFormVisible2.value = false
-}
-
-const checkAll = ref(false)
-const isIndeterminate = ref(true)
-const checkedCities = ref(['字典列表', '新增目录'])
-const cities = ['字典列表', '新增目录', '编辑目录', '删除目录']
-
-const handleCheckAllChange = (val) => {
-  checkedCities.value = val ? cities : []
-  isIndeterminate.value = false
-}
-const handleCheckedCitiesChange = (value) => {
-  const checkedCount = value.length
-  checkAll.value = checkedCount === cities.length
-  isIndeterminate.value = checkedCount > 0 && checkedCount < cities.length
 }
 
 // 权限配置
@@ -180,15 +165,14 @@ const changeRow = (key, value) => {
 }
 const menus = ref(null)
 const apis = ref(null)
-const datas = ref(null)
+const extAuth = ref(null)
 const autoEnter = (activeName, oldActiveName) => {
-  const paneArr = [menus, apis, datas]
+  const paneArr = [menus, apis, extAuth]
   if (oldActiveName) {
     if (paneArr[oldActiveName].value.needConfirm) {
       paneArr[oldActiveName].value.enterAndNext()
       paneArr[oldActiveName].value.needConfirm = false
     }
-
   }
 }
 // 拷贝角色
@@ -233,8 +217,6 @@ const openDrawer = async (row) => {
   extAuthTreeData.value = []
   apiAndExtAuthTree(res.data.treeMenus)
 
-  console.log(extAuthTreeData.value)
-
   // 回显API选中  
   apiTreeIds.value = res.data.auth.apiIds.split(",")
   // 回显extAuth选中  
@@ -249,12 +231,12 @@ const apiAndExtAuthTree = (menuTree) => {
   menuTree.forEach(item => {
     // API如果有值取出来
     if (item.api.length > 0) {
-      let menu = { 'id': item.id, 'name': item.meta.title, 'children': item.api }
+      let menu = { 'id': 'm:' + item.id, 'name': item.meta.title, 'children': item.api }
       apiTreeData.value.push(menu)
     }
     // extAuth如果有值取出来
     if (item.extAuth.length > 0) {
-      let menu = { 'id': item.id, 'name': item.meta.title, 'children': item.extAuth }
+      let menu = { 'id': 'm:' + item.id, 'name': item.meta.title, 'children': item.extAuth }
       extAuthTreeData.value.push(menu)
     }
     // 有子集往下找

@@ -28,6 +28,6 @@ func (a *ExtAuthServer) Delete(id model.GetById) (res system.ExtAuth, err error)
 	}
 
 	// 删除执行
-	err = magic.Orm.Unscoped().Delete(&find).Error
+	err = magic.Orm.Delete(&find).Error
 	return res, err
 }

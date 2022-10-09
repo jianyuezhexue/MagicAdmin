@@ -61,6 +61,16 @@ export const addApiAuthority = (data) => {
   })
 }
 
+// 设置拓展字段权限
+export const addExtAuthAuthority = (data) => {
+  return service({
+    url: '/authority/extAuth',
+    method: 'PATCH',
+    data
+  })
+}
+
+
 // 设置角色资源权限
 export const setDataAuthority = (data) => {
   return service({

@@ -34,7 +34,7 @@ func (d *ApiServer) List(data system.SearchApi) (res system.ApiPageResult, err e
 	limit := data.PageSize
 	offset := (data.Page - 1) * data.PageSize
 	var list []system.Api
-	err = db.Limit(limit).Offset(offset).Find(&list).Error
+	err = db.Limit(limit).Offset(offset).Order("menuId").Find(&list).Error
 	if err != nil {
 		return res, errors.New("DB跪了")
 	}
