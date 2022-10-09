@@ -26,7 +26,7 @@ func (m *MenuServer) MakeTree(datas []system.Menu, ParentId uint64) []system.Men
 	return trees
 }
 
-// 全部菜单树
+// 全部菜单树|设置权限用
 func (m *MenuServer) MenuTree(id model.GetById) (res any, err error) {
 	// 查询所有菜单
 	var menus []system.Menu
@@ -38,7 +38,7 @@ func (m *MenuServer) MenuTree(id model.GetById) (res any, err error) {
 	// 树形转换
 	treeMenus := MenuApp.MakeTree(menus, 0)
 
-	// 查询当前权限下所有的菜单id
+	// 查询当前权限
 	var auth system.Authority
 	err = magic.Orm.Where("id = ?", id.ID).Find(&auth).Error
 	if err != nil {
@@ -48,7 +48,7 @@ func (m *MenuServer) MenuTree(id model.GetById) (res any, err error) {
 	// 返回数据
 	result := make(map[string]any)
 	result["treeMenus"] = treeMenus
-	result["menuIds"] = auth.MenuIds
+	result["auth"] = auth
 	return result, err
 }
 

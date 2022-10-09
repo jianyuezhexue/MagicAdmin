@@ -30,7 +30,7 @@
     <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button size="small" type="primary" icon="plus" @click="openDialog('addApi')">新增</el-button>
-        <el-popover v-model="deleteVisible" placement="top" width="160">
+        <!-- <el-popover v-model="deleteVisible" placement="top" width="160">
           <p>确定要删除吗？</p>
           <div style="text-align: right; margin-top: 8px;">
             <el-button size="small" type="primary" link @click="deleteVisible = false">取消</el-button>
@@ -40,10 +40,10 @@
             <el-button icon="delete" size="small" :disabled="!apis.length" style="margin-left: 10px;"
               @click="deleteVisible = true">删除</el-button>
           </template>
-        </el-popover>
+        </el-popover> -->
       </div>
       <el-table :data="tableData" @sort-change="sortChange" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" />
+        <!-- <el-table-column type="selection" width="55" /> -->
         <el-table-column align="left" label="id" min-width="60" prop="id" sortable="custom" />
         <el-table-column align="left" label="请求" min-width="150" prop="method" sortable="custom">
           <template #default="scope">

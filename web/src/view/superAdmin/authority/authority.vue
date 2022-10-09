@@ -50,7 +50,8 @@
     <el-drawer v-if="drawer" v-model="drawer" title="权限配置" custom-class="auth-drawer" :with-header="false" size="40%">
       <el-tabs :before-leave="autoEnter" type="border-card">
         <el-tab-pane label="角色菜单">
-          <Menus ref="menus" :row="activeRow" :menuTreeData="menuTreeData" :menuTreeIds="menuTreeIds" @changeRow="changeRow" />
+          <Menus ref="menus" :row="activeRow" :menuTreeData="menuTreeData" :menuTreeIds="menuTreeIds"
+            @changeRow="changeRow" />
         </el-tab-pane>
         <el-tab-pane label="角色api">
           <Apis ref="apis" :row="activeRow" @changeRow="changeRow" />
@@ -160,7 +161,7 @@ const pageSize = ref(999)
 const tableData = ref([])
 const searchInfo = ref({})
 
-// 查询
+// 查询角色列表
 const getTableData = async () => {
   const table = await getAuthorityList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
   if (table.code === 0) {
@@ -170,9 +171,9 @@ const getTableData = async () => {
     pageSize.value = table.data.pageSize
   }
 }
-
 getTableData()
 
+// 切换tab
 const changeRow = (key, value) => {
   activeRow.value[key] = value
 }
@@ -186,6 +187,7 @@ const autoEnter = (activeName, oldActiveName) => {
       paneArr[oldActiveName].value.enterAndNext()
       paneArr[oldActiveName].value.needConfirm = false
     }
+
   }
 }
 // 拷贝角色
@@ -200,9 +202,13 @@ const copyAuthorityFunc = (row) => {
   dialogFormVisible.value = true
 }
 
-// 打开抽屉
+// 打开抽屉|设置权限
 const menuTreeData = ref([])    // 菜单数据
 const menuTreeIds = ref([])     // 选中菜单
+const apiTreeData = ref([])     // API数据
+const apiTreeIds = ref([])      // 选中API
+const extAuthTreeData = ref([]) // extAuth数据
+const extAuthTreeIds = ref([])  // 选中extAuth
 const openDrawer = async (row) => {
   // 设置选中角色数据
   activeRow.value = row
@@ -211,9 +217,10 @@ const openDrawer = async (row) => {
   // 回显菜单树
   const res = await getBaseMenuTree({ id: row.id })
   menuTreeData.value = res.data.treeMenus
+  console.log(res.data)
 
   // 回显菜单选中
-  let selectedArr = res.data.menuIds.split(",")
+  let selectedArr = res.data.auth.menuIds.split(",")
   res.data.treeMenus.forEach(item => {
     if (item.children.length > 0) { // 防止父级选中子集全选
       selectedArr = selectedArr.filter(val => val != item.id)
@@ -221,12 +228,40 @@ const openDrawer = async (row) => {
   })
   menuTreeIds.value = selectedArr
 
-  // 回显API数据
+  // 回显API树&extAuth数
+  apiAndExtAuthTree(res.data.treeMenus)
+  // 回显API选中  
+  apiTreeIds.value = res.data.auth.apiIds.split(",")
+  // 回显extAuth选中  
+  extAuthTreeIds.value = res.data.auth.extAuth.split(",")
 
+  console.log(apiTreeData.value)
+  console.log(extAuthTreeData.value)
 
   // 打开抽屉
   drawer.value = true
 }
+
+// 递归取出API和拓展字段
+const apiAndExtAuthTree = (menuTree) => {
+  menuTree.forEach(item => {
+    // API如果有值取出来
+    if (item.api.length > 0) {
+      let menu = { 'id': item.id, 'name': item.meta.title, 'chideren': item.api }
+      apiTreeData.value.push(menu)
+    }
+    // extAuth如果有值取出来
+    if (item.extAuth.length > 0) {
+      let menu = { 'id': item.id, 'name': item.meta.title, 'chideren': item.extAuth }
+      extAuthTreeData.value.push(menu)
+    }
+    // 有子集往下找
+    if (item.children.length > 0) {
+      apiAndExtAuthTree(item.children)
+    }
+  });
+}
+
 // 删除角色
 const deleteAuth = (row) => {
   ElMessageBox.confirm('此操作将永久删除该角色, 是否继续?', '提示', {
@@ -252,6 +287,7 @@ const deleteAuth = (row) => {
     })
   })
 }
+
 // 初始化表单
 const authorityForm = ref(null)
 const initForm = () => {
@@ -265,6 +301,7 @@ const initForm = () => {
     desc: ''
   }
 }
+
 // 关闭窗口
 const closeDialog = () => {
   initForm()
@@ -371,6 +408,7 @@ const setAuthorityOptions = (AuthorityData, optionsData, disabled) => {
       }
     })
 }
+
 // 增加角色
 const addAuthority = (pid) => {
   initForm()
@@ -380,6 +418,7 @@ const addAuthority = (pid) => {
   setOptions()
   dialogFormVisible.value = true
 }
+
 // 编辑角色
 const editAuthority = (row) => {
   setOptions()
@@ -391,11 +430,9 @@ const editAuthority = (row) => {
   setOptions()
   dialogFormVisible.value = true
 }
-
 </script>
 
 <script>
-
 export default {
   name: 'Authority'
 }
