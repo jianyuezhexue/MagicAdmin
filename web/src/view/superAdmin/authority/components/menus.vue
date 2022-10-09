@@ -96,7 +96,6 @@ const relation = async () => {
   const checkArr = menuTree.value.getCheckedNodes(false, true)
   let menuIds = checkArr.map(item => String(item.id))
   const res = await addMenuAuthority({
-    // menus: checkArr,
     data: menuIds,
     id: props.row.id
   })

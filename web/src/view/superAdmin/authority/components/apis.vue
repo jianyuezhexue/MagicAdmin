@@ -18,8 +18,7 @@ export default {
 </script>
 
 <script setup>
-import { getAllApis } from '@/api/api'
-import { UpdateCasbin, getPolicyPathByAuthorityId } from '@/api/casbin'
+import { addApiAuthority } from '@/api/authority'
 import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 const props = defineProps({
@@ -39,7 +38,6 @@ const props = defineProps({
     default: function () {
       return {}
     },
-    // type: Object
     type: Array
   }
 })
@@ -51,11 +49,9 @@ const apiDefaultProps = ref({
 const filterText = ref('')
 const apiTreeData = ref([])
 const apiTreeIds = ref([])
-const activeUserId = ref('')
 const init = async () => {
   // 回显API树
   apiTreeData.value = props.apiTreeData
-
   // 回显API选中
   apiTreeIds.value = props.apiTreeIds
 }
@@ -70,45 +66,14 @@ const enterAndNext = () => {
   authApiEnter()
 }
 
-// 创建api树方法
-const buildApiTree = (apis) => {
-  const apiObj = {}
-  apis &&
-    apis.forEach(item => {
-      item.onlyId = 'p:' + item.path + 'm:' + item.method
-      if (Object.prototype.hasOwnProperty.call(apiObj, item.apiGroup)) {
-        apiObj[item.apiGroup].push(item)
-      } else {
-        Object.assign(apiObj, { [item.apiGroup]: [item] })
-      }
-    })
-  const apiTree = []
-  for (const key in apiObj) {
-    const treeNode = {
-      ID: key,
-      description: key + '组',
-      children: apiObj[key]
-    }
-    apiTree.push(treeNode)
-  }
-  return apiTree
-}
-
 // 关联关系确定
 const apiTree = ref(null)
 const authApiEnter = async () => {
-  const checkArr = apiTree.value.getCheckedNodes(true)
-  var casbinInfos = []
-  checkArr && checkArr.forEach(item => {
-    var casbinInfo = {
-      path: item.path,
-      method: item.method
-    }
-    casbinInfos.push(casbinInfo)
-  })
-  const res = await UpdateCasbin({
-    authorityId: activeUserId.value,
-    casbinInfos
+  let checkArr = apiTree.value.getCheckedKeys(true, false)
+  let apiIds = checkArr.map(item => String(item))
+  const res = await addApiAuthority({
+    data: apiIds,
+    id: props.row.id
   })
   if (res.code === 0) {
     ElMessage({ type: 'success', message: 'api设置成功' })

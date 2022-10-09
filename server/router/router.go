@@ -63,6 +63,7 @@ func Routers() *gin.Engine {
 		PrivateGroup.PUT("/authority", system.AuthorityAPI.Update)             // 更新角色
 		PrivateGroup.DELETE("/authority/:id", system.AuthorityAPI.Delete)      // 删除角色
 		PrivateGroup.PATCH("/authority/menu", system.AuthorityAPI.SetMenuAuth) // 设置角色菜单权限｜待优化
+		PrivateGroup.PATCH("/authority/api", system.AuthorityAPI.SetApiAuth)   // 设置角色API权限｜待优化
 
 		// API
 		PrivateGroup.GET("/api", system.ApiAPI.List)          // 分页角色列表

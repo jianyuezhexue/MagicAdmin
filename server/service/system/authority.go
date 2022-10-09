@@ -147,9 +147,19 @@ func (a *AuthorityServer) Delete(id model.GetById) (res []system.Authority, err 
 }
 
 // 设置角色菜单权限
-func (a *AuthorityServer) SetMenuAuth(data system.SetMenuAuth) (res system.SetMenuAuth, err error) {
+func (a *AuthorityServer) SetMenuAuth(data system.SetAuth) (res system.SetAuth, err error) {
 	menuIdStr := strings.Join(data.Data, ",")
 	err = magic.Orm.Debug().Model(&system.Authority{}).Where("id = ?", data.Id).Update("menuIds", menuIdStr).Error
+	if err != nil {
+		return res, errors.New("系统繁忙，请稍后再试")
+	}
+	return data, err
+}
+
+// 设置角色菜单权限
+func (a *AuthorityServer) SetApiAuth(data system.SetAuth) (res system.SetAuth, err error) {
+	menuIdStr := strings.Join(data.Data, ",")
+	err = magic.Orm.Debug().Model(&system.Authority{}).Where("id = ?", data.Id).Update("apiIds", menuIdStr).Error
 	if err != nil {
 		return res, errors.New("系统繁忙，请稍后再试")
 	}

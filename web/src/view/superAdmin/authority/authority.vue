@@ -228,7 +228,7 @@ const openDrawer = async (row) => {
   })
   menuTreeIds.value = selectedArr
 
-  // 回显API树&extAuth数
+  // 回显API树&extAuth树
   apiTreeData.value = []
   extAuthTreeData.value = []
   apiAndExtAuthTree(res.data.treeMenus)

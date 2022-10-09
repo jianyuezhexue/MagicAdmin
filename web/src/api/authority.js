@@ -52,6 +52,15 @@ export const addMenuAuthority = (data) => {
   })
 }
 
+// 设置API权限
+export const addApiAuthority = (data) => {
+  return service({
+    url: '/authority/api',
+    method: 'PATCH',
+    data
+  })
+}
+
 // 设置角色资源权限
 export const setDataAuthority = (data) => {
   return service({

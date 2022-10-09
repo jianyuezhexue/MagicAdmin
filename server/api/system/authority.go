@@ -90,7 +90,7 @@ func (a AuthorityCtr) Delete(c *gin.Context) {
 // 角色设置菜单权限
 func (a *AuthorityCtr) SetMenuAuth(c *gin.Context) {
 	// 接收参数
-	var form system.SetMenuAuth
+	var form system.SetAuth
 	err := c.ShouldBind(&form)
 	if err != nil {
 		magic.Fail(c, http.StatusBadRequest, err.Error(), form)
@@ -105,4 +105,24 @@ func (a *AuthorityCtr) SetMenuAuth(c *gin.Context) {
 	}
 
 	magic.Success(c, "角色设置菜单权限成功", res)
+}
+
+// 角色设置API权限
+func (a *AuthorityCtr) SetApiAuth(c *gin.Context) {
+	// 接收参数
+	var form system.SetAuth
+	err := c.ShouldBind(&form)
+	if err != nil {
+		magic.Fail(c, http.StatusBadRequest, err.Error(), form)
+		return
+	}
+
+	// 逻辑处理
+	res, err := serviceSystem.AuthorityApp.SetApiAuth(form)
+	if err != nil {
+		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		return
+	}
+
+	magic.Success(c, "角色设置API权限成功", res)
 }
