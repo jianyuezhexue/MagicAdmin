@@ -46,7 +46,7 @@
                             <el-dropdown-menu class="dropdown-group">
                               <el-dropdown-item>
                                 <span style="font-weight: 600;">
-                                  当前角色：{{ userStore.userInfo.authority.authorityName }}
+                                  当前角色：{{ userStore.userInfo.authority.name }}
                                 </span>
                               </el-dropdown-item>
                               <template v-if="userStore.userInfo.authorities">

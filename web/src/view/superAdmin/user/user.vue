@@ -5,10 +5,7 @@
       <div class="gva-btn-list">
         <el-button size="small" type="primary" icon="plus" @click="addUser">新增用户</el-button>
       </div>
-      <el-table
-        :data="tableData"
-        row-key="ID"
-      >
+      <el-table :data="tableData" row-key="ID">
         <el-table-column align="left" label="头像" min-width="75">
           <template #default="scope">
             <CustomPic style="margin-top:8px" :pic-src="scope.row.headerImg" />
@@ -21,27 +18,16 @@
         <el-table-column align="left" label="邮箱" min-width="180" prop="email" />
         <el-table-column align="left" label="用户角色" min-width="200">
           <template #default="scope">
-            <el-cascader
-              v-model="scope.row.authorityIds"
-              :options="authOptions"
-              :show-all-levels="false"
-              collapse-tags
+            <el-cascader v-model="scope.row.authorityIds" :options="authOptions" :show-all-levels="false" collapse-tags
               :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
-              :clearable="false"
-              @visible-change="(flag)=>{changeAuthority(scope.row,flag,0)}"
-              @remove-tag="(removeAuth)=>{changeAuthority(scope.row,false,removeAuth)}"
-            />
+              :clearable="false" @visible-change="(flag)=>{changeAuthority(scope.row,flag,0)}"
+              @remove-tag="(removeAuth)=>{changeAuthority(scope.row,false,removeAuth)}" />
           </template>
         </el-table-column>
         <el-table-column align="left" label="启用" min-width="150">
           <template #default="scope">
-            <el-switch
-              v-model="scope.row.enable"
-              inline-prompt
-              :active-value="1"
-              :inactive-value="2"
-              @change="()=>{switchEnable(scope.row)}"
-            />
+            <el-switch v-model="scope.row.enable" inline-prompt :active-value="1" :inactive-value="2"
+              @change="()=>{switchEnable(scope.row)}" />
           </template>
         </el-table-column>
 
@@ -58,31 +44,20 @@
               </template>
             </el-popover>
             <el-button type="primary" link icon="edit" size="small" @click="openEdit(scope.row)">编辑</el-button>
-            <el-button type="primary" link icon="magic-stick" size="small" @click="resetPasswordFunc(scope.row)">重置密码</el-button>
+            <el-button type="primary" link icon="magic-stick" size="small" @click="resetPasswordFunc(scope.row)">重置密码
+            </el-button>
           </template>
         </el-table-column>
 
       </el-table>
       <div class="gva-pagination">
-        <el-pagination
-          :current-page="page"
-          :page-size="pageSize"
-          :page-sizes="[10, 30, 50, 100]"
-          :total="total"
-          layout="total, sizes, prev, pager, next, jumper"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange"
-        />
+        <el-pagination :current-page="page" :page-size="pageSize" :page-sizes="[10, 30, 50, 100]" :total="total"
+          layout="total, sizes, prev, pager, next, jumper" @current-change="handleCurrentChange"
+          @size-change="handleSizeChange" />
       </div>
     </div>
-    <el-dialog
-      v-model="addUserDialog"
-      custom-class="user-dialog"
-      title="用户"
-      :show-close="false"
-      :close-on-press-escape="false"
-      :close-on-click-modal="false"
-    >
+    <el-dialog v-model="addUserDialog" custom-class="user-dialog" title="用户" :show-close="false"
+      :close-on-press-escape="false" :close-on-click-modal="false">
       <div style="height:60vh;overflow:auto;padding:0 12px;">
         <el-form ref="userForm" :rules="rules" :model="userInfo" label-width="80px">
           <el-form-item v-if="dialogFlag === 'add'" label="用户名" prop="userName">
@@ -101,26 +76,18 @@
             <el-input v-model="userInfo.email" />
           </el-form-item>
           <el-form-item label="用户角色" prop="authorityId">
-            <el-cascader
-              v-model="userInfo.authorityIds"
-              style="width:100%"
-              :options="authOptions"
+            <el-cascader v-model="userInfo.authorityIds" style="width:100%" :options="authOptions"
               :show-all-levels="false"
               :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
-              :clearable="false"
-            />
+              :clearable="false" />
           </el-form-item>
           <el-form-item label="启用" prop="disabled">
-            <el-switch
-              v-model="userInfo.enable"
-              inline-prompt
-              :active-value="1"
-              :inactive-value="2"
-            />
+            <el-switch v-model="userInfo.enable" inline-prompt :active-value="1" :inactive-value="2" />
           </el-form-item>
           <el-form-item label="头像" label-width="80px">
             <div style="display:inline-block" @click="openHeaderChange">
-              <img v-if="userInfo.headerImg" class="header-img-box" :src="(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg">
+              <img v-if="userInfo.headerImg" class="header-img-box"
+                :src="(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg">
               <div v-else class="header-img-box">从媒体库选择</div>
             </div>
           </el-form-item>
@@ -167,23 +134,23 @@ const path = ref(import.meta.env.VITE_BASE_API + '/')
 // 初始化相关
 const setAuthorityOptions = (AuthorityData, optionsData) => {
   AuthorityData &&
-        AuthorityData.forEach(item => {
-          if (item.children && item.children.length) {
-            const option = {
-              authorityId: item.authorityId,
-              authorityName: item.authorityName,
-              children: []
-            }
-            setAuthorityOptions(item.children, option.children)
-            optionsData.push(option)
-          } else {
-            const option = {
-              authorityId: item.authorityId,
-              authorityName: item.authorityName
-            }
-            optionsData.push(option)
-          }
-        })
+    AuthorityData.forEach(item => {
+      if (item.children && item.children.length) {
+        const option = {
+          authorityId: item.id,
+          authorityName: item.name,
+          children: []
+        }
+        setAuthorityOptions(item.children, option.children)
+        optionsData.push(option)
+      } else {
+        const option = {
+          authorityId: item.id,
+          authorityName: item.name,
+        }
+        optionsData.push(option)
+      }
+    })
 }
 
 const page = ref(1)
@@ -201,8 +168,8 @@ const handleCurrentChange = (val) => {
   getTableData()
 }
 
-// 查询
-const getTableData = async() => {
+// 查询用户列表
+const getTableData = async () => {
   const table = await getUserList({ page: page.value, pageSize: pageSize.value })
   if (table.code === 0) {
     tableData.value = table.data.list
@@ -216,7 +183,7 @@ watch(() => tableData.value, () => {
   setAuthorityIds()
 })
 
-const initPage = async() => {
+const initPage = async () => {
   getTableData()
   const res = await getAuthorityList({ page: 1, pageSize: 999 })
   setOptions(res.data.list)
@@ -233,7 +200,7 @@ const resetPasswordFunc = (row) => {
       cancelButtonText: '取消',
       type: 'warning',
     }
-  ).then(async() => {
+  ).then(async () => {
     const res = await resetPassword({
       ID: row.ID,
     })
@@ -270,7 +237,7 @@ const setOptions = (authData) => {
   setAuthorityOptions(authData, authOptions.value)
 }
 
-const deleteUserFunc = async(row) => {
+const deleteUserFunc = async (row) => {
   const res = await deleteUser({ id: row.ID })
   if (res.code === 0) {
     ElMessage.success('删除成功')
@@ -307,7 +274,7 @@ const rules = ref({
   ]
 })
 const userForm = ref(null)
-const enterAddUserDialog = async() => {
+const enterAddUserDialog = async () => {
   userInfo.value.authorityId = userInfo.value.authorityIds[0]
   userForm.value.validate(async valid => {
     if (valid) {
@@ -350,7 +317,7 @@ const addUser = () => {
 }
 
 const tempAuth = {}
-const changeAuthority = async(row, flag, removeAuth) => {
+const changeAuthority = async (row, flag, removeAuth) => {
   if (flag) {
     if (!removeAuth) {
       tempAuth[row.ID] = [...row.authorityIds]
@@ -380,7 +347,7 @@ const openEdit = (row) => {
   addUserDialog.value = true
 }
 
-const switchEnable = async(row) => {
+const switchEnable = async (row) => {
   userInfo.value = JSON.parse(JSON.stringify(row))
   await nextTick()
   const req = {
@@ -400,17 +367,19 @@ const switchEnable = async(row) => {
 <style lang="scss">
 .user-dialog {
   .header-img-box {
-  width: 200px;
-  height: 200px;
-  border: 1px dashed #ccc;
-  border-radius: 20px;
-  text-align: center;
-  line-height: 200px;
-  cursor: pointer;
-}
+    width: 200px;
+    height: 200px;
+    border: 1px dashed #ccc;
+    border-radius: 20px;
+    text-align: center;
+    line-height: 200px;
+    cursor: pointer;
+  }
+
   .avatar-uploader .el-upload:hover {
     border-color: #409eff;
   }
+
   .avatar-uploader-icon {
     border: 1px dashed #d9d9d9 !important;
     border-radius: 6px;
@@ -421,18 +390,21 @@ const switchEnable = async(row) => {
     line-height: 178px;
     text-align: center;
   }
+
   .avatar {
     width: 178px;
     height: 178px;
     display: block;
   }
 }
-.nickName{
+
+.nickName {
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
-.pointer{
+
+.pointer {
   cursor: pointer;
   font-size: 16px;
   margin-left: 2px;

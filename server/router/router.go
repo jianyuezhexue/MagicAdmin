@@ -18,13 +18,11 @@ func Routers() *gin.Engine {
 		PublicGroup.GET("/health", func(c *gin.Context) {
 			c.JSON(200, "是心动啊...")
 		})
-		// 调试-查询配置
-		PublicGroup.GET("/configInfo", system.ConfigInfo)
 		// 系统-获取验证码
 		PublicGroup.POST("/user/captcha", system.Captcha)
 		// 系统-用户登录
-		PublicGroup.POST("/user/register", system.Register)
-		PublicGroup.POST("/user/login", system.Login)
+		PublicGroup.POST("/user/register", system.UserApi.Register)
+		PublicGroup.POST("/user/login", system.UserApi.Login)
 	}
 
 	// 私有路由组
@@ -32,7 +30,8 @@ func Routers() *gin.Engine {
 	PrivateGroup.Use(middle.JWTAuth())
 	{
 		// 系统-用户
-		PrivateGroup.GET("/user/info", system.UserInfo) // 用户信息
+		PrivateGroup.GET("/user/info", system.UserApi.UserInfo) // 用户信息
+		PrivateGroup.GET("/users", system.UserApi.List)         // 用户列表
 
 		// 系统-菜单
 		PrivateGroup.GET("/myMenu", system.MenuApi.MyMenu)          // 我的菜单

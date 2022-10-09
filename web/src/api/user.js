@@ -37,11 +37,11 @@ export const changePassword = (data) => {
 }
 
 // 分页获取用户列表
-export const getUserList = (data) => {
+export const getUserList = (params) => {
   return service({
-    url: '/user/getUserList',
-    method: 'post',
-    data: data
+    url: '/users',
+    method: 'GET',
+    params
   })
 }
 

@@ -44,3 +44,9 @@ type CaptchaResponse struct {
 	PicPath       string `json:"picPath"`
 	CaptchaLength int    `json:"captchaLength"`
 }
+
+// 分页查询字典详情
+type SearchUser struct {
+	model.PageInfo
+	User
+}
