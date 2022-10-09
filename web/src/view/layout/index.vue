@@ -51,10 +51,10 @@
                               </el-dropdown-item>
                               <template v-if="userStore.userInfo.authorities">
                                 <el-dropdown-item
-                                  v-for="item in userStore.userInfo.authorities.filter(i=>i.authorityId!==userStore.userInfo.authorityId)"
-                                  :key="item.authorityId" @click="changeUserAuth(item.authorityId)">
+                                  v-for="item in userStore.userInfo.authorities.filter(i=>i.id!=userStore.userInfo.authorityId)"
+                                  :key="item.id" @click="changeUserAuth(item.id)">
                                   <span>
-                                    切换为：{{ item.authorityName }}
+                                    切换为：{{ item.name }}
                                   </span>
                                 </el-dropdown-item>
                               </template>

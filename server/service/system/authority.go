@@ -46,7 +46,7 @@ type AuthorityServer struct{}
 var AuthorityApp = new(AuthorityServer)
 
 // 列表转树形
-func MakeTrees(listData []*system.Authority, Pid uint64) []*system.Authority {
+func MakeTrees(listData []*system.Authority, Pid int) []*system.Authority {
 	trees := make([]*system.Authority, 0)
 	for _, item := range listData {
 		if item.Pid == Pid {

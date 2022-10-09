@@ -8,18 +8,19 @@ import (
 // 后台系统用户
 type User struct {
 	model.BaseOrm
-	UUID        uuid.UUID `json:"uuid"`        // 用户UUID
-	UserName    string    `json:"userName"`    // 用户登录名
-	Password    string    `json:"-" `          // 用户登录密码
-	NickName    string    `json:"nickName"`    // 用户昵称
-	SideMode    string    `json:"sideMode" `   // 用户侧边主题
-	HeadImg     string    `json:"headImg" `    // 用户头像
-	BaseColor   string    `json:"baseColor"`   // 基础颜色
-	ActiveColor string    `json:"activeColor"` // 活跃颜色
-	AuthorityId string    `json:"authorityId"` // 用户角色ID
-	Token       string    `json:"token" gorm:"-"`
-	Authority   Authority `json:"authority" gorm:"foreignKey:Id;references:Id;comment:用户角色"`
-	// Authorities []Authority `json:"authorities" gorm:"many2many:sys_user_authority;"`
+	UUID         uuid.UUID   `json:"uuid"`         // 用户UUID
+	UserName     string      `json:"userName"`     // 用户登录名
+	Password     string      `json:"-" `           // 用户登录密码
+	NickName     string      `json:"nickName"`     // 用户昵称
+	SideMode     string      `json:"sideMode" `    // 用户侧边主题
+	HeadImg      string      `json:"headImg" `     // 用户头像
+	BaseColor    string      `json:"baseColor"`    // 基础颜色
+	ActiveColor  string      `json:"activeColor"`  // 活跃颜色
+	AuthorityId  string      `json:"authorityId"`  // 用户角色ID
+	AuthorityIds string      `json:"authorityIds"` // 用户角色ID
+	Token        string      `json:"token" gorm:"-"`
+	Authority    Authority   `json:"authority" gorm:"foreignKey:Id;references:Id;comment:用户角色"`
+	Authorities  []Authority `json:"authorities" gorm:"-"`
 }
 
 // 注册表单提交数据结构

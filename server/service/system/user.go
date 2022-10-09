@@ -2,6 +2,7 @@ package system
 
 import (
 	"errors"
+	"strconv"
 	"strings"
 
 	"github.com/jianyuezhexue/MagicAdmin/magic"
@@ -94,12 +95,30 @@ func (u *UserServer) Login(data system.FormLogin) (user system.User, err error) 
 	return user, err
 }
 
-// 获取用户信息
+// 查询用户信息
 func (u *UserServer) UserInfo(uuid uuid.UUID) (user system.User, err error) {
-	// 查询数据
-	findErr := magic.Orm.Where("uuid = ?", uuid).Preload("Authority").First(&user).Error
-	if findErr != nil {
-		return user, errors.New("用户查询错误")
+	// 查询用户数据
+	err = magic.Orm.Where("uuid = ?", uuid).First(&user).Error
+	if err != nil {
+		return user, errors.New("系统繁忙，请稍后再试")
+	}
+
+	// 查询角色数据
+	var auths []system.Authority
+	authIds := strings.Split(user.AuthorityIds, ".")
+	err = magic.Orm.Where("id", authIds).Find(&auths).Error
+	if err != nil {
+		return user, errors.New("系统繁忙，请稍后再试")
+	}
+
+	// 组合数据
+	user.Authorities = auths
+	authId, _ := strconv.Atoi(user.AuthorityId)
+	for _, item := range auths {
+		if item.Id == authId {
+			user.Authority = item
+			break
+		}
 	}
 	// 返回数据
 	return user, err
