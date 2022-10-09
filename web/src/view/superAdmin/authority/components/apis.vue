@@ -55,12 +55,10 @@ const activeUserId = ref('')
 const init = async () => {
   // 回显API树
   apiTreeData.value = props.apiTreeData
-  console.log(apiTreeData.value)
 
   // 回显API选中
   apiTreeIds.value = props.apiTreeIds
 }
-
 init()
 
 const needConfirm = ref(false)
@@ -124,7 +122,7 @@ defineExpose({
 
 const filterNode = (value, data) => {
   if (!value) return true
-  return data.description.indexOf(value) !== -1
+  return data.name.indexOf(value) !== -1
 }
 watch(filterText, (val) => {
   apiTree.value.filter(val)

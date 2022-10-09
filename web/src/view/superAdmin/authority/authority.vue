@@ -229,11 +229,16 @@ const openDrawer = async (row) => {
   menuTreeIds.value = selectedArr
 
   // 回显API树&extAuth数
+  apiTreeData.value = []
+  extAuthTreeData.value = []
   apiAndExtAuthTree(res.data.treeMenus)
+
+  console.log(extAuthTreeData.value)
+
   // 回显API选中  
   apiTreeIds.value = res.data.auth.apiIds.split(",")
-  // // 回显extAuth选中  
-  // extAuthTreeIds.value = res.data.auth.extAuth.split(",")
+  // 回显extAuth选中  
+  extAuthTreeIds.value = res.data.auth.extAuthIds.split(",")
 
   // 打开抽屉
   drawer.value = true
@@ -247,11 +252,11 @@ const apiAndExtAuthTree = (menuTree) => {
       let menu = { 'id': item.id, 'name': item.meta.title, 'children': item.api }
       apiTreeData.value.push(menu)
     }
-    // // extAuth如果有值取出来
-    // if (item.extAuth.length > 0) {
-    //   let menu = { 'id': item.id, 'name': item.meta.title, 'children': item.extAuth }
-    //   extAuthTreeData.value.push(menu)
-    // }
+    // extAuth如果有值取出来
+    if (item.extAuth.length > 0) {
+      let menu = { 'id': item.id, 'name': item.meta.title, 'children': item.extAuth }
+      extAuthTreeData.value.push(menu)
+    }
     // 有子集往下找
     if (item.children.length > 0) {
       apiAndExtAuthTree(item.children)

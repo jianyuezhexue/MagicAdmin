@@ -75,6 +75,6 @@ func initGorm() *gorm.DB {
 	// 查询和设置自动断开链接的时间
 	// SHOW VARIABLES LIKE '%timeout%';
 	// wait_timeout = 120
-	sqlDB.SetConnMaxLifetime(time.Second * 110)
+	sqlDB.SetConnMaxLifetime(time.Second * 100)
 	return db
 }

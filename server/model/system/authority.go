@@ -14,6 +14,7 @@ type Authority struct {
 	DefaultRouter string       `json:"defaultRouter" form:"DefaultRouter"` // 默认菜单(默认dashboard)
 	MenuIds       string       `json:"menuIds" form:"menuIds"`             // 权限下的ID
 	ApiIds        string       `json:"apiIds" form:"apiIds"`               // 权限下的ID
+	ExtAuthIds    string       `json:"extAuthIds" form:"extAuthIds"`       // 权限下的ID
 	Children      []*Authority `json:"children" gorm:"-"`
 }
 

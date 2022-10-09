@@ -30,7 +30,7 @@ func (m *MenuServer) makeTree(datas []system.Menu, ParentId uint64) []system.Men
 func (m *MenuServer) MenuTree(id model.GetById) (res any, err error) {
 	// 查询所有菜单
 	var menus []system.Menu
-	err = magic.Orm.Preload("Api").Find(&menus).Error
+	err = magic.Orm.Preload("Api").Preload("ExtAuth").Find(&menus).Error
 	if err != nil {
 		return nil, err
 	}
