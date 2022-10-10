@@ -5,13 +5,13 @@
       <div class="gva-btn-list">
         <el-button size="small" type="primary" icon="plus" @click="addUser">新增用户</el-button>
       </div>
-      <el-table :data="tableData" row-key="ID">
+      <el-table :data="tableData" row-key="id">
         <el-table-column align="left" label="头像" min-width="75">
           <template #default="scope">
             <CustomPic style="margin-top:8px" :pic-src="scope.row.headerImg" />
           </template>
         </el-table-column>
-        <el-table-column align="left" label="ID" min-width="50" prop="ID" />
+        <el-table-column align="left" label="id" min-width="50" prop="id" />
         <el-table-column align="left" label="用户名" min-width="150" prop="userName" />
         <el-table-column align="left" label="昵称" min-width="150" prop="nickName" />
         <el-table-column align="left" label="手机号" min-width="180" prop="phone" />
@@ -131,28 +131,6 @@ import { setUserInfo, resetPassword } from '@/api/user.js'
 import { nextTick, ref, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 const path = ref(import.meta.env.VITE_BASE_API + '/')
-// 初始化相关
-const setAuthorityOptions = (AuthorityData, optionsData) => {
-  AuthorityData &&
-    AuthorityData.forEach(item => {
-      if (item.children && item.children.length) {
-        const option = {
-          authorityId: item.id,
-          authorityName: item.name,
-          children: []
-        }
-        setAuthorityOptions(item.children, option.children)
-        optionsData.push(option)
-      } else {
-        const option = {
-          authorityId: item.id,
-          authorityName: item.name,
-        }
-        optionsData.push(option)
-      }
-    })
-}
-
 const page = ref(1)
 const total = ref(0)
 const pageSize = ref(10)
@@ -179,6 +157,29 @@ const getTableData = async () => {
   }
 }
 
+// 设置角色选项
+const setAuthorityOptions = (AuthorityData, optionsData) => {
+  AuthorityData &&
+    AuthorityData.forEach(item => {
+      if (item.children && item.children.length) {
+        const option = {
+          authorityId: String(item.id),
+          authorityName: item.name,
+          children: []
+        }
+        setAuthorityOptions(item.children, option.children)
+        optionsData.push(option)
+      } else {
+        const option = {
+          authorityId: String(item.id),
+          authorityName: item.name,
+        }
+        optionsData.push(option)
+      }
+    })
+}
+
+// 监听表格数据变化
 watch(() => tableData.value, () => {
   setAuthorityIds()
 })
@@ -188,7 +189,6 @@ const initPage = async () => {
   const res = await getAuthorityList({ page: 1, pageSize: 999 })
   setOptions(res.data.list)
 }
-
 initPage()
 
 const resetPasswordFunc = (row) => {
@@ -202,7 +202,7 @@ const resetPasswordFunc = (row) => {
     }
   ).then(async () => {
     const res = await resetPassword({
-      ID: row.ID,
+      id: row.id,
     })
     if (res.code === 0) {
       ElMessage({
@@ -217,12 +217,14 @@ const resetPasswordFunc = (row) => {
     }
   })
 }
+
+// 设置用户角色ID
 const setAuthorityIds = () => {
   tableData.value && tableData.value.forEach((user) => {
-    const authorityIds = user.authorities && user.authorities.map(i => {
-      return i.authorityId
-    })
-    user.authorityIds = authorityIds
+    // const authorityIds = user.authorities && user.authorities.map(i => {
+    //   return i.id
+    // })
+    // user.authorityIds = user.authorityIds.split(",")
   })
 }
 
@@ -238,7 +240,7 @@ const setOptions = (authData) => {
 }
 
 const deleteUserFunc = async (row) => {
-  const res = await deleteUser({ id: row.ID })
+  const res = await deleteUser({ id: row.id })
   if (res.code === 0) {
     ElMessage.success('删除成功')
     row.visible = false
@@ -320,21 +322,21 @@ const tempAuth = {}
 const changeAuthority = async (row, flag, removeAuth) => {
   if (flag) {
     if (!removeAuth) {
-      tempAuth[row.ID] = [...row.authorityIds]
+      tempAuth[row.id] = [...row.authorityIds]
     }
     return
   }
   await nextTick()
   const res = await setUserAuthorities({
-    ID: row.ID,
+    id: row.id,
     authorityIds: row.authorityIds
   })
   if (res.code === 0) {
     ElMessage({ type: 'success', message: '角色设置成功' })
   } else {
     if (!removeAuth) {
-      row.authorityIds = [...tempAuth[row.ID]]
-      delete tempAuth[row.ID]
+      row.authorityIds = [...tempAuth[row.id]]
+      delete tempAuth[row.id]
     } else {
       row.authorityIds = [removeAuth, ...row.authorityIds]
     }

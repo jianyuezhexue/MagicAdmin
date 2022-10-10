@@ -49,15 +49,15 @@
     <!-- 权限配置弹窗 -->
     <el-drawer v-if="drawer" v-model="drawer" title="权限配置" custom-class="auth-drawer" :with-header="false" size="40%">
       <el-tabs :before-leave="autoEnter" type="border-card">
-        <el-tab-pane label="角色菜单">
+        <el-tab-pane label="菜单权限">
           <Menus ref="menus" :row="activeRow" :menuTreeData="menuTreeData" :menuTreeIds="menuTreeIds"
             @changeRow="changeRow" />
         </el-tab-pane>
-        <el-tab-pane label="角色api">
+        <el-tab-pane label="控制权限">
           <Apis ref="apis" :row="activeRow" :apiTreeData="apiTreeData" :apiTreeIds="apiTreeIds"
             @changeRow="changeRow" />
         </el-tab-pane>
-        <el-tab-pane label="角色拓展权限">
+        <el-tab-pane label="按钮/数据权限">
           <ExtAuth ref="extAuth" :row="activeRow" :extAuthTreeData="extAuthTreeData" :extAuthTreeIds="extAuthTreeIds"
             @changeRow="changeRow" />
         </el-tab-pane>

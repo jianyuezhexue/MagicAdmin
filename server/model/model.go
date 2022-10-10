@@ -3,6 +3,7 @@ package model
 import (
 	"database/sql/driver"
 	"fmt"
+	"strings"
 	"time"
 
 	"gorm.io/gorm"
@@ -27,7 +28,6 @@ func (t LocalTime) MarshalJSON() ([]byte, error) {
 	return []byte(formatted), nil
 }
 
-// Value Value
 func (t LocalTime) Value() (driver.Value, error) {
 	var zeroTime time.Time
 	if t.Time.UnixNano() == zeroTime.UnixNano() {
@@ -35,8 +35,6 @@ func (t LocalTime) Value() (driver.Value, error) {
 	}
 	return t.Time, nil
 }
-
-// Scan Scan
 func (t *LocalTime) Scan(v interface{}) error {
 	value, ok := v.(time.Time)
 	if ok {
@@ -44,6 +42,20 @@ func (t *LocalTime) Scan(v interface{}) error {
 		return nil
 	}
 	return fmt.Errorf("can not convert %v to timestamp", v)
+}
+
+// 逗号分割的字符串类型
+type Strs []string
+
+func (m *Strs) Scan(val interface{}) error {
+	s := val.([]uint8)
+	ss := strings.Split(string(s), ",")
+	*m = ss
+	return nil
+}
+func (m Strs) Value() (driver.Value, error) {
+	str := strings.Join(m, ",")
+	return str, nil
 }
 
 // 分页查询参数结构

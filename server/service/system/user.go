@@ -105,9 +105,9 @@ func (u *UserServer) UserInfo(uuid uuid.UUID) (user system.User, err error) {
 
 	// 查询角色数据
 	var auths []system.Authority
-	authIds := strings.Split(user.AuthorityIds, ".")
-	// authIds := user.AuthorityIds
-	err = magic.Orm.Where("id", authIds).Find(&auths).Error
+	var authIds []string
+	authIds = user.AuthorityIds
+	err = magic.Orm.Debug().Where("id IN ?", authIds).Order("id").Find(&auths).Error
 	if err != nil {
 		return user, errors.New("系统繁忙，请稍后再试")
 	}
@@ -127,9 +127,7 @@ func (u *UserServer) UserInfo(uuid uuid.UUID) (user system.User, err error) {
 
 // 用户列表
 func (u *UserServer) List(data system.SearchUser) (res magic.PageResult, err error) {
-
 	db := magic.Orm.Model(&system.User{})
-
 	// 查询总数
 	var total int64
 	err = db.Count(&total).Error
@@ -141,7 +139,7 @@ func (u *UserServer) List(data system.SearchUser) (res magic.PageResult, err err
 	limit := data.PageSize
 	offset := (data.Page - 1) * data.PageSize
 	var list []system.User
-	err = db.Preload("Authority").Limit(limit).Offset(offset).Find(&list).Error
+	err = db.Limit(limit).Offset(offset).Find(&list).Error
 
 	// 组合返回数据
 	res = magic.PageResult{

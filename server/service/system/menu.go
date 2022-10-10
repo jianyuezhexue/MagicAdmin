@@ -64,7 +64,7 @@ func (m *MenuServer) MyMenu(authorityId int) (menus []system.Menu, err error) {
 
 	// 查菜单
 	var myMenus []system.Menu
-	err = magic.Orm.Where("id IN ?", menuIds).Order("sort").Preload("Api").Find(&myMenus).Error
+	err = magic.Orm.Debug().Where("id IN ?", menuIds).Order("sort").Preload("Api").Find(&myMenus).Error
 	if err != nil {
 		return nil, err
 	}

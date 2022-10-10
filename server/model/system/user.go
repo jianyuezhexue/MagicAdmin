@@ -17,11 +17,12 @@ type User struct {
 	BaseColor    string      `json:"baseColor"`    // 基础颜色
 	ActiveColor  string      `json:"activeColor"`  // 活跃颜色
 	AuthorityId  string      `json:"authorityId"`  // 用户角色ID
-	AuthorityIds string      `json:"authorityIds"` // 用户角色ID
+	AuthorityIds model.Strs  `json:"authorityIds"` // 用户角色ID
 	Phone        string      `json:"phone"`        // 用户手机号
 	Email        string      `json:"email"`        // 用户邮箱
+	Enable       int         `json:"enable"`       //用户是否被冻结 1正常 2冻结
 	Token        string      `json:"token" gorm:"-"`
-	Authority    Authority   `json:"authority" gorm:"foreignKey:Id;references:Id;comment:用户角色"`
+	Authority    Authority   `json:"authority" gorm:"-"`
 	Authorities  []Authority `json:"authorities" gorm:"-"`
 }
 
