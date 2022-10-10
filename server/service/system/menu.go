@@ -40,7 +40,7 @@ func (m *MenuServer) MenuTree(id model.GetById) (res any, err error) {
 
 	// 查询当前权限
 	var auth system.Authority
-	err = magic.Orm.Where("id = ?", id.ID).Find(&auth).Error
+	err = magic.Orm.Where("id = ?", id.Id).Find(&auth).Error
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +109,7 @@ func (m *MenuServer) MenuOption() (res []system.MenuOption, err error) {
 func (m *MenuServer) FindMenu(id model.GetById) (res system.Menu, err error) {
 	// 查询数据
 	var menu system.Menu
-	err = magic.Orm.Where("id = ?", id.ID).Preload("Api").Preload("ExtAuth").Find(&menu).Error
+	err = magic.Orm.Where("id = ?", id.Id).Preload("Api").Preload("ExtAuth").Find(&menu).Error
 	if err != nil {
 		return res, err
 	}
@@ -204,7 +204,7 @@ func (m *MenuServer) CreateMenu(menu system.Menu) (res system.Menu, err error) {
 func (m *MenuServer) DeleteMenu(id model.GetById) (err error) {
 	// 查询是否存在
 	var menu []system.Menu
-	err = magic.Orm.Where("id = ?", id.ID).Or("parentId = ?", id.ID).Find(&menu).Error
+	err = magic.Orm.Where("id = ?", id.Id).Or("parentId = ?", id.Id).Find(&menu).Error
 	if err != nil {
 		return err
 	}

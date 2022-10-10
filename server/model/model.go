@@ -73,7 +73,7 @@ type ResPageData struct {
 
 // 根据id查询接参结构
 type GetById struct {
-	ID int `json:"id" uri:"id" form:"id" binding:"required"` // 主键ID
+	Id int `json:"id" uri:"id" form:"id" binding:"required"` // 主键ID
 }
 
 // 传ID数组接收餐结构

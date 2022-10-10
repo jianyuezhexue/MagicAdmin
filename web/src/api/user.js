@@ -45,7 +45,7 @@ export const getUserList = (params) => {
   })
 }
 
-// 设置用户权限
+// 切换用户权限
 export const setUserAuthority = (data) => {
   return service({
     url: '/user/setUserAuthority',
@@ -85,6 +85,15 @@ export const setSelfInfo = (data) => {
 export const setUserAuthorities = (data) => {
   return service({
     url: '/user/auth',
+    method: 'PATCH',
+    data: data
+  })
+}
+
+// 设置用户状态-启用和禁用
+export const setUserStatus = (data) => {
+  return service({
+    url: '/user/status',
     method: 'PATCH',
     data: data
   })

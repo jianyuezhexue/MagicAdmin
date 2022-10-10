@@ -117,6 +117,7 @@ export default {
 import {
   getUserList,
   setUserAuthorities,
+  setUserStatus,
   register,
   deleteUser
 } from '@/api/user'
@@ -353,17 +354,14 @@ const openEdit = (row) => {
 
 // 启用和禁用用户
 const switchEnable = async (row) => {
-  userInfo.value = JSON.parse(JSON.stringify(row))
   await nextTick()
-  const req = {
-    ...userInfo.value
+  const data = {
+    "id": row.id
   }
-  const res = await setUserInfo(req)
+  const res = await setUserStatus(data)
   if (res.code === 0) {
-    ElMessage({ type: 'success', message: `${req.enable === 2 ? '禁用' : '启用'}成功` })
+    ElMessage({ type: 'success', message: `${row.enable === 2 ? '禁用' : '启用'}成功` })
     await getTableData()
-    userInfo.value.headerImg = ''
-    userInfo.value.authorityIds = []
   }
 }
 

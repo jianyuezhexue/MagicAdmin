@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
+	"github.com/jianyuezhexue/MagicAdmin/model"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
 	serviceSystem "github.com/jianyuezhexue/MagicAdmin/service/system"
 )
@@ -116,6 +117,22 @@ func (u *UserCtr) SetUserAuth(c *gin.Context) {
 }
 
 // 设置可用状态
+func (u *UserCtr) SetUserStatus(c *gin.Context) {
+	var id model.GetById
+	err := c.ShouldBind(&id)
+	if err != nil {
+		magic.Fail(c, http.StatusBadRequest, err.Error(), id)
+		return
+	}
+
+	// 逻辑处理
+	res, err := serviceSystem.UserApp.SetUserStatus(id)
+	if err != nil {
+		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		return
+	}
+	magic.Success(c, "设置用户角色成功", res)
+}
 
 // 重置密码
 

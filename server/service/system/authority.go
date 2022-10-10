@@ -123,7 +123,7 @@ func (a *AuthorityServer) Update(data system.Authority) (res system.Authority, e
 func (a *AuthorityServer) Delete(id model.GetById) (res []system.Authority, err error) {
 	// 查询是否存在
 	var find []system.Authority
-	err = magic.Orm.Where("id = ?", id.ID).Or("pid = ?", id.ID).Find(&find).Error
+	err = magic.Orm.Where("id = ?", id.Id).Or("pid = ?", id.Id).Find(&find).Error
 	if err != nil {
 		return find, err
 	}

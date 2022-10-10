@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/jianyuezhexue/MagicAdmin/magic"
+	"github.com/jianyuezhexue/MagicAdmin/model"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
@@ -167,11 +168,37 @@ func (u *UserServer) SetUserAuth(data system.SetUserAuth) (user system.User, err
 	}
 
 	// 设置用户角色IDs
-	// newAuthIds := strings.Join(data.Ids, ",")
 	err = magic.Orm.Debug().Model(&user).Where("id = ?", find.Id).Update("authorityIds", data.Ids).Error
 	if err != nil {
 		return user, errors.New("系统繁忙，请稍后再试")
 	}
 
 	return user, err
+}
+
+// 设置用户状态
+func (u *UserServer) SetUserStatus(id model.GetById) (user system.User, err error) {
+	// 验证用户是否存在
+	var find system.User
+	err = magic.Orm.Where("id = ?", id.Id).Find(&find).Error
+	if err != nil {
+		return user, errors.New("系统繁忙，请稍后再试")
+	}
+
+	// 用户不存在
+	if err == gorm.ErrRecordNotFound {
+		return user, errors.New("您设置的用户不存在")
+	}
+
+	// 设置用户角色IDs
+	newStatus := 1
+	if find.Enable == newStatus {
+		newStatus = 2
+	}
+	err = magic.Orm.Debug().Model(&user).Where("id = ?", find.Id).Update("enable", newStatus).Error
+	if err != nil {
+		return user, errors.New("系统繁忙，请稍后再试")
+	}
+
+	return find, err
 }

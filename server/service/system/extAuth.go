@@ -17,7 +17,7 @@ var ExtAuthApp = new(ExtAuthServer)
 func (a *ExtAuthServer) Delete(id model.GetById) (res system.ExtAuth, err error) {
 	// 查询是否存在
 	var find system.ExtAuth
-	err = magic.Orm.Where("id = ?", id.ID).Find(&find).Error
+	err = magic.Orm.Where("id = ?", id.Id).Find(&find).Error
 	if err != nil {
 		return res, err
 	}

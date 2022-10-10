@@ -79,7 +79,7 @@ func (d *DictionaryDetailServer) List(data system.SearchDictionaryDetail) (res m
 // ID查询目录
 func (d *DictionaryDetailServer) Item(id model.GetById) (res system.DictionaryDetail, err error) {
 	// 查询数据
-	err = magic.Orm.Where("id = ?", id.ID).Find(&res).Error
+	err = magic.Orm.Where("id = ?", id.Id).Find(&res).Error
 	return res, err
 }
 
@@ -108,7 +108,7 @@ func (d *DictionaryDetailServer) Update(data system.DictionaryDetail) (res syste
 func (d *DictionaryDetailServer) Delete(id model.GetById) (res system.DictionaryDetail, err error) {
 	// 查询数据
 	var find system.DictionaryDetail
-	err = magic.Orm.Where("id = ?", id.ID).Find(&find).Error
+	err = magic.Orm.Where("id = ?", id.Id).Find(&find).Error
 	if err != nil {
 		magic.Logger.Info(err.Error())
 		return res, errors.New("系统繁忙，请稍后再试")
