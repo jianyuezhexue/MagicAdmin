@@ -54,3 +54,9 @@ type SearchUser struct {
 	model.PageInfo
 	User
 }
+
+// 设置角色
+type SetUserAuth struct {
+	Id  int        `json:"id" uri:"id" form:"id" binding:"required"`    // 用户ID
+	Ids model.Strs `josn:"ids" uri:"ids" form:"ids" binding:"required"` // 角色ID数组
+}

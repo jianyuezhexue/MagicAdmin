@@ -151,3 +151,27 @@ func (u *UserServer) List(data system.SearchUser) (res magic.PageResult, err err
 
 	return res, err
 }
+
+// 设置用户角色
+func (u *UserServer) SetUserAuth(data system.SetUserAuth) (user system.User, err error) {
+	// 验证用户是否存在
+	var find system.User
+	err = magic.Orm.Where("id = ?", data.Id).Find(&find).Error
+	if err != nil {
+		return user, errors.New("系统繁忙，请稍后再试")
+	}
+
+	// 用户不存在
+	if err == gorm.ErrRecordNotFound {
+		return user, errors.New("您设置的用户不存在")
+	}
+
+	// 设置用户角色IDs
+	// newAuthIds := strings.Join(data.Ids, ",")
+	err = magic.Orm.Debug().Model(&user).Where("id = ?", find.Id).Update("authorityIds", data.Ids).Error
+	if err != nil {
+		return user, errors.New("系统繁忙，请稍后再试")
+	}
+
+	return user, err
+}

@@ -84,8 +84,8 @@ export const setSelfInfo = (data) => {
 // 设置用户权限
 export const setUserAuthorities = (data) => {
   return service({
-    url: '/user/setUserAuthorities',
-    method: 'post',
+    url: '/user/auth',
+    method: 'PATCH',
     data: data
   })
 }

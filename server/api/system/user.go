@@ -95,3 +95,28 @@ func (u *UserCtr) List(c *gin.Context) {
 	}
 	magic.Success(c, "分页查询用户列表成功", res)
 }
+
+// 设置用户角色
+func (u *UserCtr) SetUserAuth(c *gin.Context) {
+	// 参数校验
+	var param system.SetUserAuth
+	err := c.ShouldBind(&param)
+	if err != nil {
+		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
+		return
+	}
+
+	// 逻辑处理
+	res, err := serviceSystem.UserApp.SetUserAuth(param)
+	if err != nil {
+		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		return
+	}
+	magic.Success(c, "设置用户角色成功", res)
+}
+
+// 设置可用状态
+
+// 重置密码
+
+// 切换角色

@@ -20,8 +20,7 @@
           <template #default="scope">
             <el-cascader v-model="scope.row.authorityIds" :options="authOptions" :show-all-levels="false" collapse-tags
               :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
-              :clearable="false" @visible-change="(flag)=>{changeAuthority(scope.row,flag,0)}"
-              @remove-tag="(removeAuth)=>{changeAuthority(scope.row,false,removeAuth)}" />
+              :clearable="false" @visible-change="(flag)=>{changeAuthority(flag,scope.row)}" />
           </template>
         </el-table-column>
         <el-table-column align="left" label="启用" min-width="150">
@@ -179,11 +178,12 @@ const setAuthorityOptions = (AuthorityData, optionsData) => {
     })
 }
 
-// 监听表格数据变化
-watch(() => tableData.value, () => {
-  setAuthorityIds()
-})
+// // 监听表格数据变化
+// watch(() => tableData.value, () => {
+//   setAuthorityIds()
+// })
 
+// 初始化页面
 const initPage = async () => {
   getTableData()
   const res = await getAuthorityList({ page: 1, pageSize: 999 })
@@ -191,6 +191,7 @@ const initPage = async () => {
 }
 initPage()
 
+// 删除用户
 const resetPasswordFunc = (row) => {
   ElMessageBox.confirm(
     '是否将此用户密码重置为123456?',
@@ -221,10 +222,10 @@ const resetPasswordFunc = (row) => {
 // 设置用户角色ID
 const setAuthorityIds = () => {
   tableData.value && tableData.value.forEach((user) => {
-    // const authorityIds = user.authorities && user.authorities.map(i => {
-    //   return i.id
-    // })
-    // user.authorityIds = user.authorityIds.split(",")
+    const authorityIds = user.authorities && user.authorities.map(i => {
+      return i.id
+    })
+    user.authorityIds = user.authorityIds.split(",")
   })
 }
 
@@ -303,6 +304,7 @@ const enterAddUserDialog = async () => {
   })
 }
 
+// 新增用户
 const addUserDialog = ref(false)
 const closeAddUserDialog = () => {
   userForm.value.resetFields()
@@ -310,45 +312,46 @@ const closeAddUserDialog = () => {
   userInfo.value.authorityIds = []
   addUserDialog.value = false
 }
-
 const dialogFlag = ref('add')
-
 const addUser = () => {
   dialogFlag.value = 'add'
   addUserDialog.value = true
 }
 
+// 监听用户角色设置
 const tempAuth = {}
-const changeAuthority = async (row, flag, removeAuth) => {
+const changeAuthority = async (flag, row) => {
+  // 打开时记录原始角色ID数据
   if (flag) {
-    if (!removeAuth) {
-      tempAuth[row.id] = [...row.authorityIds]
-    }
+    tempAuth[row.id] = row.authorityIds
     return
   }
+
+  // 关闭时候发现没有变化
+  if (tempAuth[row.id] == row.authorityIds) {
+    return
+  }
+
+  // 关闭时候发现变化-更新数据
   await nextTick()
   const res = await setUserAuthorities({
     id: row.id,
-    authorityIds: row.authorityIds
+    ids: row.authorityIds
   })
   if (res.code === 0) {
     ElMessage({ type: 'success', message: '角色设置成功' })
-  } else {
-    if (!removeAuth) {
-      row.authorityIds = [...tempAuth[row.id]]
-      delete tempAuth[row.id]
-    } else {
-      row.authorityIds = [removeAuth, ...row.authorityIds]
-    }
+    // todo:更新右上角用户的信息
   }
 }
 
+// 编辑用户
 const openEdit = (row) => {
   dialogFlag.value = 'edit'
   userInfo.value = JSON.parse(JSON.stringify(row))
   addUserDialog.value = true
 }
 
+// 启用和禁用用户
 const switchEnable = async (row) => {
   userInfo.value = JSON.parse(JSON.stringify(row))
   await nextTick()
