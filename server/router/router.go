@@ -29,11 +29,14 @@ func Routers() *gin.Engine {
 	PrivateGroup.Use(middle.JWTAuth())
 	{
 		// 系统-用户
-		PrivateGroup.GET("/user/info", system.UserApi.UserInfo)          // 用户信息
-		PrivateGroup.GET("/users", system.UserApi.List)                  // 用户列表
-		PrivateGroup.PATCH("/user/auth", system.UserApi.SetUserAuth)     // 设置用户角色
-		PrivateGroup.PATCH("/user/status", system.UserApi.SetUserStatus) // 设置用户状态
-		PublicGroup.POST("/user/register", system.UserApi.Register)      // 新建用户
+		PrivateGroup.GET("/user/info", system.UserApi.UserInfo)           // 用户信息
+		PrivateGroup.GET("/users", system.UserApi.List)                   // 用户列表
+		PrivateGroup.POST("/user/register", system.UserApi.Register)      // 新建用户
+		PrivateGroup.PUT("/user", system.UserApi.Update)                  // 编辑用户
+		PrivateGroup.PATCH("/user/auth", system.UserApi.SetUserAuth)      // 设置用户角色
+		PrivateGroup.PATCH("/user/status", system.UserApi.SetUserStatus)  // 设置用户状态
+		PrivateGroup.PATCH("/user/reSetPwd/:id", system.UserApi.ReSetPwd) // 重置用户密码
+		PrivateGroup.DELETE("/user/:id", system.UserApi.Delete)           // 删除菜单
 
 		// 系统-菜单
 		PrivateGroup.GET("/myMenu", system.MenuApi.MyMenu)          // 我的菜单

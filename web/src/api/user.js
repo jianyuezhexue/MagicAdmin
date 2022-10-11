@@ -21,8 +21,8 @@ export const login = (data) => {
 // 用户注册
 export const register = (data) => {
   return service({
-    url: '/user/admin_register',
-    method: 'post',
+    url: '/user/register',
+    method: 'POST',
     data: data
   })
 }
@@ -55,19 +55,18 @@ export const setUserAuthority = (data) => {
 }
 
 // 删除用户
-export const deleteUser = (data) => {
+export const deleteUser = (id) => {
   return service({
-    url: '/user/deleteUser',
-    method: 'delete',
-    data: data
+    url: `/user/${id}`,
+    method: 'DELETE',
   })
 }
 
-// 设置用户信息
+// 更新用户信息
 export const setUserInfo = (data) => {
   return service({
-    url: '/user/setUserInfo',
-    method: 'put',
+    url: '/user',
+    method: 'PUT',
     data: data
   })
 }
@@ -108,10 +107,9 @@ export const getUserInfo = () => {
 }
 
 // 重置密码
-export const resetPassword = (data) => {
+export const resetPassword = (id) => {
   return service({
-    url: '/user/resetPassword',
-    method: 'post',
-    data: data
+    url: `/user/reSetPwd/${id}`,
+    method: 'PATCH',
   })
 }

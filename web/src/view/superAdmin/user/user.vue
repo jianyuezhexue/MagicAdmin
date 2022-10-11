@@ -8,7 +8,7 @@
       <el-table :data="tableData" row-key="id">
         <el-table-column align="left" label="头像" min-width="75">
           <template #default="scope">
-            <CustomPic style="margin-top:8px" :pic-src="scope.row.headerImg" />
+            <CustomPic style="margin-top:8px" :pic-src="scope.row.headImg" />
           </template>
         </el-table-column>
         <el-table-column align="left" label="id" min-width="50" prop="id" />
@@ -85,8 +85,8 @@
           </el-form-item>
           <el-form-item label="头像" label-width="80px">
             <div style="display:inline-block" @click="openHeaderChange">
-              <img v-if="userInfo.headerImg" class="header-img-box"
-                :src="(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg">
+              <img v-if="userInfo.headImg" class="header-img-box"
+                :src="(userInfo.headImg && userInfo.headImg.slice(0, 4) !== 'http')?path+userInfo.headImg:userInfo.headImg">
               <div v-else class="header-img-box">从媒体库选择</div>
             </div>
           </el-form-item>
@@ -102,7 +102,7 @@
         </div>
       </template>
     </el-dialog>
-    <ChooseImg ref="chooseImg" :target="userInfo" :target-key="`headerImg`" />
+    <ChooseImg ref="chooseImg" :target="userInfo" :target-key="`headImg`" />
   </div>
 </template>
 
@@ -119,14 +119,15 @@ import {
   setUserAuthorities,
   setUserStatus,
   register,
-  deleteUser
+  deleteUser,
+  setUserInfo,
+  resetPassword
 } from '@/api/user'
 
 import { getAuthorityList } from '@/api/authority'
 import CustomPic from '@/components/customPic/index.vue'
 import ChooseImg from '@/components/chooseImg/index.vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
-import { setUserInfo, resetPassword } from '@/api/user.js'
 
 import { nextTick, ref, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -179,11 +180,6 @@ const setAuthorityOptions = (AuthorityData, optionsData) => {
     })
 }
 
-// // 监听表格数据变化
-// watch(() => tableData.value, () => {
-//   setAuthorityIds()
-// })
-
 // 初始化页面
 const initPage = async () => {
   getTableData()
@@ -192,7 +188,7 @@ const initPage = async () => {
 }
 initPage()
 
-// 删除用户
+// 重置密码
 const resetPasswordFunc = (row) => {
   ElMessageBox.confirm(
     '是否将此用户密码重置为123456?',
@@ -203,9 +199,7 @@ const resetPasswordFunc = (row) => {
       type: 'warning',
     }
   ).then(async () => {
-    const res = await resetPassword({
-      id: row.id,
-    })
+    const res = await resetPassword(row.id)
     if (res.code === 0) {
       ElMessage({
         type: 'success',
@@ -217,16 +211,6 @@ const resetPasswordFunc = (row) => {
         message: res.msg,
       })
     }
-  })
-}
-
-// 设置用户角色ID
-const setAuthorityIds = () => {
-  tableData.value && tableData.value.forEach((user) => {
-    const authorityIds = user.authorities && user.authorities.map(i => {
-      return i.id
-    })
-    user.authorityIds = user.authorityIds.split(",")
   })
 }
 
@@ -242,7 +226,7 @@ const setOptions = (authData) => {
 }
 
 const deleteUserFunc = async (row) => {
-  const res = await deleteUser({ id: row.id })
+  const res = await deleteUser(row.id)
   if (res.code === 0) {
     ElMessage.success('删除成功')
     row.visible = false
@@ -252,10 +236,10 @@ const deleteUserFunc = async (row) => {
 
 // 弹窗相关
 const userInfo = ref({
-  username: '',
+  userName: '',
   password: '',
   nickName: '',
-  headerImg: '',
+  headImg: '',
   authorityId: '',
   authorityIds: [],
   enable: 1,
@@ -264,7 +248,7 @@ const userInfo = ref({
 const rules = ref({
   userName: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 5, message: '最低5位字符', trigger: 'blur' }
+    { min: 2, message: '最低5位字符', trigger: 'blur' }
   ],
   password: [
     { required: true, message: '请输入用户密码', trigger: 'blur' },
@@ -309,7 +293,8 @@ const enterAddUserDialog = async () => {
 const addUserDialog = ref(false)
 const closeAddUserDialog = () => {
   userForm.value.resetFields()
-  userInfo.value.headerImg = ''
+  userInfo.value.userName = ''
+  userInfo.value.headImg = ''
   userInfo.value.authorityIds = []
   addUserDialog.value = false
 }

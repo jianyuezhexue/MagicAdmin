@@ -14,10 +14,10 @@ type UserCtr struct{}
 
 var UserApi = new(UserCtr)
 
-// Register 用户注册账号
+// 新建后台用户
 func (u *UserCtr) Register(c *gin.Context) {
 	// 表单验证
-	var param system.FormRegister
+	var param system.User
 	err := c.ShouldBind(&param)
 	if err != nil {
 		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
@@ -35,7 +35,7 @@ func (u *UserCtr) Register(c *gin.Context) {
 	magic.Success(c, "注册成功", res)
 }
 
-// Login 用户登录
+// 用户登录
 func (u *UserCtr) Login(c *gin.Context) {
 	// 参数校验
 	var param system.FormLogin
@@ -62,7 +62,7 @@ func (u *UserCtr) Login(c *gin.Context) {
 	magic.Success(c, "登录成功", res)
 }
 
-// 用户信息
+// 用户信息|登录之后
 func (u *UserCtr) UserInfo(c *gin.Context) {
 	// 解密uuid
 	uuid := magic.TokenInfo(c).UUID
@@ -95,6 +95,43 @@ func (u *UserCtr) List(c *gin.Context) {
 		return
 	}
 	magic.Success(c, "分页查询用户列表成功", res)
+}
+
+// 删除用户
+func (u UserCtr) Delete(c *gin.Context) {
+	// 接受参数
+	var id model.GetById
+	err := c.ShouldBindUri(&id)
+	if err != nil {
+		magic.Fail(c, http.StatusBadRequest, err.Error(), id)
+		return
+	}
+
+	// 逻辑处理
+	res, err := serviceSystem.UserApp.Delete(id)
+	if err != nil {
+		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		return
+	}
+	magic.Success(c, "删除用户成功", res)
+}
+
+// 更新用户信息
+func (u *UserCtr) Update(c *gin.Context) {
+	var param system.User
+	err := c.ShouldBind(&param)
+	if err != nil {
+		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
+		return
+	}
+
+	// 逻辑处理
+	res, err := serviceSystem.UserApp.Update(param)
+	if err != nil {
+		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		return
+	}
+	magic.Success(c, "更新用户成功", res)
 }
 
 // 设置用户角色
@@ -134,6 +171,22 @@ func (u *UserCtr) SetUserStatus(c *gin.Context) {
 	magic.Success(c, "设置用户角色成功", res)
 }
 
-// 重置密码
+// 重置密码|123456
+func (u UserCtr) ReSetPwd(c *gin.Context) {
+	var id model.GetById
+	err := c.ShouldBindUri(&id)
+	if err != nil {
+		magic.Fail(c, http.StatusBadRequest, err.Error(), id)
+		return
+	}
+
+	// 逻辑处理
+	res, err := serviceSystem.UserApp.ReSetPwd(id)
+	if err != nil {
+		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		return
+	}
+	magic.Success(c, "设置用户角色成功", res)
+}
 
 // 切换角色

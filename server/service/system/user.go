@@ -3,7 +3,6 @@ package system
 import (
 	"errors"
 	"strconv"
-	"strings"
 
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model"
@@ -17,29 +16,21 @@ type UserServer struct{}
 var UserApp = new(UserServer)
 
 // Register 注册
-func (u *UserServer) Register(data system.FormRegister) (res system.User, err error) {
-
-	// 实例化
-	user := &system.User{
-		UserName:    strings.Trim(data.UserName, " "),
-		NickName:    strings.Trim(data.NickName, " "),
-		Password:    strings.Trim(data.Password, " "),
-		AuthorityId: strings.Trim(data.AuthorityId, " "),
-	}
-
+func (u *UserServer) Register(data system.User) (res system.User, err error) {
 	// 查重
-	find := magic.Orm.Select("id").Where("userName = ?", user.UserName).First(user).Error
-	if !errors.Is(find, gorm.ErrRecordNotFound) {
-		return *user, errors.New("用户名已注册")
+	var user system.User
+	err = magic.Orm.Select("id").Where("userName = ?", user.UserName).First(user).Error
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
+		return user, errors.New("用户名已注册")
 	}
 
 	// 加密
-	user.Password = magic.MD5V(user.Password)
-	user.UUID = uuid.NewV4()
+	data.Password = magic.MD5V(user.Password)
+	data.UUID = uuid.NewV4()
 
 	// 创建
-	err = magic.Orm.Create(user).Error
-	return *user, err
+	err = magic.Orm.Create(&data).Error
+	return user, err
 }
 
 // 登录以后签发jwt
@@ -81,10 +72,15 @@ func (u *UserServer) Login(data system.FormLogin) (user system.User, err error) 
 	// 验证登录
 	data.Password = magic.MD5V(data.Password)
 	where := "userName = ?"
-	findErr := magic.Orm.Select("*").Where(where, data.UserName).Preload("Authority").First(&user).Error
+	findErr := magic.Orm.Select("*").Where(where, data.UserName).First(&user).Error
 	if findErr != nil || user.Password != data.Password {
 		return user, errors.New("用户名或密码错误")
 	}
+
+	// 查询用户权限
+	var auth system.Authority
+	err = magic.Orm.Where("id = ?", user.AuthorityId).Find(&auth).Error
+	user.Authority = auth
 
 	// 签发JWT
 	token, tErr := createToken(user)
@@ -201,4 +197,59 @@ func (u *UserServer) SetUserStatus(id model.GetById) (user system.User, err erro
 	}
 
 	return find, err
+}
+
+// 删除用户
+func (u *UserServer) Delete(id model.GetById) (user system.User, err error) {
+	// 查询角色是否存在
+	err = magic.Orm.Where("id = ?", id.Id).Find(&user).Error
+	if err != nil {
+		return user, err
+	}
+
+	// 用户不存在
+	if err == gorm.ErrRecordNotFound {
+		return user, errors.New("您删除的用户不存在")
+	}
+
+	// 删除处理
+	err = magic.Orm.Delete(&user).Error
+	return user, err
+}
+
+// 更新用户信息
+func (u *UserServer) Update(data system.User) (user system.User, err error) {
+	// 查询角色是否存在
+	err = magic.Orm.Where("id = ?", data.Id).Find(&user).Error
+	if err != nil {
+		return user, err
+	}
+
+	// 用户不存在
+	if err == gorm.ErrRecordNotFound {
+		return user, errors.New("您编辑的用户不存在")
+	}
+
+	// 更新处理
+	err = magic.Orm.Updates(&data).Error
+	return user, err
+}
+
+// 重置用户密码|123456
+func (u *UserServer) ReSetPwd(id model.GetById) (user system.User, err error) {
+	// 查询角色是否存在
+	err = magic.Orm.Where("id = ?", id.Id).Find(&user).Error
+	if err != nil {
+		return user, err
+	}
+
+	// 用户不存在
+	if err == gorm.ErrRecordNotFound {
+		return user, errors.New("您编辑的用户不存在")
+	}
+
+	// 修改字段
+	newPsw := magic.MD5V("123456")
+	err = magic.Orm.Model(&user).UpdateColumn("password", newPsw).Error
+	return user, err
 }
