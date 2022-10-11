@@ -104,7 +104,7 @@ func (u *UserServer) UserInfo(uuid uuid.UUID) (user system.User, err error) {
 	var auths []system.Authority
 	var authIds []string
 	authIds = user.AuthorityIds
-	err = magic.Orm.Debug().Where("id IN ?", authIds).Order("id").Find(&auths).Error
+	err = magic.Orm.Where("id IN ?", authIds).Order("id").Find(&auths).Error
 	if err != nil {
 		return user, errors.New("系统繁忙，请稍后再试")
 	}
@@ -164,7 +164,7 @@ func (u *UserServer) SetUserAuth(data system.SetUserAuth) (user system.User, err
 	}
 
 	// 设置用户角色IDs
-	err = magic.Orm.Debug().Model(&user).Where("id = ?", find.Id).Update("authorityIds", data.Ids).Error
+	err = magic.Orm.Model(&user).Where("id = ?", find.Id).Update("authorityIds", data.Ids).Error
 	if err != nil {
 		return user, errors.New("系统繁忙，请稍后再试")
 	}
@@ -191,7 +191,7 @@ func (u *UserServer) SetUserStatus(id model.GetById) (user system.User, err erro
 	if find.Enable == newStatus {
 		newStatus = 2
 	}
-	err = magic.Orm.Debug().Model(&user).Where("id = ?", find.Id).Update("enable", newStatus).Error
+	err = magic.Orm.Model(&user).Where("id = ?", find.Id).Update("enable", newStatus).Error
 	if err != nil {
 		return user, errors.New("系统繁忙，请稍后再试")
 	}
