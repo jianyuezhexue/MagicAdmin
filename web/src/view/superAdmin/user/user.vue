@@ -293,9 +293,15 @@ const enterAddUserDialog = async () => {
 const addUserDialog = ref(false)
 const closeAddUserDialog = () => {
   userForm.value.resetFields()
-  userInfo.value.userName = ''
-  userInfo.value.headImg = ''
-  userInfo.value.authorityIds = []
+  userInfo.value = {
+    userName: '',
+    password: '',
+    nickName: '',
+    headImg: '',
+    authorityId: '',
+    authorityIds: [],
+    enable: 1,
+  }
   addUserDialog.value = false
 }
 const dialogFlag = ref('add')

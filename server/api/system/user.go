@@ -186,7 +186,7 @@ func (u UserCtr) ReSetPwd(c *gin.Context) {
 		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
-	magic.Success(c, "设置用户角色成功", res)
+	magic.Success(c, "重置密码成功", res)
 }
 
 // 切换角色
