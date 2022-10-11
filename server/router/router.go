@@ -19,9 +19,8 @@ func Routers() *gin.Engine {
 			c.JSON(200, "是心动啊...")
 		})
 		// 系统-获取验证码
-		PublicGroup.POST("/user/captcha", system.Captcha)
+		PublicGroup.POST("/user/captcha", system.CommonApi.Captcha)
 		// 系统-用户登录
-		PublicGroup.POST("/user/register", system.UserApi.Register)
 		PublicGroup.POST("/user/login", system.UserApi.Login)
 	}
 
@@ -34,6 +33,7 @@ func Routers() *gin.Engine {
 		PrivateGroup.GET("/users", system.UserApi.List)                  // 用户列表
 		PrivateGroup.PATCH("/user/auth", system.UserApi.SetUserAuth)     // 设置用户角色
 		PrivateGroup.PATCH("/user/status", system.UserApi.SetUserStatus) // 设置用户状态
+		PublicGroup.POST("/user/register", system.UserApi.Register)      // 新建用户
 
 		// 系统-菜单
 		PrivateGroup.GET("/myMenu", system.MenuApi.MyMenu)          // 我的菜单
@@ -44,21 +44,21 @@ func Routers() *gin.Engine {
 		PrivateGroup.DELETE("/menu/:id", system.MenuApi.DeleteMenu) // 删除菜单
 		PrivateGroup.GET("/menuTree", system.MenuApi.MenuTree)      // 权限菜单
 
-		// 字典-目录
+		// 系统-字典目录
 		PrivateGroup.POST("/dictionary", system.DictionaryApi.Create)       // 新增字典目录
 		PrivateGroup.GET("/dictionary", system.DictionaryApi.List)          // 分页字典目录
 		PrivateGroup.GET("/dictionary/:id", system.DictionaryApi.Item)      // 查询字典目录
 		PrivateGroup.PUT("/dictionary", system.DictionaryApi.Update)        // 更新字典目录
 		PrivateGroup.DELETE("/dictionary/:id", system.DictionaryApi.Delete) // 删除字典目录
 
-		// 字典-详情
+		// 系统-字典详情
 		PrivateGroup.POST("/dictionaryDetail", system.DictionaryDetailApi.Create)       // 新增字典目录
 		PrivateGroup.GET("/dictionaryDetail", system.DictionaryDetailApi.List)          // 分页字典目录
 		PrivateGroup.GET("/dictionaryDetail/:id", system.DictionaryDetailApi.Item)      // 查询字典目录
 		PrivateGroup.PUT("/dictionaryDetail", system.DictionaryDetailApi.Update)        // 更新字典目录
 		PrivateGroup.DELETE("/dictionaryDetail/:id", system.DictionaryDetailApi.Delete) // 删除字典目录
 
-		// 角色
+		// 系统-角色
 		PrivateGroup.GET("/authorityTree", system.AuthorityAPI.TreeList)         // 角色树形列表
 		PrivateGroup.POST("/authority", system.AuthorityAPI.Create)              // 创建角色
 		PrivateGroup.PUT("/authority", system.AuthorityAPI.Update)               // 更新角色
@@ -67,12 +67,15 @@ func Routers() *gin.Engine {
 		PrivateGroup.PATCH("/authority/api", system.AuthorityAPI.SetApiAuth)     // 设置角色API权限｜待优化
 		PrivateGroup.PATCH("/authority/extAuth", system.AuthorityAPI.SetExtAuth) // 设置角色拓展权限｜待优化
 
-		// API
+		// 系统-API
 		PrivateGroup.GET("/api", system.ApiAPI.List)          // 分页角色列表
-		PrivateGroup.DELETE("/api/:id", system.ApiAPI.Delete) // 删除角色
+		PrivateGroup.DELETE("/api/:id", system.ApiAPI.Delete) // 删除API
 
-		// 拓展权限
+		// 系统-拓展权限
 		PrivateGroup.DELETE("/extAuth/:id", system.ExtAuthAPI.Delete) // 删除拓展权限
+
+		// 系统-公共接口
+		PrivateGroup.GET("/common/fileList", system.CommonApi.MediaList) // 查询媒体列表
 	}
 
 	magic.Logger.Info("router register success")

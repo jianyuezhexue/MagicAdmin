@@ -67,7 +67,7 @@ type PageInfo struct {
 // 分页查询返回结构
 type ResPageData struct {
 	List  any `json:"list"`
-	Total int `json:"total"`
+	Total any `json:"total"`
 	PageInfo
 }
 
