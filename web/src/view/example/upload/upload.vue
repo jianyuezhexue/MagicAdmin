@@ -1,22 +1,11 @@
 <template>
   <div v-loading.fullscreen.lock="fullscreenLoading">
     <div class="gva-table-box">
-      <warning-bar
-        title="点击“文件名/备注”可以编辑文件名或者备注内容。"
-      />
+      <warning-bar title="点击“文件名/备注”可以编辑文件名或者备注内容。" />
       <div class="gva-btn-list">
-        <upload-common
-          v-model:imageCommon="imageCommon"
-          class="upload-btn"
-          @on-success="getTableData"
-        />
-        <upload-image
-          v-model:imageUrl="imageUrl"
-          :file-size="512"
-          :max-w-h="1080"
-          class="upload-btn"
-          @on-success="getTableData"
-        />
+        <upload-common v-model:imageCommon="imageCommon" class="upload-btn" @on-success="getTableData" />
+        <upload-image v-model:imageUrl="imageUrl" :file-size="512" :max-w-h="1080" class="upload-btn"
+          @on-success="getTableData" />
 
         <el-form ref="searchForm" :inline="true" :model="search">
           <el-form-item label="">
@@ -49,10 +38,7 @@
         <el-table-column align="left" label="链接" prop="url" min-width="300" />
         <el-table-column align="left" label="标签" prop="tag" width="100">
           <template #default="scope">
-            <el-tag
-              :type="scope.row.tag === 'jpg' ? 'primary' : 'success'"
-              disable-transitions
-            >{{ scope.row.tag }}
+            <el-tag :type="scope.row.tag === 'jpg' ? 'primary' : 'success'" disable-transitions>{{ scope.row.tag }}
             </el-tag>
           </template>
         </el-table-column>
@@ -64,16 +50,9 @@
         </el-table-column>
       </el-table>
       <div class="gva-pagination">
-        <el-pagination
-          :current-page="page"
-          :page-size="pageSize"
-          :page-sizes="[10, 30, 50, 100]"
-          :style="{ float: 'right', padding: '20px' }"
-          :total="total"
-          layout="total, sizes, prev, pager, next, jumper"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange"
-        />
+        <el-pagination :current-page="page" :page-size="pageSize" :page-sizes="[10, 30, 50, 100]"
+          :style="{ float: 'right', padding: '20px' }" :total="total" layout="total, sizes, prev, pager, next, jumper"
+          @current-change="handleCurrentChange" @size-change="handleSizeChange" />
       </div>
     </div>
   </div>
@@ -114,7 +93,7 @@ const handleCurrentChange = (val) => {
 }
 
 // 查询
-const getTableData = async() => {
+const getTableData = async () => {
   const table = await getFileList({ page: page.value, pageSize: pageSize.value, ...search.value })
   if (table.code === 0) {
     tableData.value = table.data.list
@@ -125,13 +104,13 @@ const getTableData = async() => {
 }
 getTableData()
 
-const deleteFileFunc = async(row) => {
+const deleteFileFunc = async (row) => {
   ElMessageBox.confirm('此操作将永久删除文件, 是否继续?', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning',
   })
-    .then(async() => {
+    .then(async () => {
       const res = await deleteFile(row)
       if (res.code === 0) {
         ElMessage({
@@ -166,14 +145,14 @@ const downloadFile = (row) => {
  * @param row
  * @returns {Promise<void>}
  */
-const editFileNameFunc = async(row) => {
+const editFileNameFunc = async (row) => {
   ElMessageBox.prompt('请输入文件名或者备注', '编辑', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     inputPattern: /\S/,
     inputErrorMessage: '不能为空',
     inputValue: row.name
-  }).then(async({ value }) => {
+  }).then(async ({ value }) => {
     row.name = value
     const res = await editFileName(row)
     if (res.code === 0) {
@@ -203,7 +182,7 @@ export default {
   cursor: pointer;
 }
 
-.upload-btn + .upload-btn {
+.upload-btn+.upload-btn {
   margin-left: 12px;
 }
 </style>
