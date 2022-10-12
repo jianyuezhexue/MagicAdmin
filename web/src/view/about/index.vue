@@ -10,40 +10,27 @@
             <el-row>
               <el-col :span="8" :offset="8">
                 <a href="https://github.com/flipped-aurora/gin-vue-admin">
-                  <img
-                    class="org-img dom-center"
-                    src="@/assets/logo.png"
-                    alt="gin-vue-admin"
-                  >
+                  <img class="org-img dom-center" src="@/assets/logo.png" alt="gin-vue-admin">
                 </a>
               </el-col>
             </el-row>
             <el-row :gutter="10">
               <el-col :span="8">
                 <a href="https://github.com/flipped-aurora/gin-vue-admin">
-                  <img
-                    class="dom-center"
-                    src="https://img.shields.io/github/watchers/flipped-aurora/gin-vue-admin.svg?label=Watch"
-                    alt=""
-                  >
+                  <img class="dom-center"
+                    src="https://img.shields.io/github/watchers/flipped-aurora/gin-vue-admin.svg?label=Watch" alt="">
                 </a>
               </el-col>
               <el-col :span="8">
                 <a href="https://github.com/flipped-aurora/gin-vue-admin">
-                  <img
-                    class="dom-center"
-                    src="https://img.shields.io/github/stars/flipped-aurora/gin-vue-admin.svg?style=social"
-                    alt=""
-                  >
+                  <img class="dom-center"
+                    src="https://img.shields.io/github/stars/flipped-aurora/gin-vue-admin.svg?style=social" alt="">
                 </a>
               </el-col>
               <el-col :span="8">
                 <a href="https://github.com/flipped-aurora/gin-vue-admin">
-                  <img
-                    class="dom-center"
-                    src="https://img.shields.io/github/forks/flipped-aurora/gin-vue-admin.svg?label=Fork"
-                    alt=""
-                  >
+                  <img class="dom-center"
+                    src="https://img.shields.io/github/forks/flipped-aurora/gin-vue-admin.svg?label=Fork" alt="">
                 </a>
               </el-col>
             </el-row>
@@ -57,11 +44,7 @@
             <el-row>
               <el-col :span="8" :offset="8">
                 <a href="https://github.com/flipped-aurora">
-                  <img
-                    class="org-img dom-center"
-                    src="@/assets/flipped-aurora.png"
-                    alt="flipped-aurora"
-                  >
+                  <img class="org-img dom-center" src="@/assets/flipped-aurora.png" alt="flipped-aurora">
                 </a>
               </el-col>
             </el-row>
@@ -83,12 +66,8 @@
           </template>
           <div>
             <el-timeline>
-              <el-timeline-item
-                v-for="(item,index) in dataTimeline"
-                :key="index"
-                :timestamp="item.from"
-                placement="top"
-              >
+              <el-timeline-item v-for="(item,index) in dataTimeline" :key="index" :timestamp="item.from"
+                placement="top">
                 <el-card>
                   <h4>{{ item.title }}</h4>
                   <p>{{ item.message }}</p>
@@ -96,12 +75,7 @@
               </el-timeline-item>
             </el-timeline>
           </div>
-          <el-button
-            class="load-more"
-            type="primary"
-            link
-            @click="loadMore"
-          >Load more</el-button>
+          <el-button class="load-more" type="primary" link @click="loadMore">Load more</el-button>
         </el-card>
       </el-col>
     </el-row>

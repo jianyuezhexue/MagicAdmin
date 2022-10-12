@@ -11,6 +11,9 @@ import (
 func Routers() *gin.Engine {
 	var Router = gin.Default()
 
+	// 静态资源地址
+	Router.Static("/form-generator", "./resource/page")
+
 	// 公共路由组
 	PublicGroup := Router.Group("")
 	{
