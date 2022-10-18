@@ -34,7 +34,7 @@ func (u *UserServer) Register(data system.User) (res system.User, err error) {
 }
 
 // 登录以后签发jwt
-func createToken(user system.User) (token string, err error) {
+func createToken(user system.User, changeToken bool) (token string, err error) {
 	// 创建Claims
 	jwt := &magic.JWT{SigningKey: []byte(magic.Config.JWT.SigningKey)}
 	claims := jwt.CreateClaims(magic.BaseClaims{
@@ -49,12 +49,20 @@ func createToken(user system.User) (token string, err error) {
 	}
 
 	// 单点登录-返回
-	if !magic.Config.System.UseMultipoint {
+	if !magic.Config.System.UseMultiPoint {
 		return token, err
 	}
 
-	// 多点登录-先查
+	// 多点登录
 	var redisKey string = "token_" + user.UserName
+
+	// 切换角色
+	if changeToken {
+		_, err = magic.Redis.Del(redisKey)
+		return token, err
+	}
+
+	// 登录先查
 	cacheToken, err := magic.Redis.Get(redisKey)
 	if err != nil {
 		// 多点登录-后存
@@ -83,7 +91,7 @@ func (u *UserServer) Login(data system.FormLogin) (user system.User, err error) 
 	user.Authority = auth
 
 	// 签发JWT
-	token, tErr := createToken(user)
+	token, tErr := createToken(user, false)
 	if tErr != nil {
 		return user, errors.New("生成签名失败")
 	}
@@ -251,5 +259,41 @@ func (u *UserServer) ReSetPwd(id model.GetById) (user system.User, err error) {
 	// 修改字段
 	newPsw := magic.MD5V("123456")
 	err = magic.Orm.Model(&user).UpdateColumn("password", newPsw).Error
+	return user, err
+}
+
+// 切换角色
+func (u *UserServer) SwitchAuth(data system.SwitchAuth) (user system.User, err error) {
+	// 查询角色是否存在
+	err = magic.Orm.Where("uuid = ?", data.UUID).Find(&user).Error
+	if err != nil {
+		return user, err
+	}
+
+	// 用户不存在
+	if err == gorm.ErrRecordNotFound {
+		return user, errors.New("您编辑的用户不存在")
+	}
+
+	// 目标角色和当前角色一致
+	if user.AuthorityId == data.AuthorityId {
+		return user, errors.New("目标角色当前角色一样")
+	}
+
+	// 生成新的token
+	user.AuthorityId = data.AuthorityId
+	token, err := createToken(user, true)
+	if err != nil {
+		return user, errors.New("生成签名失败")
+	}
+
+	// 更新用户当前角色
+	err = magic.Orm.Model(&user).UpdateColumn("authorityId", data.AuthorityId).Error
+	if err != nil {
+		return user, errors.New("更新当前角色失败")
+	}
+
+	// 返回最新的token
+	user.Token = token
 	return user, err
 }

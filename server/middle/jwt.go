@@ -41,7 +41,7 @@ func JWTAuth() gin.HandlerFunc {
 			newClaims, _ := jwt.ParseToken(newToken)
 			c.Header("new-token", newToken)
 			c.Header("new-expires-at", strconv.FormatInt(newClaims.ExpiresAt, 10))
-			if magic.Config.System.UseMultipoint {
+			if magic.Config.System.UseMultiPoint {
 				RedisJwtToken, err := jwtService.GetRedisJWT(newClaims.UserName)
 				if err != nil {
 					magic.Logger.Error("get redis jwt failed", zap.Any("err", err))

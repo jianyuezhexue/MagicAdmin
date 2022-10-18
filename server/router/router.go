@@ -39,6 +39,7 @@ func Routers() *gin.Engine {
 		PrivateGroup.PATCH("/user/auth", system.UserApi.SetUserAuth)      // 设置用户角色
 		PrivateGroup.PATCH("/user/status", system.UserApi.SetUserStatus)  // 设置用户状态
 		PrivateGroup.PATCH("/user/reSetPwd/:id", system.UserApi.ReSetPwd) // 重置用户密码
+		PrivateGroup.PATCH("/user/switchAuth", system.UserApi.SwitchAuth) // 切换用户角色
 		PrivateGroup.DELETE("/user/:id", system.UserApi.Delete)           // 删除菜单
 
 		// 系统-菜单

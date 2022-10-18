@@ -46,10 +46,10 @@ export const getUserList = (params) => {
 }
 
 // 切换用户权限
-export const setUserAuthority = (data) => {
+export const switchAuth = (data) => {
   return service({
-    url: '/user/setUserAuthority',
-    method: 'post',
+    url: '/user/switchAuth',
+    method: 'PATCH',
     data: data
   })
 }

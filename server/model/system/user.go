@@ -52,3 +52,9 @@ type SetUserAuth struct {
 	Id  int        `json:"id" uri:"id" form:"id" binding:"required"`    // 用户ID
 	Ids model.Strs `josn:"ids" uri:"ids" form:"ids" binding:"required"` // 角色ID数组
 }
+
+// 切换角色
+type SwitchAuth struct {
+	AuthorityId string    `json:"authorityId" form:"authorityId" binding:"required,numeric"` // 当前角色ID
+	UUID        uuid.UUID `json:"uuid"`                                                      // 用户UUID
+}

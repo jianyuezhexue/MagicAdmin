@@ -190,3 +190,28 @@ func (u UserCtr) ReSetPwd(c *gin.Context) {
 }
 
 // 切换角色
+func (u UserCtr) SwitchAuth(c *gin.Context) {
+
+	// 接收参数
+	var param system.SwitchAuth
+	err := c.ShouldBind(&param)
+	if err != nil {
+		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
+		return
+	}
+
+	// 获取当前用户UUID & 合并参数
+	userInfo := magic.TokenInfo(c)
+	param.UUID = userInfo.UUID
+
+	// 逻辑处理
+	res, err := serviceSystem.UserApp.SwitchAuth(param)
+	if err != nil {
+		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		return
+	}
+
+	// 返回头带最新的token
+	c.Header("new-token", res.Token)
+	magic.Success(c, "重置密码成功", res)
+}

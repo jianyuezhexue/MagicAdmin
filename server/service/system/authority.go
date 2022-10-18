@@ -148,6 +148,14 @@ func (a *AuthorityServer) Delete(id model.GetById) (res []system.Authority, err 
 
 // 设置角色菜单权限
 func (a *AuthorityServer) SetMenuAuth(data system.SetAuth) (res system.SetAuth, err error) {
+	// 删除当前角色菜单缓存
+	key := config.MenueIds + strconv.Itoa(int(data.Id))
+	_, err = magic.Redis.Del(key)
+	if err != nil {
+		return res, err
+	}
+
+	// 修改角色菜单权限
 	menuIdStr := strings.Join(data.Data, ",")
 	err = magic.Orm.Model(&system.Authority{}).Where("id = ?", data.Id).Update("menuIds", menuIdStr).Error
 	if err != nil {

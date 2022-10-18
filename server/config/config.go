@@ -6,7 +6,7 @@ type System struct {
 	Addr          int    `mapstructure:"addr" json:"addr" yaml:"addr"`                            // 端口值
 	DbType        string `mapstructure:"dbType" json:"dbType" yaml:"dbType"`                      // 数据库类型:mysql(默认)|sqlite|sqlserver|postgresql
 	OssType       string `mapstructure:"ossType" json:"ossType" yaml:"ossType"`                   // Oss类型
-	UseMultipoint bool   `mapstructure:"useMultipoint" json:"useMultipoint" yaml:"useMultipoint"` // 多点登录拦截
+	UseMultiPoint bool   `mapstructure:"useMultipoint" json:"useMultipoint" yaml:"useMultipoint"` // 多点登录拦截
 	LimitCountIP  int    `mapstructure:"iplimitCount" json:"iplimitCount" yaml:"iplimitCount"`
 	LimitTimeIP   int    `mapstructure:"iplimitTime" json:"iplimitTime" yaml:"iplimitTime"`
 }
