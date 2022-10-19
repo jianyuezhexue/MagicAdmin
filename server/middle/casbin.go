@@ -9,9 +9,9 @@ import (
 func Casbin() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		e := serviceSystem.CasbinApp.Casbin()
-		waitUse := magic.TokenInfo(c)
+		userInfo := magic.TokenInfo(c)
 		// 角色
-		sub := waitUse.AuthorityId
+		sub := userInfo.AuthorityId
 		// 方法
 		obj := c.Request.Method
 		// 路由
