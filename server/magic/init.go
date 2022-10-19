@@ -6,6 +6,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/casbin/casbin"
 	"github.com/gin-gonic/gin"
 	"github.com/jianyuezhexue/MagicAdmin/config"
 	"github.com/songzhibin97/gkit/cache/local_cache"
@@ -28,6 +29,8 @@ var (
 	SingleFlight = &singleflight.Group{}
 	// LocalCache 本地缓存
 	LocalCache local_cache.Cache
+	// casbin
+	cachedEnforcer *casbin.CachedEnforcer
 	// once
 	once sync.Once
 )

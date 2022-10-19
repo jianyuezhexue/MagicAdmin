@@ -29,7 +29,7 @@ func Routers() *gin.Engine {
 
 	// 私有路由组
 	PrivateGroup := Router.Group("")
-	PrivateGroup.Use(middle.JWTAuth())
+	PrivateGroup.Use(middle.JWTAuth()).Use(middle.Casbin())
 	{
 		// 系统-用户
 		PrivateGroup.GET("/user/info", system.UserApi.UserInfo)           // 用户信息
