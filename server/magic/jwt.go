@@ -104,7 +104,7 @@ func (j *JWT) ParseToken(tokenString string) (*CustomClaims, error) {
 	return nil, ErrTokenInvalid
 }
 
-// token解析出用户信息|这里默认已经经过了JWT中间件的鉴权
+// token解析出用户信息
 func TokenInfo(c *gin.Context) (userInfo *BaseClaims) {
 	token := c.Request.Header.Get("x-token")
 	jwt := NewJWT()
