@@ -16,14 +16,16 @@ var jwtService = magic.JwtService{}
 // JWTAuth jwt鉴权
 func JWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// 获取token字符串
 		token := c.Request.Header.Get("x-token")
 		if token == "" {
 			magic.Fail(c, http.StatusForbidden, "未登录或非法访问", "")
 			c.Abort()
 			return
 		}
+
+		// 校验授权
 		jwt := magic.NewJWT()
-		// parseToken 解析token包含的信息
 		claims, err := jwt.ParseToken(token)
 		if err != nil {
 			if err == magic.ErrTokenExpired {
@@ -35,6 +37,8 @@ func JWTAuth() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
+
+		// 过期自动续期
 		if claims.ExpiresAt-time.Now().Unix() < claims.BufferTime {
 			claims.ExpiresAt = time.Now().Unix() + magic.Config.JWT.ExpiresTime
 			newToken, _ := jwt.CreateTokenByOldToken(token, *claims)
