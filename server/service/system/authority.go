@@ -164,17 +164,25 @@ func (a *AuthorityServer) SetMenuAuth(data system.SetAuth) (res system.SetAuth, 
 	return data, err
 }
 
-// 设置角色菜单权限
+// 设置角色API权限
 func (a *AuthorityServer) SetApiAuth(data system.SetAuth) (res system.SetAuth, err error) {
+	// 查询API信息
+
+	// 设置casbin
+
+	// 设置API权限
 	menuIdStr := strings.Join(data.Data, ",")
 	err = magic.Orm.Model(&system.Authority{}).Where("id = ?", data.Id).Update("apiIds", menuIdStr).Error
 	if err != nil {
 		return res, errors.New("系统繁忙，请稍后再试")
 	}
+
+	// 重载casbin规则
+
 	return data, err
 }
 
-// 设置角色菜单权限
+// 设置角色数据/按钮权限
 func (a *AuthorityServer) SetExtAuth(data system.SetAuth) (res system.SetAuth, err error) {
 	menuIdStr := strings.Join(data.Data, ",")
 	err = magic.Orm.Model(&system.Authority{}).Where("id = ?", data.Id).Update("extAuthIds", menuIdStr).Error
