@@ -5,6 +5,7 @@
       <el-aside class="main-cont main-left gva-aside">
         <div class="tilte" :style="{background: backgroundColor}">
           <img alt class="logoimg" :src="$GIN_VUE_ADMIN.appLogo">
+          <!-- <img alt class="logoimg" :src="../../../../assets/logo.jpg"> -->
           <div v-if="isSider" class="tit-text" :style="{color:textColor}">{{ $GIN_VUE_ADMIN.appName }}</div>
         </div>
         <Aside class="aside" />
@@ -113,6 +114,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useRouterStore } from '@/pinia/modules/router'
 import { fmtTitle } from '@/utils/fmtRouterTitle'
 import { useUserStore } from '@/pinia/modules/user'
+import assert from 'assert'
 
 const router = useRouter()
 const route = useRoute()

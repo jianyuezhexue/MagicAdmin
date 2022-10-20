@@ -3,8 +3,8 @@
  */
 
 const config = {
-  appName: '渠道数据中台',
-  appLogo: 'https://www.gin-vue-admin.com/img/logo.png',
+  appName: 'MagicAdmin',
+  appLogo: 'http://chuantu.xyz/t6/742/1666241837x2890373684.jpg',
   showViteLogo: true
 }
 
