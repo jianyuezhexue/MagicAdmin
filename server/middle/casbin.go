@@ -22,6 +22,7 @@ func Casbin() gin.HandlerFunc {
 		// if !check {
 		// 	magic.Fail(c, 1001, "您的权限不足,请联系管理员", "您的权限不足,请联系管理员")
 		// 	c.Abort()
+		// 	return
 		// }
 
 		c.Next()
