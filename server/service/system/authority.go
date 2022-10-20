@@ -220,6 +220,7 @@ func (a *AuthorityServer) SetApiAuth(data system.SetAuth) service.BackData {
 		return service.Back(2203, "重载规则失败", "重载规则失败")
 	}
 
+	// 返回结果
 	return service.Back(0, "设置角色成功", data)
 }
 
