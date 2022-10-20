@@ -184,6 +184,13 @@ func (a *AuthorityServer) SetApiAuth(data system.SetAuth) (res system.SetAuth, e
 		casbinRules = append(casbinRules, itemRule)
 	}
 
+	// 删除当前角色下的规则
+	enforcer := CasbinApp.Casbin()
+	remove, err := enforcer.RemoveFilteredPolicy(0, strconv.Itoa(data.Id))
+	if err != nil || !remove {
+		return res, errors.New("系统繁忙，请稍后再试")
+	}
+
 	// 开启事务
 	tx := magic.Orm.Begin()
 
@@ -191,11 +198,11 @@ func (a *AuthorityServer) SetApiAuth(data system.SetAuth) (res system.SetAuth, e
 	apiIdStr := strings.Join(data.Data, ",")
 	err = tx.Model(&system.Authority{}).Where("id = ?", data.Id).Update("apiIds", apiIdStr).Error
 	if err != nil {
+		tx.Rollback()
 		return res, errors.New("系统繁忙，请稍后再试")
 	}
 
 	// 设置casbin规则
-	enforcer := CasbinApp.Casbin()
 	_, err = enforcer.AddPolicies(casbinRules)
 	if err != nil {
 		tx.Rollback()
