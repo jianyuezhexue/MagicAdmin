@@ -118,13 +118,13 @@ func (a *AuthorityCtr) SetApiAuth(c *gin.Context) {
 	}
 
 	// 逻辑处理
-	res, err := serviceSystem.AuthorityApp.SetApiAuth(form)
-	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+	res := serviceSystem.AuthorityApp.SetApiAuth(form)
+	if res.Code != 0 {
+		magic.Fail(c, res.Code, res.Msg, res)
 		return
 	}
 
-	magic.Success(c, "角色设置API权限成功", res)
+	magic.Success(c, res.Msg, res)
 }
 
 // 角色设置拓展权限

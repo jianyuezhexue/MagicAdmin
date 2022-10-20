@@ -10,6 +10,7 @@ import (
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
+	"github.com/jianyuezhexue/MagicAdmin/service"
 	"gorm.io/gorm"
 )
 
@@ -165,13 +166,13 @@ func (a *AuthorityServer) SetMenuAuth(data system.SetAuth) (res system.SetAuth, 
 }
 
 // 设置角色API权限
-func (a *AuthorityServer) SetApiAuth(data system.SetAuth) (res system.SetAuth, err error) {
+func (a *AuthorityServer) SetApiAuth(data system.SetAuth) service.BackData {
 
 	// 查询API信息
 	var apis []system.Api
-	err = magic.Orm.Where("id", data.Data).Find(&apis).Error
+	err := magic.Orm.Where("id", data.Data).Find(&apis).Error
 	if err != nil {
-		return res, errors.New("系统繁忙，请稍后再试")
+		return service.Back(-2200, "系统繁忙，请稍后再试", "DB跪了")
 	}
 
 	// 组合casbin的数据
@@ -186,9 +187,9 @@ func (a *AuthorityServer) SetApiAuth(data system.SetAuth) (res system.SetAuth, e
 
 	// 删除当前角色下的规则
 	enforcer := CasbinApp.Casbin()
-	remove, err := enforcer.RemoveFilteredPolicy(0, strconv.Itoa(data.Id))
-	if err != nil || !remove {
-		return res, errors.New("系统繁忙，请稍后再试")
+	_, err = enforcer.RemoveFilteredPolicy(0, strconv.Itoa(data.Id))
+	if err != nil {
+		return service.Back(2201, "系统繁忙，请稍后再试", err.Error())
 	}
 
 	// 开启事务
@@ -199,14 +200,14 @@ func (a *AuthorityServer) SetApiAuth(data system.SetAuth) (res system.SetAuth, e
 	err = tx.Model(&system.Authority{}).Where("id = ?", data.Id).Update("apiIds", apiIdStr).Error
 	if err != nil {
 		tx.Rollback()
-		return res, errors.New("系统繁忙，请稍后再试")
+		return service.Back(2202, "系统繁忙，请稍后再试", "设置API权限错误")
 	}
 
 	// 设置casbin规则
 	_, err = enforcer.AddPolicies(casbinRules)
 	if err != nil {
 		tx.Rollback()
-		return res, errors.New("系统繁忙，请稍后再试")
+		return service.Back(2203, "系统繁忙，请稍后再试", "设置casbin规则错误")
 	}
 
 	// 提交事务
@@ -216,10 +217,10 @@ func (a *AuthorityServer) SetApiAuth(data system.SetAuth) (res system.SetAuth, e
 	err = enforcer.LoadPolicy()
 	if err != nil {
 		// todo 这里要记录系统日志
-		return res, errors.New("设置失败[重载规则失败]")
+		return service.Back(2203, "重载规则失败", "重载规则失败")
 	}
 
-	return data, err
+	return service.Back(0, "设置角色成功", data)
 }
 
 // 设置角色数据/按钮权限
