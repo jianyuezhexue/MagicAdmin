@@ -21,5 +21,5 @@ type Authority struct {
 // 设置角色菜单
 type SetAuth struct {
 	model.IdArr
-	Id uint64 `json:"id" form:"id" binding:"required"` // 主键ID
+	Id int `json:"id" form:"id" binding:"required"` // 主键ID
 }

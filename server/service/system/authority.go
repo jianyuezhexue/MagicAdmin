@@ -166,18 +166,51 @@ func (a *AuthorityServer) SetMenuAuth(data system.SetAuth) (res system.SetAuth, 
 
 // 设置角色API权限
 func (a *AuthorityServer) SetApiAuth(data system.SetAuth) (res system.SetAuth, err error) {
+
 	// 查询API信息
-
-	// 设置casbin
-
-	// 设置API权限
-	menuIdStr := strings.Join(data.Data, ",")
-	err = magic.Orm.Model(&system.Authority{}).Where("id = ?", data.Id).Update("apiIds", menuIdStr).Error
+	var apis []system.Api
+	err = magic.Orm.Where("id", data.Data).Find(&apis).Error
 	if err != nil {
 		return res, errors.New("系统繁忙，请稍后再试")
 	}
 
+	// 组合casbin的数据
+	casbinRules := make([][]string, 0)
+	for _, item := range apis {
+		itemRule := make([]string, 0)
+		itemRule = append(itemRule, strconv.Itoa(data.Id))
+		itemRule = append(itemRule, item.Method)
+		itemRule = append(itemRule, item.Route)
+		casbinRules = append(casbinRules, itemRule)
+	}
+
+	// 开启事务
+	tx := magic.Orm.Begin()
+
+	// 设置API权限
+	apiIdStr := strings.Join(data.Data, ",")
+	err = tx.Model(&system.Authority{}).Where("id = ?", data.Id).Update("apiIds", apiIdStr).Error
+	if err != nil {
+		return res, errors.New("系统繁忙，请稍后再试")
+	}
+
+	// 设置casbin规则
+	enforcer := CasbinApp.Casbin()
+	_, err = enforcer.AddPolicies(casbinRules)
+	if err != nil {
+		tx.Rollback()
+		return res, errors.New("系统繁忙，请稍后再试")
+	}
+
+	// 提交事务
+	tx.Commit()
+
 	// 重载casbin规则
+	err = enforcer.LoadPolicy()
+	if err != nil {
+		// todo 这里要记录系统日志
+		return res, errors.New("设置失败[重载规则失败]")
+	}
 
 	return data, err
 }
