@@ -4,7 +4,7 @@
 
 const config = {
   appName: 'MagicAdmin',
-  appLogo: 'http://chuantu.xyz/t6/742/1666241837x2890373684.jpg',
+  appLogo: 'https://i.postimg.cc/Wb026mfD/logo.jpg',
   showViteLogo: true
 }
 
