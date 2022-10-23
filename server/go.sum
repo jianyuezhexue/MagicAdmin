@@ -74,6 +74,8 @@ github.com/casbin/gorm-adapter v1.0.0 h1:s6U2gJQ4reenRde0L85YsrwNt8k0bv6iUAfRigi
 github.com/casbin/gorm-adapter v1.0.0/go.mod h1:1E0t3/djAo+vIvDfNPGigJjLMyoh2XNesXMW69R3ykA=
 github.com/casbin/gorm-adapter/v3 v3.12.0 h1:jUJCwaLnB+QfUadOETD6ymxeDmOR9jQXTmUTzLMpS3g=
 github.com/casbin/gorm-adapter/v3 v3.12.0/go.mod h1:jqaf4bUITbCyMPUellaTd8IQJ77JfVAbe77gZZnx98w=
+github.com/casbin/gorm-adapter/v3 v3.12.1 h1:YfHkjwna8MR9B9V81/pvu+rVcz8YzATmJbwqD5fvDuI=
+github.com/casbin/gorm-adapter/v3 v3.12.1/go.mod h1:jqaf4bUITbCyMPUellaTd8IQJ77JfVAbe77gZZnx98w=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/cespare/xxhash v1.1.0/go.mod h1:XrSqR1VqqWfGrhpAt58auRo0WTKS1nRRg3ghfAqPWnc=
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=

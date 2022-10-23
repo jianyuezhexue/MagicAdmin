@@ -19,7 +19,6 @@ require (
 
 require (
 	github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible // indirect
-	github.com/casbin/casbin v1.9.1 // indirect
 	github.com/glebarez/go-sqlite v1.19.1 // indirect
 	github.com/glebarez/sqlite v1.5.0 // indirect
 	github.com/golang-sql/civil v0.0.0-20220223132316-b832511892a9 // indirect
@@ -33,8 +32,6 @@ require (
 	github.com/jackc/pgservicefile v0.0.0-20200714003250-2b9c44734f2b // indirect
 	github.com/jackc/pgtype v1.12.0 // indirect
 	github.com/jackc/pgx/v4 v4.17.2 // indirect
-	github.com/jinzhu/gorm v1.9.16 // indirect
-	github.com/lib/pq v1.10.2 // indirect
 	github.com/microsoft/go-mssqldb v0.17.0 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20200410134404-eec4a21b6bb0 // indirect
 	gorm.io/driver/postgres v1.4.4 // indirect
@@ -47,9 +44,9 @@ require (
 )
 
 require (
+	github.com/casbin/casbin v1.9.1
 	github.com/casbin/casbin/v2 v2.56.0
-	github.com/casbin/gorm-adapter v1.0.0
-	github.com/casbin/gorm-adapter/v3 v3.12.0
+	github.com/casbin/gorm-adapter/v3 v3.12.1
 	github.com/duke-git/lancet v1.3.2
 	github.com/duke-git/lancet/v2 v2.1.6 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
