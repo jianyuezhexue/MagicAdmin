@@ -1,10 +1,20 @@
-## :airplane: 渠道数据中台-开发计划
+## :airplane: 环境安装
+ - golang 1.8以上
+ - npm
+ - mysql
+ - redis
 
- - [x]  API权限设置完成
- - [x]  用户列表查询完成
- - [x]  用户角色配置完成
- - [ ]  媒体库建表
- - [ ]  用户增删改完成
- - [ ]  细节优化
- - [ ]  操作历史
- - [ ]  定时删除
+## :cake: 运行调试
+```
+// 配置文件修改
+server/config/config.yaml
+
+// 启动后端
+cd server
+go run main.go
+
+// 启动前段
+ce web
+npm run serve
+
+```
