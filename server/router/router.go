@@ -11,6 +11,8 @@ import (
 func Routers() *gin.Engine {
 	var Router = gin.Default()
 
+	Router.Use(middle.CostTime())
+
 	// 静态资源地址
 	Router.Static("/form-generator", "./resource/page")
 

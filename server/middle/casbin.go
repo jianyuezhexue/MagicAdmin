@@ -6,6 +6,7 @@ import (
 	serviceSystem "github.com/jianyuezhexue/MagicAdmin/service/system"
 )
 
+// API鉴权中间件
 func Casbin() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		e := serviceSystem.CasbinApp.Casbin()

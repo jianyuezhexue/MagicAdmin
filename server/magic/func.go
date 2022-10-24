@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"reflect"
@@ -30,13 +31,27 @@ type PageResult struct {
 }
 
 // Success 成功返回
-func Success(c *gin.Context, msg string, data interface{}) {
-	c.JSON(http.StatusOK, gin.H{"code": 0, "msg": msg, "data": data})
+func Success(c *gin.Context, msg string, data any) {
+	// 获取开始时间
+	start := c.GetInt64("Magic_sTime")
+	log.Println(start)
+	// 计算耗时
+	end := time.Now().UnixNano()
+	costTime, _ := strconv.ParseFloat(fmt.Sprintf("%.4f", (float64(end)-float64(start))/1000000), 64)
+
+	c.JSON(http.StatusOK, gin.H{"code": 0, "msg": msg, "data": data, "cosTime": costTime})
 }
 
 // Fail 失败返回
-func Fail(c *gin.Context, code int, msg string, data interface{}) {
-	c.JSON(http.StatusOK, gin.H{"code": code, "msg": msg, "data": data})
+func Fail(c *gin.Context, code int, msg string, data any) {
+	// 获取开始时间
+	start := c.GetInt64("Magic_sTime")
+	log.Println(start)
+	// 计算耗时
+	end := time.Now().UnixNano()
+	costTime, _ := strconv.ParseFloat(fmt.Sprintf("%.4f", (float64(end)-float64(start))/1000000), 64)
+
+	c.JSON(http.StatusOK, gin.H{"code": code, "msg": msg, "data": data, "cosTime": costTime})
 }
 
 // 调试打印数据
