@@ -24,6 +24,7 @@ require (
 	github.com/golang-sql/civil v0.0.0-20220223132316-b832511892a9 // indirect
 	github.com/golang-sql/sqlexp v0.1.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
+	github.com/gookit/color v1.3.6 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.13.0 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
@@ -69,6 +70,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/mojocn/base64Captcha v1.3.5 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
+	github.com/qiniu/api.v7/v7 v7.8.2
 	github.com/spf13/afero v1.6.0 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect

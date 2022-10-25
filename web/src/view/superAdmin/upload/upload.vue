@@ -1,5 +1,5 @@
 <template>
-  <div v-loading.fullscreen.lock="fullscreenLoading">
+  <div>
     <div class="gva-table-box">
       <warning-bar title="点击“文件名/备注”可以编辑文件名或者备注内容。" />
       <div class="gva-btn-list">
@@ -25,11 +25,11 @@
             <CustomPic pic-type="file" :pic-src="scope.row.url" />
           </template>
         </el-table-column>
-        <el-table-column align="left" label="日期" prop="UpdatedAt" width="180">
+        <!-- <el-table-column align="left" label="日期" prop="UpdatedAt" width="180">
           <template #default="scope">
             <div>{{ formatDate(scope.row.UpdatedAt) }}</div>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column align="left" label="文件名/备注" prop="name" width="180">
           <template #default="scope">
             <div class="name" @click="editFileNameFunc(scope.row)">{{ scope.row.name }}</div>
