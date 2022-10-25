@@ -1,5 +1,5 @@
 ## :airplane: 环境安装
- - golang 1.8以上
+ - golang 1.8
  - npm
  - mysql
  - redis
