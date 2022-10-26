@@ -52,26 +52,33 @@ func (m *MenuServer) MenuTree(id model.GetById) (res any, err error) {
 	return result, err
 }
 
-// 我的菜单树
-func (m *MenuServer) MyMenu(authorityId int) (menus []system.Menu, err error) {
-	// 查权限[防击穿]
-	menuIds, err, _ := magic.SingleFlight.Do("ServiceMenu", func() (any, error) {
-		return MenuIds(authorityId)
+// 我的权限菜单树
+func (m *MenuServer) MyMenu(authorityId int) (menus any, err error) {
+	// // 先查本地缓存
+	// cacheKey := "myMenuTree"
+	// myMenuTree, err := magic.LocalCache.Get(cacheKey)
+	// if err != bigcache.ErrEntryNotFound { // 如果找到了key
+	// 	err = json.Unmarshal(myMenuTree, &menus)
+	// 	magic.Print(menus)
+	// }
+
+	// 查数据库[防击穿]
+	treeMenus, err, _ := magic.SingleFlight.Do("ServiceMenu", func() (any, error) {
+		return AuthorityApp.MyMenuTree(authorityId)
 	})
+
 	if err != nil {
 		return nil, err
 	}
 
-	// 查菜单
-	var myMenus []system.Menu
-	err = magic.Orm.Where("id IN ?", menuIds).Order("sort").Preload("Api").Find(&myMenus).Error
-	if err != nil {
-		return nil, err
-	}
+	// // 设置缓存
+	// cacheCon, err := json.Marshal(treeMenus)
+	// if err != nil {
+	// 	return nil, errors.New("Marshal失败")
+	// }
+	// magic.LocalCache.Set(cacheKey, cacheCon)
 
-	// 树形转换
-	treeMenuus := MenuApp.makeTree(myMenus, 0)
-	return treeMenuus, err
+	return treeMenus, err
 }
 
 // 分页获取菜单列表
@@ -83,10 +90,10 @@ func (m *MenuServer) Menus(pageInfo model.PageInfo) (list model.ResPageData, err
 		return list, err
 	}
 	// 树形转换
-	treeMenuus := MenuApp.makeTree(menus, 0)
+	treeMenus := MenuApp.makeTree(menus, 0)
 
 	// 数据封装
-	list.List = treeMenuus
+	list.List = treeMenus
 	list.Page = 1
 	list.PageSize = 999
 	list.Total = len(menus)

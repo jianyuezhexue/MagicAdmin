@@ -6,10 +6,10 @@ import (
 	"sync"
 	"time"
 
+	"github.com/allegro/bigcache/v3"
 	"github.com/casbin/casbin"
 	"github.com/gin-gonic/gin"
 	"github.com/jianyuezhexue/MagicAdmin/config"
-	"github.com/songzhibin97/gkit/cache/local_cache"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"golang.org/x/sync/singleflight"
@@ -28,7 +28,7 @@ var (
 	// SingleFlight 防止缓存击穿
 	SingleFlight = &singleflight.Group{}
 	// LocalCache 本地缓存
-	LocalCache local_cache.Cache
+	LocalCache *bigcache.BigCache
 	// casbin
 	cachedEnforcer *casbin.CachedEnforcer
 	// once
@@ -49,6 +49,15 @@ func initConfig() {
 	}
 }
 
+// 初始化本地缓存
+func initLocalCache() *bigcache.BigCache {
+	localCache, err := bigcache.NewBigCache(bigcache.DefaultConfig(10 * time.Minute))
+	if err != nil {
+		panic(fmt.Errorf("初始化本地缓存失败: %s", err))
+	}
+	return localCache
+}
+
 // 初始化配置
 func init() {
 	// 读取配置
@@ -59,7 +68,8 @@ func init() {
 	Orm = initGorm()
 	// 初始化Redis
 	Redis = NewRedisCache()
-	fmt.Println("-------------------------- 初始化变量完成 --------------------------")
+	// 初始化本地缓存
+	LocalCache = initLocalCache()
 }
 
 // Server Server

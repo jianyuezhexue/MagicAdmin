@@ -7,8 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
-	"github.com/jianyuezhexue/MagicAdmin/model/system"
-	"go.uber.org/zap"
 )
 
 var jwtService = magic.JwtService{}
@@ -46,13 +44,7 @@ func JWTAuth() gin.HandlerFunc {
 			c.Header("new-token", newToken)
 			c.Header("new-expires-at", strconv.FormatInt(newClaims.ExpiresAt, 10))
 			if magic.Config.System.UseMultiPoint {
-				RedisJwtToken, err := jwtService.GetRedisJWT(newClaims.UserName)
-				if err != nil {
-					magic.Logger.Error("get redis jwt failed", zap.Any("err", err))
-				} else { // 当之前的取成功时才进行拉黑操作
-					_ = jwtService.JSONInBlacklist(system.JwtBlacklist{Jwt: RedisJwtToken})
-				}
-				// 无论如何都要记录当前的活跃状态
+				// 重置新Token
 				_ = jwtService.SetRedisJWT(newToken, newClaims.UserName)
 			}
 		}

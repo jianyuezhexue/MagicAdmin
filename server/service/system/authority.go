@@ -5,8 +5,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/gomodule/redigo/redis"
-	"github.com/jianyuezhexue/MagicAdmin/config"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
@@ -15,31 +13,26 @@ import (
 )
 
 // MenuIds 通过权限ID查出所有菜单ID
-func MenuIds(authorityId int) (res []string, err error) {
-	// 先查缓存
-	menuIds := ""
-	key := config.MenueIds + strconv.Itoa(authorityId)
-	menuIds, err = magic.Redis.Get(key)
-	if err != nil && err != redis.ErrNil { // 区分空值和报错
+func (a *AuthorityServer) MyMenuTree(authorityId int) (treeMenus []system.Menu, err error) {
+	// 查询菜单IDs
+	var authorites system.Authority
+	err1 := magic.Orm.Where("id = ?", authorityId).First(&authorites).Error
+	if err1 != nil {
+		return nil, err1
+	}
+	menuIds := authorites.MenuIds
+
+	// 查菜单
+	var myMenus []system.Menu
+	idSlice := strings.Split(menuIds, ",")
+	err = magic.Orm.Where("id IN ?", idSlice).Order("sort").Preload("Api").Find(&myMenus).Error
+	if err != nil {
 		return nil, err
 	}
 
-	// 没缓存查DB
-	if err == redis.ErrNil {
-		var authorites system.Authority
-		err = magic.Orm.Where("id = ?", authorityId).First(&authorites).Error
-		if err != nil {
-			return nil, err
-		}
-		menuIds = authorites.MenuIds
-
-		// 设置缓存
-		magic.Redis.Set(key, menuIds, -1)
-	}
-
-	// 字符串解析
-	slice := strings.Split(menuIds, ",")
-	return slice, nil
+	// 树形转换
+	treeMenus = MenuApp.makeTree(myMenus, 0)
+	return treeMenus, err
 }
 
 type AuthorityServer struct{}
@@ -149,12 +142,12 @@ func (a *AuthorityServer) Delete(id model.GetById) (res []system.Authority, err 
 
 // 设置角色菜单权限
 func (a *AuthorityServer) SetMenuAuth(data system.SetAuth) (res system.SetAuth, err error) {
-	// 删除当前角色菜单缓存
-	key := config.MenueIds + strconv.Itoa(int(data.Id))
-	_, err = magic.Redis.Del(key)
-	if err != nil {
-		return res, err
-	}
+	// // 删除当前角色菜单缓存
+	// cacheKey := "myMenuTree"
+	// err = magic.LocalCache.Delete(cacheKey)
+	// if err != nil {
+	// 	return res, err
+	// }
 
 	// 修改角色菜单权限
 	menuIdStr := strings.Join(data.Data, ",")
