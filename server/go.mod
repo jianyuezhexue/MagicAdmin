@@ -3,12 +3,12 @@ module github.com/jianyuezhexue/MagicAdmin
 go 1.18
 
 require (
+	github.com/allegro/bigcache/v3 v3.0.2
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.7.4
 	github.com/gomodule/redigo v1.8.5
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/satori/go.uuid v1.2.0
-	github.com/songzhibin97/gkit v1.1.2
 	github.com/spf13/viper v1.9.0
 	github.com/unrolled/secure v1.0.9
 	go.uber.org/zap v1.19.1
@@ -19,7 +19,6 @@ require (
 
 require (
 	github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible // indirect
-	github.com/allegro/bigcache/v3 v3.0.2 // indirect
 	github.com/glebarez/go-sqlite v1.19.1 // indirect
 	github.com/glebarez/sqlite v1.5.0 // indirect
 	github.com/golang-sql/civil v0.0.0-20220223132316-b832511892a9 // indirect
@@ -35,6 +34,7 @@ require (
 	github.com/jackc/pgtype v1.12.0 // indirect
 	github.com/jackc/pgx/v4 v4.17.2 // indirect
 	github.com/microsoft/go-mssqldb v0.17.0 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20200410134404-eec4a21b6bb0 // indirect
 	gorm.io/driver/postgres v1.4.4 // indirect
 	gorm.io/driver/sqlserver v1.4.1 // indirect
@@ -49,8 +49,6 @@ require (
 	github.com/casbin/casbin v1.9.1
 	github.com/casbin/casbin/v2 v2.56.0
 	github.com/casbin/gorm-adapter/v3 v3.12.1
-	github.com/duke-git/lancet v1.3.2
-	github.com/duke-git/lancet/v2 v2.1.6 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
@@ -69,7 +67,7 @@ require (
 	github.com/mitchellh/mapstructure v1.4.2 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
-	github.com/mojocn/base64Captcha v1.3.5 // indirect
+	github.com/mojocn/base64Captcha v1.3.5
 	github.com/pelletier/go-toml v1.9.4 // indirect
 	github.com/qiniu/api.v7/v7 v7.8.2
 	github.com/spf13/afero v1.6.0 // indirect
