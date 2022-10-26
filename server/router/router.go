@@ -9,6 +9,7 @@ import (
 
 // Routers 初始化总路由
 func Routers() *gin.Engine {
+	gin.SetMode(gin.DebugMode) // debug模式
 	var Router = gin.Default()
 
 	Router.Use(middle.CostTime())
