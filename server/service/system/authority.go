@@ -122,9 +122,6 @@ func (a *AuthorityServer) Delete(id model.GetById) (res []system.Authority, err 
 		return find, err
 	}
 
-	// 验证是否有子角色
-	magic.Print(find)
-
 	// 异常提醒
 	if err == gorm.ErrRecordNotFound {
 		return find, errors.New("您删除的角色不存在")

@@ -23,7 +23,6 @@ func (CasbinServer *CasbinServer) Casbin() *casbin.CachedEnforcer {
 	once.Do(func() {
 		adapter, err := gormadapter.NewAdapterByDBUseTableName(magic.Orm, "", "casbin")
 		if err != nil {
-			magic.Print(err)
 			return
 		}
 		text := `

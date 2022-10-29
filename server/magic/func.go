@@ -33,11 +33,15 @@ type PageResult struct {
 // Success 成功返回
 func Success(c *gin.Context, msg string, data any) {
 	// 获取开始时间
-	start := c.GetInt64("Magic_sTime")
+	start := c.GetInt64("magicStartTime")
 	log.Println(start)
 	// 计算耗时
 	end := time.Now().UnixNano()
-	costTime, _ := strconv.ParseFloat(fmt.Sprintf("%.4f", (float64(end)-float64(start))/1000000), 64)
+	costTime, _ := strconv.ParseFloat(fmt.Sprintf("%.5f", (float64(end)-float64(start))/1000000), 64)
+
+	// 预埋操作记录参数
+	c.Set("magicMsg", msg)
+	c.Set("magicResp", fmt.Sprintf("%v", data))
 
 	c.JSON(http.StatusOK, gin.H{"code": 0, "msg": msg, "data": data, "cosTime": costTime})
 }
@@ -45,11 +49,16 @@ func Success(c *gin.Context, msg string, data any) {
 // Fail 失败返回
 func Fail(c *gin.Context, code int, msg string, data any) {
 	// 获取开始时间
-	start := c.GetInt64("Magic_sTime")
+	start := c.GetInt64("magicStartTime")
 	log.Println(start)
+
 	// 计算耗时
 	end := time.Now().UnixNano()
-	costTime, _ := strconv.ParseFloat(fmt.Sprintf("%.4f", (float64(end)-float64(start))/1000000), 64)
+	costTime, _ := strconv.ParseFloat(fmt.Sprintf("%.5f", (float64(end)-float64(start))/1000000), 64)
+
+	// 预埋操作记录参数
+	c.Set("magicMsg", msg)
+	c.Set("magicResp", fmt.Sprintf("%v", data))
 
 	c.JSON(http.StatusOK, gin.H{"code": code, "msg": msg, "data": data, "cosTime": costTime})
 }

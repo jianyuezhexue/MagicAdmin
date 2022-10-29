@@ -59,7 +59,6 @@ func (m *MenuServer) MyMenu(authorityId int) (menus any, err error) {
 	// myMenuTree, err := magic.LocalCache.Get(cacheKey)
 	// if err != bigcache.ErrEntryNotFound { // 如果找到了key
 	// 	err = json.Unmarshal(myMenuTree, &menus)
-	// 	magic.Print(menus)
 	// }
 
 	// 查数据库[防击穿]
