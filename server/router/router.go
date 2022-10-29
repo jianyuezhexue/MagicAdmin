@@ -12,7 +12,7 @@ func Routers() *gin.Engine {
 	gin.SetMode(gin.DebugMode) // debug模式
 	var Router = gin.Default()
 
-	Router.Use(middle.CostTime()).Use(middle.Record())
+	Router.Use(middle.Record())
 
 	// 静态资源地址
 	Router.Static("/form-generator", "./resource/page")
