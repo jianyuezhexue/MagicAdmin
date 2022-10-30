@@ -17,9 +17,10 @@ import (
 
 // Response 返回结构体
 type Response struct {
-	Code int    `json:"code"`
-	Msg  string `json:"msg"`
-	Data any    `json:"data"`
+	Code     int     `json:"code"`
+	Msg      string  `json:"msg"`
+	Data     any     `json:"data"`
+	CostTime float64 `json:"costTime"`
 }
 
 // 分页查询返回结构体
@@ -39,11 +40,15 @@ func Success(c *gin.Context, msg string, data any) {
 	end := time.Now().UnixNano()
 	costTime, _ := strconv.ParseFloat(fmt.Sprintf("%.5f", (float64(end)-float64(start))/1000000), 64)
 
+	// 返回结果
+	res := Response{Code: 0, Msg: msg, Data: data, CostTime: costTime}
+
 	// 预埋操作记录参数
 	c.Set("magicMsg", msg)
-	c.Set("magicResp", fmt.Sprintf("%v", data))
+	recodeBytes, _ := json.Marshal(res)
+	c.Set("magicResp", string(recodeBytes))
 
-	c.JSON(http.StatusOK, gin.H{"code": 0, "msg": msg, "data": data, "cosTime": costTime})
+	c.JSON(http.StatusOK, res)
 }
 
 // Fail 失败返回
@@ -56,11 +61,15 @@ func Fail(c *gin.Context, code int, msg string, data any) {
 	end := time.Now().UnixNano()
 	costTime, _ := strconv.ParseFloat(fmt.Sprintf("%.5f", (float64(end)-float64(start))/1000000), 64)
 
+	// 返回结果
+	res := Response{Code: 0, Msg: msg, Data: data, CostTime: costTime}
+
 	// 预埋操作记录参数
 	c.Set("magicMsg", msg)
-	c.Set("magicResp", fmt.Sprintf("%v", data))
+	recodeBytes, _ := json.Marshal(res)
+	c.Set("magicResp", string(recodeBytes))
 
-	c.JSON(http.StatusOK, gin.H{"code": code, "msg": msg, "data": data, "cosTime": costTime})
+	c.JSON(http.StatusOK, res)
 }
 
 // 调试打印数据
