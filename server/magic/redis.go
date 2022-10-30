@@ -37,7 +37,7 @@ func NewRedisCache() RedisClient {
 type Option struct {
 }
 
-// Set 设置字符串key,valule
+// 设置字符串key,valule
 func (c RedisClient) Set(key string, val string, expiration int64) (err error) {
 	// 获取链接
 	conn := c.pool.Get()
@@ -57,7 +57,7 @@ func SetNx() error {
 	return nil
 }
 
-// Get 获取 字符串类型的值
+// 获取 字符串类型的值
 func (c RedisClient) Get(name string) (val string, err error) {
 	conn := c.pool.Get()
 	defer conn.Close()
@@ -65,7 +65,7 @@ func (c RedisClient) Get(name string) (val string, err error) {
 	return val, err
 }
 
-// Exist 判断所在的 key 是否存在
+// 判断所在的 key 是否存在
 func (c RedisClient) Exist(name string) (bool, error) {
 	conn := c.pool.Get()
 	defer conn.Close()
@@ -73,7 +73,7 @@ func (c RedisClient) Exist(name string) (bool, error) {
 	return v, err
 }
 
-// Incr 自增
+// 自增
 func (c RedisClient) Incr(name string) (int, error) {
 	conn := c.pool.Get()
 	defer conn.Close()
@@ -81,7 +81,7 @@ func (c RedisClient) Incr(name string) (int, error) {
 	return v, err
 }
 
-// Expire 设置过期时间 （单位 秒）
+// 设置过期时间 （单位 秒）
 func (c RedisClient) Expire(name string, newSecondsLifeTime int64) error {
 	// 设置key 的过期时间
 	conn := c.pool.Get()
@@ -90,7 +90,7 @@ func (c RedisClient) Expire(name string, newSecondsLifeTime int64) error {
 	return err
 }
 
-// Del 删除指定的键
+// 删除指定的键
 func (c RedisClient) Del(keys ...interface{}) (bool, error) {
 	conn := c.pool.Get()
 	defer conn.Close()
@@ -98,7 +98,7 @@ func (c RedisClient) Del(keys ...interface{}) (bool, error) {
 	return v, err
 }
 
-// StrLen 查看指定的长度
+// 查看指定的长度
 func (c RedisClient) StrLen(name string) (int, error) {
 	conn := c.pool.Get()
 	defer conn.Close()
@@ -106,7 +106,7 @@ func (c RedisClient) StrLen(name string) (int, error) {
 	return v, err
 }
 
-// Hdel 删除指定的 hash 键
+// 删除指定的 hash 键
 func (c RedisClient) Hdel(name, key string) (bool, error) {
 	conn := c.pool.Get()
 	defer conn.Close()
@@ -115,7 +115,7 @@ func (c RedisClient) Hdel(name, key string) (bool, error) {
 	return v, err
 }
 
-// HExists 查看hash 中指定是否存在
+// 查看hash 中指定是否存在
 func (c RedisClient) HExists(name, field string) (bool, error) {
 	conn := c.pool.Get()
 	defer conn.Close()
@@ -124,7 +124,7 @@ func (c RedisClient) HExists(name, field string) (bool, error) {
 	return v, err
 }
 
-// HLen 获取hash 的键的个数
+// 获取hash 的键的个数
 func (c RedisClient) HLen(name string) (int, error) {
 	conn := c.pool.Get()
 	defer conn.Close()
@@ -132,7 +132,7 @@ func (c RedisClient) HLen(name string) (int, error) {
 	return v, err
 }
 
-// HMget 传入的 字段列表获得对应的值
+// 传入的 字段列表获得对应的值
 func (c RedisClient) HMget(name string, fields ...string) ([]interface{}, error) {
 	conn := c.pool.Get()
 	defer conn.Close()
@@ -145,7 +145,7 @@ func (c RedisClient) HMget(name string, fields ...string) ([]interface{}, error)
 	return value, err
 }
 
-// HSet 设置单个值, value 还可以是一个 map slice 等
+// 设置单个值, value 还可以是一个 map slice 等
 func (c RedisClient) HSet(name string, key string, value interface{}) (err error) {
 	conn := c.pool.Get()
 	defer conn.Close()
@@ -154,7 +154,7 @@ func (c RedisClient) HSet(name string, key string, value interface{}) (err error
 	return
 }
 
-// HMSet 设置多个值 , obj 可以是指针 slice map struct
+// 设置多个值 , obj 可以是指针 slice map struct
 func (c RedisClient) HMSet(name string, obj interface{}) (err error) {
 	conn := c.pool.Get()
 	defer conn.Close()
@@ -162,7 +162,7 @@ func (c RedisClient) HMSet(name string, obj interface{}) (err error) {
 	return
 }
 
-// HGet 获取单个hash 中的值
+// 获取单个hash 中的值
 func (c RedisClient) HGet(name, field string, v interface{}) (err error) {
 	conn := c.pool.Get()
 	defer conn.Close()
@@ -171,7 +171,7 @@ func (c RedisClient) HGet(name, field string, v interface{}) (err error) {
 	return
 }
 
-// Smembers 获取 set 集合中所有的元素, 想要什么类型的自己指定
+// 获取 set 集合中所有的元素, 想要什么类型的自己指定
 func (c RedisClient) Smembers(name string, v interface{}) (err error) {
 	conn := c.pool.Get()
 	defer conn.Close()
@@ -180,10 +180,26 @@ func (c RedisClient) Smembers(name string, v interface{}) (err error) {
 	return err
 }
 
-// ScardInt64s 获取集合中元素的个数
+// 获取集合中元素的个数
 func (c RedisClient) ScardInt64s(name string) (int64, error) {
 	conn := c.pool.Get()
 	defer conn.Close()
 	v, err := redis.Int64(conn.Do("SCARD", name))
+	return v, err
+}
+
+// LIST左边插入数据
+func (c RedisClient) Lpush(name string, val string) (int64, error) {
+	conn := c.pool.Get()
+	defer conn.Close()
+	v, err := redis.Int64(conn.Do("LPUSH", name, val))
+	return v, err
+}
+
+// LIST右边弹出数据
+func (c RedisClient) Rpop(key string) (string, error) {
+	conn := c.pool.Get()
+	defer conn.Close()
+	v, err := redis.String(conn.Do("RPOP", key))
 	return v, err
 }

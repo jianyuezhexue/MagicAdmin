@@ -12,7 +12,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
-	serviceSystem "github.com/jianyuezhexue/MagicAdmin/service/system"
 )
 
 // 记录操作记录
@@ -25,7 +24,7 @@ func Record() gin.HandlerFunc {
 		claims := magic.TokenInfo(c)
 
 		// 收集参数
-		var record system.Record
+		var record system.RecordBase
 		record.Ip = c.ClientIP()             // IP
 		record.UserId = int(claims.ID)       // 用户ID
 		record.UserName = claims.UserName    // 用户昵称
@@ -40,23 +39,26 @@ func Record() gin.HandlerFunc {
 		end := time.Now().UnixNano()
 		costTime, _ := strconv.ParseFloat(fmt.Sprintf("%.5f", (float64(end)-float64(start))/1000000), 64)
 
-		record.Status = c.Writer.Status()    // 返回状态
-		record.Msg = c.GetString("magicMsg") // 返回信息
-		record.CostTime = costTime           // 接口耗时
-		// record.Resp = c.GetString("magicResp") // 接口返回
+		record.Status = c.Writer.Status()      // 返回状态
+		record.Msg = c.GetString("magicMsg")   // 返回信息
+		record.CostTime = costTime             // 接口耗时
 		record.Resp = c.GetString("magicResp") // 接口返回
 
-		// 发送到队列
-		// todo
+		// 删除记录
+		c.Set("magicMsg", "")
+		c.Set("magicResp", "")
+
+		// 查询记录不存储返回
+		if record.Method == http.MethodGet && record.Path == "/recode" {
+			record.Resp = "不记录" // 接口返回
+		}
 
 		// 设置熔断等级
 		// todo
 
-		// 记录入库
-		err := serviceSystem.RecodeApp.Create(record)
-		if err != nil {
-			magic.Logger.Info("日志记录失败:" + err.Error())
-		}
+		// 发送到队列
+		recordBytes, _ := json.Marshal(record)
+		magic.Redis.Lpush(magic.RecodeListKey, string(recordBytes))
 	}
 }
 

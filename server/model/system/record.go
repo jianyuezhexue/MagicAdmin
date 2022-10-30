@@ -4,8 +4,8 @@ import (
 	"github.com/jianyuezhexue/MagicAdmin/model"
 )
 
-type Record struct {
-	model.BaseOrm
+// 基础记录
+type RecordBase struct {
 	UserId   int     `json:"userId"`   // 用户id
 	UserName string  `json:"userName"` // 用户名称
 	Ip       string  `json:"ip"`       // 请求ip
@@ -17,6 +17,11 @@ type Record struct {
 	Msg      string  `json:"msg"`      // 错误信息
 	Params   string  `json:"params"`   // 请求参数
 	Resp     string  `json:"resp"`     // 响应Body
+}
+
+type Record struct {
+	model.BaseOrm
+	RecordBase
 }
 
 // 分页查询字典目录

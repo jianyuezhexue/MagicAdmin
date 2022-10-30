@@ -12,7 +12,7 @@ var RecodeApp = new(RecodeServer)
 
 // 保存记录
 func (r *RecodeServer) Create(data system.Record) (err error) {
-	err = magic.Orm.Create(&data).Error
+	err = magic.Orm.Debug().Create(&data).Error
 	if err != nil {
 		return err
 	}
@@ -37,7 +37,7 @@ func (r *RecodeServer) List(data system.SearchRecord) service.BackData {
 	limit := data.PageSize
 	offset := (data.Page - 1) * data.PageSize
 	var list []system.Record
-	err = db.Limit(limit).Offset(offset).Find(&list).Error
+	err = db.Limit(limit).Offset(offset).Order("id DESC").Find(&list).Error
 	if err != nil {
 		return service.Back(2902, err.Error(), err.Error())
 	}
