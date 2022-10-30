@@ -18,3 +18,9 @@ type Record struct {
 	Params   string  `json:"params"`   // 请求参数
 	Resp     string  `json:"resp"`     // 响应Body
 }
+
+// 分页查询字典目录
+type SearchRecord struct {
+	model.PageInfo
+	Record
+}

@@ -73,9 +73,9 @@ func Routers() *gin.Engine {
 		PrivateGroup.POST("/authority", system.AuthorityAPI.Create)              // 创建角色
 		PrivateGroup.PUT("/authority", system.AuthorityAPI.Update)               // 更新角色
 		PrivateGroup.DELETE("/authority/:id", system.AuthorityAPI.Delete)        // 删除角色
-		PrivateGroup.PATCH("/authority/menu", system.AuthorityAPI.SetMenuAuth)   // 设置角色菜单权限｜待优化
-		PrivateGroup.PATCH("/authority/api", system.AuthorityAPI.SetApiAuth)     // 设置角色API权限｜待优化
-		PrivateGroup.PATCH("/authority/extAuth", system.AuthorityAPI.SetExtAuth) // 设置角色拓展权限｜待优化
+		PrivateGroup.PATCH("/authority/menu", system.AuthorityAPI.SetMenuAuth)   // 设置角色菜单权限
+		PrivateGroup.PATCH("/authority/api", system.AuthorityAPI.SetApiAuth)     // 设置角色API权限
+		PrivateGroup.PATCH("/authority/extAuth", system.AuthorityAPI.SetExtAuth) // 设置角色拓展权限
 
 		// 系统-API
 		PrivateGroup.GET("/api", system.ApiAPI.List)          // 分页角色列表
@@ -86,6 +86,9 @@ func Routers() *gin.Engine {
 
 		// 系统-公共接口
 		PrivateGroup.GET("/common/fileList", system.CommonApi.MediaList) // 查询媒体列表
+
+		// 系统-查询请求记录
+		PrivateGroup.GET("/recode", system.RecodeApi.List) // 分页查询
 	}
 
 	magic.Logger.Info("router register success")
