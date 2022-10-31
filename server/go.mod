@@ -8,6 +8,7 @@ require (
 	github.com/gin-gonic/gin v1.7.4
 	github.com/gomodule/redigo v1.8.5
 	github.com/natefinch/lumberjack v2.0.0+incompatible
+	github.com/robfig/cron v1.2.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/spf13/viper v1.9.0
 	github.com/unrolled/secure v1.0.9
@@ -36,7 +37,6 @@ require (
 	github.com/microsoft/go-mssqldb v0.17.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20200410134404-eec4a21b6bb0 // indirect
-	github.com/robfig/cron v1.2.0 // indirect
 	gorm.io/driver/postgres v1.4.4 // indirect
 	gorm.io/driver/sqlserver v1.4.1 // indirect
 	gorm.io/plugin/dbresolver v1.3.0 // indirect
