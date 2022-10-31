@@ -19,14 +19,14 @@
         <el-table-column align="left" label="用户角色" min-width="200">
           <template #default="scope">
             <el-cascader v-model="scope.row.authorityIds" :options="authOptions" :show-all-levels="false" collapse-tags
-              :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
-              :clearable="false" @visible-change="(flag)=>{changeAuthority(flag,scope.row)}" />
+              :props="{ multiple: true, checkStrictly: true, label: 'authorityName', value: 'authorityId', disabled: 'disabled', emitPath: false }"
+              :clearable="false" @visible-change="(flag) => { changeAuthority(flag, scope.row) }" />
           </template>
         </el-table-column>
         <el-table-column align="left" label="启用" min-width="150">
           <template #default="scope">
             <el-switch v-model="scope.row.enable" inline-prompt :active-value="1" :inactive-value="2"
-              @change="()=>{switchEnable(scope.row)}" />
+              @change="() => { switchEnable(scope.row) }" />
           </template>
         </el-table-column>
 
@@ -77,7 +77,7 @@
           <el-form-item label="用户角色" prop="authorityId">
             <el-cascader v-model="userInfo.authorityIds" style="width:100%" :options="authOptions"
               :show-all-levels="false"
-              :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
+              :props="{ multiple: true, checkStrictly: true, label: 'authorityName', value: 'authorityId', disabled: 'disabled', emitPath: false }"
               :clearable="false" />
           </el-form-item>
           <el-form-item label="启用" prop="disabled">
@@ -86,7 +86,7 @@
           <el-form-item label="头像" label-width="80px">
             <div style="display:inline-block" @click="openHeaderChange">
               <img v-if="userInfo.headImg" class="header-img-box"
-                :src="(userInfo.headImg && userInfo.headImg.slice(0, 4) !== 'http')?path+userInfo.headImg:userInfo.headImg">
+                :src="(userInfo.headImg && userInfo.headImg.slice(0, 4) !== 'http') ? path + userInfo.headImg : userInfo.headImg">
               <div v-else class="header-img-box">从媒体库选择</div>
             </div>
           </el-form-item>

@@ -59,7 +59,7 @@
 </template>
 
 <script setup>
-import { getFileList, deleteFile, editFileName } from '@/api/fileUploadAndDownload'
+import { getFileList, deleteFile, editFileName } from '@/api/upload'
 import { downloadImage } from '@/utils/downloadImg'
 import CustomPic from '@/components/customPic/index.vue'
 import UploadImage from '@/components/upload/image.vue'

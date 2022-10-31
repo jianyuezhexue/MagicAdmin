@@ -4,41 +4,42 @@
       <el-col :span="12">
         <el-card>
           <template #header>
-            <el-divider>gin-vue-admin</el-divider>
+            <el-divider>MagicAdmin</el-divider>
           </template>
           <div>
             <el-row>
               <el-col :span="8" :offset="8">
-                <a href="https://github.com/flipped-aurora/gin-vue-admin">
-                  <img class="org-img dom-center" src="@/assets/logo.png" alt="gin-vue-admin">
+                <a href="https://github.com/jianyuezhexue/MagicAdmin">
+                  <img class="org-img dom-center" style="border-radius: 50%;" src="@/assets/logo.jpg"
+                    alt="gin-vue-admin">
                 </a>
               </el-col>
             </el-row>
             <el-row :gutter="10">
               <el-col :span="8">
-                <a href="https://github.com/flipped-aurora/gin-vue-admin">
+                <a href="https://github.com/jianyuezhexue/MagicAdmin">
                   <img class="dom-center"
-                    src="https://img.shields.io/github/watchers/flipped-aurora/gin-vue-admin.svg?label=Watch" alt="">
+                    src="https://img.shields.io/github/watchers/jianyuezhexue/MagicAdmin.svg?label=Watch" alt="">
                 </a>
               </el-col>
               <el-col :span="8">
-                <a href="https://github.com/flipped-aurora/gin-vue-admin">
+                <a href="https://github.com/jianyuezhexue/MagicAdmin">
                   <img class="dom-center"
-                    src="https://img.shields.io/github/stars/flipped-aurora/gin-vue-admin.svg?style=social" alt="">
+                    src="https://img.shields.io/github/stars/jianyuezhexue/MagicAdmin.svg?style=social" alt="">
                 </a>
               </el-col>
               <el-col :span="8">
-                <a href="https://github.com/flipped-aurora/gin-vue-admin">
+                <a href="https://github.com/jianyuezhexue/MagicAdmin">
                   <img class="dom-center"
-                    src="https://img.shields.io/github/forks/flipped-aurora/gin-vue-admin.svg?label=Fork" alt="">
+                    src="https://img.shields.io/github/forks/jianyuezhexue/MagicAdmin.svg?label=Fork" alt="">
                 </a>
               </el-col>
             </el-row>
           </div>
         </el-card>
-        <el-card style="margin-top: 20px">
+        <!-- <el-card style="margin-top: 20px">
           <template #header>
-            <div>flipped-aurora团队</div>
+            <div>关于作者</div>
           </template>
           <div>
             <el-row>
@@ -57,7 +58,7 @@
               </el-col>
             </el-row>
           </div>
-        </el-card>
+        </el-card> -->
       </el-col>
       <el-col :span="12">
         <el-card>
@@ -66,7 +67,7 @@
           </template>
           <div>
             <el-timeline>
-              <el-timeline-item v-for="(item,index) in dataTimeline" :key="index" :timestamp="item.from"
+              <el-timeline-item v-for="(item, index) in dataTimeline" :key="index" :timestamp="item.from"
                 placement="top">
                 <el-card>
                   <h4>{{ item.title }}</h4>

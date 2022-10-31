@@ -1,5 +1,4 @@
 import { login, getUserInfo, setSelfInfo } from '@/api/user'
-import { jsonInBlacklist } from '@/api/jwt'
 import router from '@/router/index'
 import { ElLoading, ElMessage } from 'element-plus'
 import { defineStore } from 'pinia'
@@ -80,14 +79,6 @@ export const useUserStore = defineStore('user', () => {
 
   // 登出
   const LoginOut = async () => {
-    // const res = await jsonInBlacklist()
-    // if (res.code === 0) {
-    //   token.value = ''
-    //   sessionStorage.clear()
-    //   localStorage.clear()
-    //   router.push({ name: 'Login', replace: true })
-    //   window.location.reload()
-    // }
     token.value = ''
     sessionStorage.clear()
     localStorage.clear()

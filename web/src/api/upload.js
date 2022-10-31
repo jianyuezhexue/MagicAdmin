@@ -1,5 +1,5 @@
 import service from '@/utils/request'
-// @Summary 分页文件列表
+// 分页文件列表
 export const getFileList = (params) => {
   return service({
     url: '/common/fileList',
@@ -8,7 +8,7 @@ export const getFileList = (params) => {
   })
 }
 
-// @Summary 删除文件
+// 删除文件
 export const deleteFile = (data) => {
   return service({
     url: '/fileUploadAndDownload/deleteFile',

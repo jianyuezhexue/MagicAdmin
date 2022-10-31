@@ -39,7 +39,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { getFileList, editFileName } from '@/api/fileUploadAndDownload'
+import { getFileList, editFileName } from '@/api/upload'
 import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
