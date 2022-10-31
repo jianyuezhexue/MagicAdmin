@@ -12,8 +12,6 @@ func Routers() *gin.Engine {
 	gin.SetMode(gin.DebugMode) // debug模式
 	var Router = gin.Default()
 
-	Router.Use(middle.Record())
-
 	// 静态资源地址
 	Router.Static("/form-generator", "./resource/page")
 
@@ -32,7 +30,7 @@ func Routers() *gin.Engine {
 
 	// 私有路由组
 	PrivateGroup := Router.Group("")
-	PrivateGroup.Use(middle.JWTAuth()).Use(middle.Casbin())
+	PrivateGroup.Use(middle.Record()).Use(middle.JWTAuth()).Use(middle.Casbin())
 	{
 		// 系统-用户
 		PrivateGroup.GET("/user/info", system.UserApi.UserInfo)           // 用户信息

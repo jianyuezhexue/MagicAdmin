@@ -2,7 +2,6 @@ package model
 
 import (
 	"database/sql/driver"
-	"fmt"
 	"strings"
 	"time"
 
@@ -12,36 +11,9 @@ import (
 // BaseOrm ORM默认字段
 type BaseOrm struct {
 	Id        uint64         `json:"id" gorm:"primarykey"` // 主键ID
-	CreatedAt LocalTime      `json:"createdAt"`            // 创建时间
-	UpdatedAt LocalTime      `json:"-"`                    // 更新时间
+	CreatedAt time.Time      `json:"createdAt"`            // 创建时间
+	UpdatedAt time.Time      `json:"-"`                    // 更新时间
 	DeletedAt gorm.DeletedAt `json:"-" gorm:"index;"`      // 删除时间
-}
-
-// LocalTime 格式化时间
-type LocalTime struct {
-	time.Time
-}
-
-// MarshalJSON 格式时间格式
-func (t LocalTime) MarshalJSON() ([]byte, error) {
-	formatted := fmt.Sprintf("\"%s\"", t.Format("2006-01-02 15:04:05"))
-	return []byte(formatted), nil
-}
-
-func (t LocalTime) Value() (driver.Value, error) {
-	var zeroTime time.Time
-	if t.Time.UnixNano() == zeroTime.UnixNano() {
-		return nil, nil
-	}
-	return t.Time, nil
-}
-func (t *LocalTime) Scan(v interface{}) error {
-	value, ok := v.(time.Time)
-	if ok {
-		*t = LocalTime{Time: value}
-		return nil
-	}
-	return fmt.Errorf("can not convert %v to timestamp", v)
 }
 
 // 逗号分割的字符串类型
