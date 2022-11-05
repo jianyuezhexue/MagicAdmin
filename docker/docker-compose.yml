@@ -2,7 +2,8 @@ version: "3.7"
 
 services:
   mysql:
-    image: mysql
+    # image: mysql
+    build: ./mysql/sh
     hostname: mysql
     container_name: mysql
     ports:
