@@ -3,8 +3,8 @@ version: "3.7"
 services:
   mysql:
     image: mysql
-    hostname: docker-mysql
-    container_name: docker-mysql
+    hostname: mysql
+    container_name: mysql
     ports:
       - 3306:3306
     networks:
@@ -19,8 +19,8 @@ services:
   redis:
     image: redis
     restart: always
-    hostname: docker-redis
-    container_name: docker-redis
+    hostname: redis
+    container_name: redis
     ports:
       - 6379:6379
     networks:
