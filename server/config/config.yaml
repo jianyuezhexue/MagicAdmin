@@ -26,13 +26,15 @@ zap:
 
 # redis configuration
 redis:
-  addr: '127.0.0.1:6379'
+  # addr: '127.0.0.1:6379'
+  addr: '172.24.0.11:6379' # 容器
   password: ''
   db: 0
 
 # mysql connect configuration
 mysql:
-  path: 'localhost'
+  # path: '172.0.0.10'
+  path: '172.24.0.10' # 容器
   config: 'charset=utf8mb4&parseTime=true'
   dbName: 'dbMagicAdmin'
   userName: 'root'

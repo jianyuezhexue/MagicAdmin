@@ -14,5 +14,10 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 server/log/
+docker/mysql/logs/
+docker/mysql/data
+!docker/mysql/data/dbMagicAdmin/
+docker/redis/data/
+docker/redis/logs/
 adminBackuUp/
 .DS_Store
