@@ -2,8 +2,7 @@ version: "3.7"
 
 services:
   mysql:
-    # image: mysql
-    build: ./mysql/sh
+    image: mysql
     hostname: mysql
     container_name: mysql
     ports:
@@ -38,7 +37,7 @@ services:
     build: ../server
     hostname: magicAdminServer
     container_name: magicAdminServer
-    restart: always
+    # restart: always
     depends_on:
       - mysql
       - redis

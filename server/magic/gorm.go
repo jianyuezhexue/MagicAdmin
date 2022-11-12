@@ -1,7 +1,6 @@
 package magic
 
 import (
-	"fmt"
 	"strings"
 	"time"
 
@@ -65,8 +64,11 @@ func initGorm() *gorm.DB {
 	// 链接数据库
 	db, err := gorm.Open(mysql.New(mysqlConfig), ormConfig)
 	if err != nil {
-		panic(fmt.Errorf("链接数据库失败: %s", err))
+		Print("链接数据库失败")
+		return nil
 	}
+	Print("链接数据库成功")
+
 	// DB设置
 	sqlDB, _ := db.DB()
 	sqlDB.SetMaxIdleConns(config.MaxIdleConns)
