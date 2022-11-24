@@ -35,7 +35,7 @@ func storeRecode() {
 // 每天的凌晨3点，删除15天前的日志记录
 // todo
 
-// 初始化定时任务
+// 初始化&注册定时任务
 func InitCron() {
 	c := cron.New()
 	// 每三秒保存一次记录

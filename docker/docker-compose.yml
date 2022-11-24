@@ -16,6 +16,7 @@ services:
       - ./mysql/data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: dbMagicAdmin
   redis:
     image: redis
     restart: always

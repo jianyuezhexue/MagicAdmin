@@ -1,5 +1,5 @@
 FROM golang:1.19
-MAINTAINER wangjie 490513975@qq.com
+LABEL wangjie 490513975@qq.com
 WORKDIR /go/src/magicAdmin
 
 COPY . .
