@@ -3,10 +3,10 @@ version: "3.7"
 services:
   mysql:
     image: mysql
-    hostname: mysql
-    container_name: mysql
+    hostname: docker-mysql
+    container_name: docker-mysql
     ports:
-      - 3306:3306
+      - 13306:3306
     networks:
       magicAdmin:
         ipv4_address: 172.24.0.10
@@ -14,15 +14,19 @@ services:
       - ./mysql/conf:/etc/mysql/conf.d
       - ./mysql/logs:/logs
       - ./mysql/data:/var/lib/mysql
+      - ./mysql/mysql-files:/var/lib/mysql-files
+      - ./mysql/init:/docker-entrypoint-initdb.d
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: dbMagicAdmin
   redis:
     image: redis
     restart: always
-    hostname: redis
-    container_name: redis
+    hostname: docker-redis
+    container_name: docker-redis
     ports:
-      - 6379:6379
+      - 16379:6379
     networks:
       magicAdmin:
         ipv4_address: 172.24.0.11
@@ -37,7 +41,7 @@ services:
     build: ../server
     hostname: magicAdminServer
     container_name: magicAdminServer
-    # restart: always
+    restart: always
     depends_on:
       - mysql
       - redis
