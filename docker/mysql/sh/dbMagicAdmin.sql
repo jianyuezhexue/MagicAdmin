@@ -14,10 +14,6 @@
  Date: 05/11/2022 12:53:46
 */
 
-create database `dbMagicAdmin` default character set utf8mb4 collate utf8mb4_general_ci;
-
-use dbMagicAdmin;
-
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
