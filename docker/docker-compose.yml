@@ -43,8 +43,8 @@ services:
     container_name: magicAdminServer
     restart: always
     depends_on:
-      - mysql
-      - redis
+      - docker-mysql
+      - docker-redis
     ports:
       - "5241:5240"
     networks:
