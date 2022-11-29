@@ -63,7 +63,6 @@ export default {
 </script>
 
 <script setup>
-import { initDB } from '@/api/initdb'
 import { reactive, ref } from 'vue'
 import { ElLoading, ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
