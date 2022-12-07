@@ -66,10 +66,6 @@ func init() {
 	Logger = initZap()
 	// 初始化ORM
 	Orm = initGorm()
-	if Orm == nil { // 第一次新建数据库
-		InitDb()
-		Orm = initGorm()
-	}
 	// 初始化Redis
 	Redis = NewRedisCache()
 	// 初始化本地缓存
