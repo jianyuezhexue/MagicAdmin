@@ -52,6 +52,21 @@ services:
         ipv4_address: 172.24.0.19
     volumes:
       - ../server:/go/src/magicAdmin
+  web:
+    image: nginx
+    hostname: web-nginx
+    container_name: web-nginx
+    depends_on:
+      - server
+    ports:
+      - "8080:80"
+    networks:
+      magicAdmin:
+        ipv4_address: 172.24.0.30
+    volumes:
+      - ../admin/dist:/var/www/html
+      - ../admin//nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      # - ../admin//nginx/conf/conf.d:/etc/nginx/cond.f
 
 networks:
   magicAdmin:

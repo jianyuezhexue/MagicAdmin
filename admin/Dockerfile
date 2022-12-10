@@ -1,10 +1,7 @@
-FROM node
+FROM nginx
 MAINTAINER wangjie 490513975@qq.com
-WORKDIR /app/
+WORKDIR /var/www/html/
 
-COPY . .
-
-RUN npm install
+COPY ./dist .
 
 EXPOSE 8080
-CMD ["npm", "run", "serve"]
