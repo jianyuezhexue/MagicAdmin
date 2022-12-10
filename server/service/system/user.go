@@ -21,7 +21,7 @@ func (u *UserServer) Register(data system.User) (res system.User, err error) {
 	var user system.User
 	err = magic.Orm.Select("id").Where("userName = ?", user.UserName).First(user).Error
 	if !errors.Is(err, gorm.ErrRecordNotFound) {
-		return user, errors.New("用户名已注册")
+		return system.User{}, errors.New("用户名已注册")
 	}
 
 	// 加密
