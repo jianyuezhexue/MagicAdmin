@@ -199,7 +199,6 @@
   const toDetail = (row) => {
     router.push({
       name: 'dictionaryDetail',
-      // name: 'person',
       params: {
         id: row.id,
       },
