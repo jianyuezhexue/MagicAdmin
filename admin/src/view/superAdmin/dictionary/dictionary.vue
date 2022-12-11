@@ -33,7 +33,7 @@
         <el-table-column align="left" label="字典名（中）" prop="name" width="160" />
         <el-table-column align="left" label="字典名（英）" prop="value" width="120" />
         <el-table-column align="left" label="超管权限" prop="status" width="120">
-          <template #default="scope">{{formatBoolean(scope.row.super)}}</template>
+          <template #default="scope">{{ formatBoolean(scope.row.super) }}</template>
         </el-table-column>
         <el-table-column align="left" label="描述" prop="desc" width="280" />
         <el-table-column align="left" label="按钮组">
@@ -196,10 +196,10 @@ getTableData()
 const toDetail = (row) => {
   router.push({
     name: 'dictionaryDetail',
-    // name: 'person',
     params: {
       id: row.id,
-    },
+      name: row.name
+    }
   })
 }
 

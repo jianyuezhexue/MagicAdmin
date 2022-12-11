@@ -29,13 +29,16 @@
         <!-- <el-table-column align="left" label="日期" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column> -->
+        <el-table-column align="left" label="父级栏目" width="120">
+          <template #default="scope">{{ parentName }}</template>
+        </el-table-column>
         <el-table-column align="left" label="展示值" prop="name" width="120" />
         <el-table-column align="left" label="字典值" prop="value" width="120" />
         <el-table-column align="left" label="超管权限" prop="super" width="120">
-          <template #default="scope">{{formatBoolean(scope.row.super)}}</template>
+          <template #default="scope">{{ formatBoolean(scope.row.super) }}</template>
         </el-table-column>
         <el-table-column align="left" label="排序标记" prop="sort" width="120" />
-        <el-table-column align="left" label="展示值" prop="desc" width="240" />
+        <el-table-column align="left" label="描述" prop="desc" width="240" />
         <el-table-column align="left" label="按钮组">
           <template #default="scope">
             <el-button size="small" type="primary" link icon="edit" @click="updateDictionaryDetailFunc(scope.row)">变更
@@ -65,10 +68,10 @@
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
       <el-form ref="dialogForm" :model="formData" :rules="rules" size="default" label-width="110px">
         <el-form-item label="展示值" prop="name">
-          <el-input v-model="formData.name" placeholder="请输入展示值" clearable :style="{width: '100%'}" />
+          <el-input v-model="formData.name" placeholder="请输入展示值" clearable :style="{ width: '100%' }" />
         </el-form-item>
         <el-form-item label="字典值" prop="value">
-          <el-input v-model="formData.value" placeholder="请输入展示值" clearable :style="{width: '100%'}" />
+          <el-input v-model="formData.value" placeholder="请输入展示值" clearable :style="{ width: '100%' }" />
         </el-form-item>
         <el-form-item label="超管权限" prop="super">
           <el-switch v-model="formData.super" :active-value=1 :inactive-value=2 class="ml-2" />
@@ -77,7 +80,7 @@
           <el-input-number v-model.number="formData.sort" placeholder="排序标记" />
         </el-form-item>
         <el-form-item label="描述" prop="desc">
-          <el-input v-model="formData.desc" placeholder="请输入描述" clearable :style="{width: '100%'}" />
+          <el-input v-model="formData.desc" placeholder="请输入描述" clearable :style="{ width: '100%' }" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -109,6 +112,7 @@ import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { formatBoolean, formatDate } from '@/utils/format'
 const route = useRoute()
+const parentName = route.params.name
 
 const formData = ref({
   name: "",

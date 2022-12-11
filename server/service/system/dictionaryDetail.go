@@ -23,7 +23,7 @@ func (d *DictionaryDetailServer) Create(data system.DictionaryDetail) (system.Di
 	}
 
 	// val值重复提醒
-	if data.Value == find.Value {
+	if data.Value == find.Value && data.Pid == find.Pid {
 		return find, errors.New("英文字典名不能重复，请修改")
 	}
 
