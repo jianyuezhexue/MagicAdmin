@@ -11,7 +11,7 @@
  Target Server Version : 80029
  File Encoding         : 65001
 
- Date: 11/12/2022 15:21:47
+ Date: 16/12/2022 20:01:19
 */
 
 SET NAMES utf8mb4;
@@ -32,7 +32,8 @@ CREATE TABLE `api` (
   `updatedAt` timestamp NULL DEFAULT NULL,
   `deletedAt` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `idx_type_route` (`method`,`route`) USING BTREE COMMENT '路由不能重复'
+  UNIQUE KEY `idx_type_route` (`method`,`route`) USING BTREE COMMENT '路由不能重复',
+  KEY `idx_deletedAt` (`deletedAt`) USING BTREE COMMENT '是否删除'
 ) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
@@ -61,20 +62,30 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `article`;
 CREATE TABLE `article` (
-  `uuid` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户ID',
-  `title` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '文章标题',
-  `summary` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '文章摘要',
-  `content` text NOT NULL COMMENT '文章内容',
-  `picList` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT '图片列表',
-  `videoList` text COMMENT '视频列表',
-  `categoryList` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '文章分类',
-  `markList` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '文章标志：置顶，推荐，精华',
-  `topicList` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '文章话题',
-  `tagList` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '文章标签',
+  `id` int NOT NULL COMMENT '主键ID',
+  `uuid` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户ID',
+  `authName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '作者姓名',
+  `title` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '文章标题',
+  `summary` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '文章摘要',
+  `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '文章内容',
+  `type` tinyint NOT NULL DEFAULT '1' COMMENT '文章类型：1-图文；2-视频文章',
+  `picList` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '图片列表',
+  `videoList` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '视频列表',
+  `categoryList` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '文章分类',
+  `markList` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '文章标志：置顶，推荐，精华',
+  `topicList` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '文章话题',
+  `tagList` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '文章标签',
   `status` tinyint(1) DEFAULT NULL COMMENT '0 - 待审核 ; 1 - 审核通过，线上状态; 2 - 已删除; 3 - 审核不通过',
-  `postTime` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '发布时间',
-  `editTime` timestamp NULL DEFAULT NULL COMMENT '编辑时间'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `likeNum` int DEFAULT NULL COMMENT '点赞数量',
+  `commontNum` int DEFAULT NULL COMMENT '评论数量',
+  `hotNum` int DEFAULT NULL COMMENT '热力值（点赞+评论）',
+  `ipAddress` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '发表ip地址',
+  `createdAt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `updatedAt` timestamp NULL DEFAULT NULL,
+  `deletedAt` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_deletedAt` (`deletedAt`) USING BTREE COMMENT '是否删除'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of article
@@ -99,7 +110,8 @@ CREATE TABLE `authority` (
   `updatedAt` datetime DEFAULT NULL,
   `deletedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  KEY `idx_name` (`name`) USING BTREE
+  KEY `idx_name` (`name`) USING BTREE,
+  KEY `idx_deletedAt` (`deletedAt`) USING BTREE COMMENT '是否删除'
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
@@ -181,7 +193,8 @@ CREATE TABLE `dictionary` (
   `updatedAt` timestamp NULL DEFAULT NULL,
   `deletedAt` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `idx_val` (`value`) USING BTREE COMMENT '字典目录val唯一'
+  UNIQUE KEY `idx_val` (`value`) USING BTREE COMMENT '字典目录val唯一',
+  KEY `idx_deletedAt` (`deletedAt`) COMMENT '是否删除'
 ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='字典目录表';
 
 -- ----------------------------
@@ -212,7 +225,8 @@ CREATE TABLE `dictionaryDetail` (
   `deletedAt` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `index_pid_value` (`pid`,`value`) USING BTREE COMMENT '同一个字典目录下值不能重复',
-  KEY `index_pid` (`pid`) USING BTREE COMMENT '查询索引'
+  KEY `index_pid` (`pid`) USING BTREE COMMENT '查询索引',
+  KEY `idx_deletedAt` (`deletedAt`) USING BTREE COMMENT '是否删除'
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='字典详情表';
 
 -- ----------------------------
@@ -249,7 +263,8 @@ CREATE TABLE `extAuth` (
   `createdAt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT NULL,
   `deletedAt` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_deletedAt` (`deletedAt`) USING BTREE COMMENT '是否删除'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
@@ -271,7 +286,8 @@ CREATE TABLE `mediaFiles` (
   `createdAt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT NULL,
   `deletedAt` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_deletedAt` (`deletedAt`) USING BTREE COMMENT '是否删除'
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
@@ -300,7 +316,8 @@ CREATE TABLE `menu` (
   `createdAt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT NULL,
   `deletedAt` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_deletedAt` (`deletedAt`) USING BTREE COMMENT '是否删除'
 ) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
@@ -355,8 +372,9 @@ CREATE TABLE `record` (
   `createdAt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT NULL,
   `deletedAt` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=575 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_deletedAt` (`deletedAt`) USING BTREE COMMENT '是否删除'
+) ENGINE=InnoDB AUTO_INCREMENT=664 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of record

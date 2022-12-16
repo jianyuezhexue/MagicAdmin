@@ -41,6 +41,7 @@ mysql:
   password: 'root'
   maxidleConns: 10
   maxOpenConns: 100
+  timeout: 28800
   logMode: ""
   logZap: false
 
