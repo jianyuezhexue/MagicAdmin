@@ -28,8 +28,6 @@ func (a *ArticleCtr) Create(c *gin.Context) {
 		return
 	}
 
-	// 单用户锁
-
 	// 逻辑处理
 	res := communityService.ArticleApp.Create(param)
 	magic.HttpSuccess(c, res)
