@@ -52,10 +52,6 @@ func (co *CommonCtr) MediaList(c *gin.Context) {
 	}
 
 	// 逻辑处理
-	res, err := serviceSystem.CommonApp.MediaList(param)
-	if err != nil {
-		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
-		return
-	}
-	magic.Success(c, "分页查询媒体库列表成功", res)
+	res := serviceSystem.CommonApp.MediaList(param)
+	magic.HttpSuccess(c, res)
 }

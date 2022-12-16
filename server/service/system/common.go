@@ -11,16 +11,16 @@ type CommonServer struct{}
 var CommonApp = new(CommonServer)
 
 // 分页查询媒体列表
-func (c *CommonServer) MediaList(data model.PageInfo) (res model.ResPageData, err error) {
+func (c *CommonServer) MediaList(data model.PageInfo) magic.BackData {
 
 	// 初始化化表
 	db := magic.Orm.Model(&system.MediaFiles{})
 
 	// 查总数
 	var total int64
-	err = db.Count(&total).Error
+	err := db.Count(&total).Error
 	if err != nil {
-		return res, err
+		return magic.Back(21400, err.Error(), total)
 	}
 
 	// 查数据
@@ -29,14 +29,10 @@ func (c *CommonServer) MediaList(data model.PageInfo) (res model.ResPageData, er
 	var list []system.MediaFiles
 	err = db.Limit(limit).Offset(offset).Find(&list).Error
 	if err != nil {
-		return res, err
+		return magic.Back(21401, err.Error(), total)
 	}
 
 	// 组合返回数据
-	res.List = list
-	res.Total = total
-	res.Page = data.Page
-	res.PageSize = data.PageSize
-
-	return res, err
+	res := model.ResPageData{List: list, Total: total, Page: data.Page, PageSize: data.PageSize}
+	return magic.Back(0, "分页查询媒体列表成功", res)
 }
