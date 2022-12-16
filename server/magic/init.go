@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/allegro/bigcache/v3"
-	"github.com/casbin/casbin"
 	"github.com/gin-gonic/gin"
 	"github.com/jianyuezhexue/MagicAdmin/config"
 	"github.com/spf13/viper"
@@ -30,7 +29,7 @@ var (
 	// LocalCache 本地缓存
 	LocalCache *bigcache.BigCache
 	// casbin
-	cachedEnforcer *casbin.CachedEnforcer
+	// cachedEnforcer *casbin.CachedEnforcer
 	// once
 	once sync.Once
 )
