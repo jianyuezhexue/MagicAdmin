@@ -43,7 +43,7 @@ type Option struct {
 // TODO:用字符串包替换
 
 // Serialization 序列化
-func Serialization(value interface{}) ([]byte, error) {
+func Serialization(value any) ([]byte, error) {
 	if bytes, ok := value.([]byte); ok {
 		return bytes, nil
 	}
@@ -60,7 +60,7 @@ func Serialization(value interface{}) ([]byte, error) {
 }
 
 // Deserialization 反序列化
-func Deserialization(byt []byte, ptr interface{}) (err error) {
+func Deserialization(byt []byte, ptr any) (err error) {
 	if bytes, ok := ptr.(*[]byte); ok {
 		*bytes = byt
 		return
@@ -148,7 +148,7 @@ func (c RedisClient) Expire(name string, newSecondsLifeTime int64) error {
 }
 
 // 删除指定的键
-func (c RedisClient) Del(keys ...interface{}) (bool, error) {
+func (c RedisClient) Del(keys ...any) (bool, error) {
 	conn := c.pool.Get()
 	defer conn.Close()
 	v, err := redis.Bool(conn.Do("DEL", keys...))
@@ -190,10 +190,10 @@ func (c RedisClient) HLen(name string) (int, error) {
 }
 
 // 传入的 字段列表获得对应的值
-func (c RedisClient) HMget(name string, fields ...string) ([]interface{}, error) {
+func (c RedisClient) HMget(name string, fields ...string) ([]any, error) {
 	conn := c.pool.Get()
 	defer conn.Close()
-	args := []interface{}{name}
+	args := []any{name}
 	for _, field := range fields {
 		args = append(args, field)
 	}
@@ -203,7 +203,7 @@ func (c RedisClient) HMget(name string, fields ...string) ([]interface{}, error)
 }
 
 // 设置单个值, value 还可以是一个 map slice 等
-func (c RedisClient) HSet(name string, key string, value interface{}) (err error) {
+func (c RedisClient) HSet(name string, key string, value any) (err error) {
 	conn := c.pool.Get()
 	defer conn.Close()
 	v, _ := Serialization(value)
@@ -212,7 +212,7 @@ func (c RedisClient) HSet(name string, key string, value interface{}) (err error
 }
 
 // 设置多个值 , obj 可以是指针 slice map struct
-func (c RedisClient) HMSet(name string, obj interface{}) (err error) {
+func (c RedisClient) HMSet(name string, obj any) (err error) {
 	conn := c.pool.Get()
 	defer conn.Close()
 	_, err = conn.Do("HSET", redis.Args{}.Add(name).AddFlat(&obj)...)
@@ -220,7 +220,7 @@ func (c RedisClient) HMSet(name string, obj interface{}) (err error) {
 }
 
 // 获取单个hash 中的值
-func (c RedisClient) HGet(name, field string, v interface{}) (err error) {
+func (c RedisClient) HGet(name, field string, v any) (err error) {
 	conn := c.pool.Get()
 	defer conn.Close()
 	temp, _ := redis.Bytes(conn.Do("Get", name, field))
@@ -229,7 +229,7 @@ func (c RedisClient) HGet(name, field string, v interface{}) (err error) {
 }
 
 // 获取 set 集合中所有的元素, 想要什么类型的自己指定
-func (c RedisClient) Smembers(name string, v interface{}) (err error) {
+func (c RedisClient) Smembers(name string, v any) (err error) {
 	conn := c.pool.Get()
 	defer conn.Close()
 	temp, _ := redis.Bytes(conn.Do("smembers", name))
