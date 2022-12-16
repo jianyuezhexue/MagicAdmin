@@ -8,7 +8,6 @@ import (
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
-	"github.com/jianyuezhexue/MagicAdmin/service"
 	"gorm.io/gorm"
 )
 
@@ -156,13 +155,13 @@ func (a *AuthorityServer) SetMenuAuth(data system.SetAuth) (res system.SetAuth, 
 }
 
 // 设置角色API权限
-func (a *AuthorityServer) SetApiAuth(data system.SetAuth) service.BackData {
+func (a *AuthorityServer) SetApiAuth(data system.SetAuth) magic.BackData {
 
 	// 查询API信息
 	var apis []system.Api
 	err := magic.Orm.Where("id", data.Data).Find(&apis).Error
 	if err != nil {
-		return service.Back(-2200, "系统繁忙，请稍后再试", "DB跪了")
+		return magic.Back(-2200, "系统繁忙，请稍后再试", "DB跪了")
 	}
 
 	// 组合casbin的数据
@@ -179,7 +178,7 @@ func (a *AuthorityServer) SetApiAuth(data system.SetAuth) service.BackData {
 	enforcer := CasbinApp.Casbin()
 	_, err = enforcer.RemoveFilteredPolicy(0, strconv.Itoa(data.Id))
 	if err != nil {
-		return service.Back(2201, "系统繁忙，请稍后再试", err.Error())
+		return magic.Back(2201, "系统繁忙，请稍后再试", err.Error())
 	}
 
 	// 开启事务
@@ -190,14 +189,14 @@ func (a *AuthorityServer) SetApiAuth(data system.SetAuth) service.BackData {
 	err = tx.Model(&system.Authority{}).Where("id = ?", data.Id).Update("apiIds", apiIdStr).Error
 	if err != nil {
 		tx.Rollback()
-		return service.Back(2202, "系统繁忙，请稍后再试", "设置API权限错误")
+		return magic.Back(2202, "系统繁忙，请稍后再试", "设置API权限错误")
 	}
 
 	// 设置casbin规则
 	_, err = enforcer.AddPolicies(casbinRules)
 	if err != nil {
 		tx.Rollback()
-		return service.Back(2203, "系统繁忙，请稍后再试", "设置casbin规则错误")
+		return magic.Back(2203, "系统繁忙，请稍后再试", "设置casbin规则错误")
 	}
 
 	// 提交事务
@@ -207,11 +206,11 @@ func (a *AuthorityServer) SetApiAuth(data system.SetAuth) service.BackData {
 	err = enforcer.LoadPolicy()
 	if err != nil {
 		// todo 这里要记录系统日志
-		return service.Back(2203, "重载规则失败", "重载规则失败")
+		return magic.Back(2203, "重载规则失败", "重载规则失败")
 	}
 
 	// 返回结果
-	return service.Back(0, "设置角色成功", data)
+	return magic.Back(0, "设置角色成功", data)
 }
 
 // 设置角色数据/按钮权限

@@ -3,7 +3,6 @@ package system
 import (
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
-	"github.com/jianyuezhexue/MagicAdmin/service"
 )
 
 type RecodeServer struct{}
@@ -20,7 +19,7 @@ func (r *RecodeServer) Create(data system.Record) (err error) {
 }
 
 // 分页查询
-func (r *RecodeServer) List(data system.SearchRecord) service.BackData {
+func (r *RecodeServer) List(data system.SearchRecord) magic.BackData {
 	// 初始化DB
 	db := magic.Orm.Model(&system.Record{})
 
@@ -30,7 +29,7 @@ func (r *RecodeServer) List(data system.SearchRecord) service.BackData {
 	var total int64
 	err := db.Count(&total).Error
 	if err != nil {
-		return service.Back(2900, err.Error(), err.Error())
+		return magic.Back(2900, err.Error(), err.Error())
 	}
 
 	// 查询列表数据
@@ -39,7 +38,7 @@ func (r *RecodeServer) List(data system.SearchRecord) service.BackData {
 	var list []system.Record
 	err = db.Limit(limit).Offset(offset).Order("id DESC").Find(&list).Error
 	if err != nil {
-		return service.Back(2902, err.Error(), err.Error())
+		return magic.Back(2902, err.Error(), err.Error())
 	}
 
 	// 组合返回数据
@@ -51,5 +50,5 @@ func (r *RecodeServer) List(data system.SearchRecord) service.BackData {
 	}
 
 	// 返回数据
-	return service.Back(0, "分页查询操作记录成功", res)
+	return magic.Back(0, "分页查询操作记录成功", res)
 }
