@@ -20,14 +20,14 @@ func (e *ExtAuthCtr) Delete(c *gin.Context) {
 	var id model.GetById
 	err := c.ShouldBindUri(&id)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), id)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), id)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.ExtAuthApp.Delete(id)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 

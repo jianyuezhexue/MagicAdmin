@@ -21,14 +21,14 @@ func (m *MenuCtr) MenuTree(c *gin.Context) {
 	var id model.GetById
 	err := c.ShouldBind(&id)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), id)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), id)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.MenuApp.MenuTree(id)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 
@@ -45,7 +45,7 @@ func (m *MenuCtr) MyMenu(c *gin.Context) {
 	// 逻辑处理
 	res, err := serviceSystem.MenuApp.MyMenu(authorityId)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 	// 结果返回
@@ -58,14 +58,14 @@ func (m *MenuCtr) Menus(c *gin.Context) {
 	var pageInfo model.PageInfo
 	err := c.ShouldBind(&pageInfo)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), pageInfo)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), pageInfo)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.MenuApp.Menus(pageInfo)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 
@@ -79,14 +79,14 @@ func (m *MenuCtr) FindMenu(c *gin.Context) {
 	var id model.GetById
 	err := c.ShouldBindUri(&id)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), id)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), id)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.MenuApp.FindMenu(id)
 	if err != nil {
-		magic.Fail(c, 1202, err.Error(), res)
+		magic.HttpFail(c, 1202, err.Error(), res)
 		return
 	}
 
@@ -100,14 +100,14 @@ func (m *MenuCtr) UpdateMenu(c *gin.Context) {
 	var menu system.Menu
 	err := c.ShouldBind(&menu)
 	if err != nil {
-		magic.Fail(c, 1204, err.Error(), menu)
+		magic.HttpFail(c, 1204, err.Error(), menu)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.MenuApp.UpdateMenu(menu)
 	if err != nil {
-		magic.Fail(c, 1206, err.Error(), res)
+		magic.HttpFail(c, 1206, err.Error(), res)
 		return
 	}
 
@@ -121,14 +121,14 @@ func (m *MenuCtr) CreateMenu(c *gin.Context) {
 	var param system.Menu
 	err := c.ShouldBind(&param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), param)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.MenuApp.CreateMenu(param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 	// 结果返回
@@ -141,14 +141,14 @@ func (m *MenuCtr) DeleteMenu(c *gin.Context) {
 	var id model.GetById
 	err := c.ShouldBindUri(&id)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), id)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), id)
 		return
 	}
 
 	// 逻辑处理
 	err = serviceSystem.MenuApp.DeleteMenu(id)
 	if err != nil {
-		magic.Fail(c, 1202, err.Error(), err)
+		magic.HttpFail(c, 1202, err.Error(), err)
 		return
 	}
 	magic.Success(c, "删除菜单成功", 1)

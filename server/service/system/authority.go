@@ -51,7 +51,7 @@ func MakeTrees(listData []*system.Authority, Pid int) []*system.Authority {
 }
 
 // 查询树形列表
-func (a *AuthorityServer) TreeList() (res magic.PageResult, err error) {
+func (a *AuthorityServer) TreeList() (res model.ResPageData, err error) {
 	// 初始化DB
 	var list []*system.Authority
 	err = magic.Orm.Order("id").Find(&list).Error
@@ -63,7 +63,7 @@ func (a *AuthorityServer) TreeList() (res magic.PageResult, err error) {
 	tree := MakeTrees(list, 0)
 
 	// 组合返回数据
-	res = magic.PageResult{
+	res = model.ResPageData{
 		List:     tree,
 		Total:    999,
 		Page:     1,

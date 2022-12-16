@@ -20,14 +20,14 @@ func (u *UserCtr) Register(c *gin.Context) {
 	var param system.User
 	err := c.ShouldBind(&param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), param)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.UserApp.Register(param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 
@@ -41,20 +41,20 @@ func (u *UserCtr) Login(c *gin.Context) {
 	var param system.FormLogin
 	err := c.ShouldBind(&param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), param)
 		return
 	}
 
 	// 验证码校验
 	if !store.Verify(param.CaptchaId, param.Captcha, true) {
-		magic.Fail(c, 1202, "验证码错误", param)
+		magic.HttpFail(c, 1202, "验证码错误", param)
 		return
 	}
 
 	// 逻辑实现
 	res, err := serviceSystem.UserApp.Login(param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 
@@ -70,7 +70,7 @@ func (u *UserCtr) UserInfo(c *gin.Context) {
 	// 逻辑处理
 	res, err := serviceSystem.UserApp.UserInfo(uuid)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 
@@ -84,14 +84,14 @@ func (u *UserCtr) List(c *gin.Context) {
 	var param system.SearchUser
 	err := c.ShouldBind(&param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), param)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.UserApp.List(param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 	magic.Success(c, "分页查询用户列表成功", res)
@@ -103,14 +103,14 @@ func (u UserCtr) Delete(c *gin.Context) {
 	var id model.GetById
 	err := c.ShouldBindUri(&id)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), id)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), id)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.UserApp.Delete(id)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 	magic.Success(c, "删除用户成功", res)
@@ -121,14 +121,14 @@ func (u *UserCtr) Update(c *gin.Context) {
 	var param system.User
 	err := c.ShouldBind(&param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), param)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.UserApp.Update(param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 	magic.Success(c, "更新用户成功", res)
@@ -140,14 +140,14 @@ func (u *UserCtr) SetUserAuth(c *gin.Context) {
 	var param system.SetUserAuth
 	err := c.ShouldBind(&param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), param)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.UserApp.SetUserAuth(param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 	magic.Success(c, "设置用户角色成功", res)
@@ -158,14 +158,14 @@ func (u *UserCtr) SetUserStatus(c *gin.Context) {
 	var id model.GetById
 	err := c.ShouldBind(&id)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), id)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), id)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.UserApp.SetUserStatus(id)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 	magic.Success(c, "设置用户角色成功", res)
@@ -176,14 +176,14 @@ func (u UserCtr) ReSetPwd(c *gin.Context) {
 	var id model.GetById
 	err := c.ShouldBindUri(&id)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), id)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), id)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.UserApp.ReSetPwd(id)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 	magic.Success(c, "重置密码成功", res)
@@ -196,7 +196,7 @@ func (u UserCtr) SwitchAuth(c *gin.Context) {
 	var param system.SwitchAuth
 	err := c.ShouldBind(&param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), param)
 		return
 	}
 
@@ -207,7 +207,7 @@ func (u UserCtr) SwitchAuth(c *gin.Context) {
 	// 逻辑处理
 	res, err := serviceSystem.UserApp.SwitchAuth(param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 

@@ -25,19 +25,21 @@ func (co *CommonCtr) Captcha(c *gin.Context) {
 	cp := base64Captcha.NewCaptcha(driver, store)
 	id, b64s, err := cp.Generate()
 	if err != nil {
-		magic.Fail(c, 1201, err.Error(), err)
+		magic.HttpFail(c, 1201, err.Error(), err)
 		return
 	}
 
 	// 组合返回数据
-	var res = system.CaptchaResponse{
+	var res magic.BackData
+	code := system.CaptchaResponse{
 		CaptchaId:     id,
 		PicPath:       b64s,
 		CaptchaLength: keyLong,
 	}
+	res = magic.Back(0, "获取验证码成功", code)
 
 	// 结果返回
-	magic.Success(c, "验证码获取成功", res)
+	magic.HttpSuccess(c, res)
 }
 
 // 分页查询媒体库列表
@@ -45,14 +47,14 @@ func (co *CommonCtr) MediaList(c *gin.Context) {
 	var param model.PageInfo
 	err := c.ShouldBind(&param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), param)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.CommonApp.MediaList(param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 	magic.Success(c, "分页查询媒体库列表成功", res)

@@ -21,7 +21,7 @@ func (a *AuthorityCtr) TreeList(c *gin.Context) {
 	// 逻辑处理
 	res, err := serviceSystem.AuthorityApp.TreeList()
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 
@@ -34,14 +34,14 @@ func (a *AuthorityCtr) Create(c *gin.Context) {
 	var param system.Authority
 	err := c.ShouldBind(&param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), param)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.AuthorityApp.Create(param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 
@@ -54,14 +54,14 @@ func (a AuthorityCtr) Update(c *gin.Context) {
 	var param system.Authority
 	err := c.ShouldBind(&param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), param)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.AuthorityApp.Update(param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 
@@ -73,14 +73,14 @@ func (a AuthorityCtr) Delete(c *gin.Context) {
 	var id model.GetById
 	err := c.ShouldBindUri(&id)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), id)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), id)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.AuthorityApp.Delete(id)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 
@@ -93,14 +93,14 @@ func (a *AuthorityCtr) SetMenuAuth(c *gin.Context) {
 	var form system.SetAuth
 	err := c.ShouldBind(&form)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), form)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), form)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.AuthorityApp.SetMenuAuth(form)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 
@@ -113,14 +113,14 @@ func (a *AuthorityCtr) SetApiAuth(c *gin.Context) {
 	var form system.SetAuth
 	err := c.ShouldBind(&form)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), form)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), form)
 		return
 	}
 
 	// 逻辑处理
 	res := serviceSystem.AuthorityApp.SetApiAuth(form)
 	if res.Code != 0 {
-		magic.Fail(c, res.Code, res.Msg, res)
+		magic.HttpFail(c, res.Code, res.Msg, res)
 		return
 	}
 
@@ -133,14 +133,14 @@ func (a *AuthorityCtr) SetExtAuth(c *gin.Context) {
 	var form system.SetAuth
 	err := c.ShouldBind(&form)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), form)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), form)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.AuthorityApp.SetExtAuth(form)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 

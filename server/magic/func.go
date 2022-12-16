@@ -15,21 +15,6 @@ import (
 )
 
 // ------------------待迁移走开始-------------------
-// Response 返回结构体
-type Response struct {
-	Code     int     `json:"code"`
-	Msg      string  `json:"msg"`
-	Data     any     `json:"data"`
-	CostTime float64 `json:"costTime"`
-}
-
-// 分页查询返回结构体
-type PageResult struct {
-	List     any   `json:"list"`
-	Total    int64 `json:"total"`
-	Page     int   `json:"page"`
-	PageSize int   `json:"pageSize"`
-}
 
 // Success 成功返回
 func Success(c *gin.Context, msg string, data any) {
@@ -41,28 +26,7 @@ func Success(c *gin.Context, msg string, data any) {
 	costTime, _ := strconv.ParseFloat(fmt.Sprintf("%.5f", (float64(end)-float64(start))/1000000), 64)
 
 	// 返回结果
-	res := Response{Code: 0, Msg: msg, Data: data, CostTime: costTime}
-
-	// 预埋操作记录参数
-	c.Set("magicMsg", msg)
-	recodeBytes, _ := json.Marshal(res)
-	c.Set("magicResp", string(recodeBytes))
-
-	c.JSON(http.StatusOK, res)
-}
-
-// Fail 失败返回
-func Fail(c *gin.Context, code int, msg string, data any) {
-	// 获取开始时间
-	start := c.GetInt64("magicStartTime")
-	log.Println(start)
-
-	// 计算耗时
-	end := time.Now().UnixNano()
-	costTime, _ := strconv.ParseFloat(fmt.Sprintf("%.5f", (float64(end)-float64(start))/1000000), 64)
-
-	// 返回结果
-	res := Response{Code: -1, Msg: msg, Data: data, CostTime: costTime}
+	res := BackData{Code: 0, Msg: msg, Data: data, CostTime: costTime}
 
 	// 预埋操作记录参数
 	c.Set("magicMsg", msg)

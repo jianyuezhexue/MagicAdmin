@@ -20,14 +20,14 @@ func (a *ApiCtr) List(c *gin.Context) {
 	var param system.SearchApi
 	err := c.ShouldBind(&param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), param)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.ApiApp.List(param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 	magic.Success(c, "分页查询字典目录成功", res)
@@ -40,14 +40,14 @@ func (a *ApiCtr) Delete(c *gin.Context) {
 	var id model.GetById
 	err := c.ShouldBindUri(&id)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), id)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), id)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.ApiApp.Delete(id)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 

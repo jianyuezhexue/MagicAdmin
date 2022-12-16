@@ -20,14 +20,14 @@ func (d *DictionaryCtr) Create(c *gin.Context) {
 	var param system.Dictionary
 	err := c.ShouldBind(&param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), param)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.DictionaryApp.Create(param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 
@@ -40,14 +40,14 @@ func (d *DictionaryCtr) List(c *gin.Context) {
 	var param system.SearchDictionary
 	err := c.ShouldBind(&param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), param)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.DictionaryApp.List(param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadGateway, err.Error(), res)
 		return
 	}
 	magic.Success(c, "分页查询字典目录成功", res)
@@ -59,14 +59,14 @@ func (d *DictionaryCtr) Item(c *gin.Context) {
 	var id model.GetById
 	err := c.ShouldBindUri(&id)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), id)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), id)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.DictionaryApp.Item(id)
 	if err != nil {
-		magic.Fail(c, 1202, err.Error(), res)
+		magic.HttpFail(c, 1202, err.Error(), res)
 		return
 	}
 
@@ -80,14 +80,14 @@ func (d *DictionaryCtr) Update(c *gin.Context) {
 	var param system.Dictionary
 	err := c.ShouldBind(&param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), param)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.DictionaryApp.Update(param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), res)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), res)
 		return
 	}
 
@@ -101,14 +101,14 @@ func (d *DictionaryCtr) Delete(c *gin.Context) {
 	var id model.GetById
 	err := c.ShouldBindUri(&id)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), id)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), id)
 		return
 	}
 
 	// 逻辑处理
 	res, err := serviceSystem.DictionaryApp.Delete(id)
 	if err != nil {
-		magic.Fail(c, 1202, err.Error(), res)
+		magic.HttpFail(c, 1202, err.Error(), res)
 		return
 	}
 

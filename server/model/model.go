@@ -38,9 +38,10 @@ type PageInfo struct {
 
 // 分页查询返回结构
 type ResPageData struct {
-	List  any `json:"list"`
-	Total any `json:"total"`
-	PageInfo
+	List     any `json:"list"`
+	Total    any `json:"total"`
+	Page     int `json:"page" form:"page"`         // 页码
+	PageSize int `json:"pageSize" form:"pageSize"` // 每页大小
 }
 
 // 根据id查询接参结构

@@ -34,7 +34,7 @@ func (d *DictionaryServer) Create(data system.Dictionary) (system.Dictionary, er
 }
 
 // 分页查询
-func (d *DictionaryServer) List(data system.SearchDictionary) (res magic.PageResult, err error) {
+func (d *DictionaryServer) List(data system.SearchDictionary) (res model.ResPageData, err error) {
 	// 初始化DB
 	db := magic.Orm.Model(&system.Dictionary{})
 
@@ -66,7 +66,7 @@ func (d *DictionaryServer) List(data system.SearchDictionary) (res magic.PageRes
 	err = db.Limit(limit).Offset(offset).Find(&list).Error
 
 	// 组合返回数据
-	res = magic.PageResult{
+	res = model.ResPageData{
 		List:     list,
 		Total:    total,
 		Page:     data.Page,

@@ -54,29 +54,15 @@ func (m *MenuServer) MenuTree(id model.GetById) (res any, err error) {
 
 // 我的权限菜单树
 func (m *MenuServer) MyMenu(authorityId int) (menus any, err error) {
-	// // 先查本地缓存
-	// cacheKey := "myMenuTree"
-	// myMenuTree, err := magic.LocalCache.Get(cacheKey)
-	// if err != bigcache.ErrEntryNotFound { // 如果找到了key
-	// 	err = json.Unmarshal(myMenuTree, &menus)
-	// }
-
 	// 查数据库[防击穿]
 	treeMenus, err, _ := magic.SingleFlight.Do("ServiceMenu", func() (any, error) {
 		return AuthorityApp.MyMenuTree(authorityId)
 	})
-
 	if err != nil {
 		return nil, err
 	}
 
-	// // 设置缓存
-	// cacheCon, err := json.Marshal(treeMenus)
-	// if err != nil {
-	// 	return nil, errors.New("Marshal失败")
-	// }
-	// magic.LocalCache.Set(cacheKey, cacheCon)
-
+	// 返回结果
 	return treeMenus, err
 }
 

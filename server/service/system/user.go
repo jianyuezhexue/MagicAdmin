@@ -131,7 +131,7 @@ func (u *UserServer) UserInfo(uuid uuid.UUID) (user system.User, err error) {
 }
 
 // 用户列表
-func (u *UserServer) List(data system.SearchUser) (res magic.PageResult, err error) {
+func (u *UserServer) List(data system.SearchUser) (res model.ResPageData, err error) {
 	db := magic.Orm.Model(&system.User{})
 	// 查询总数
 	var total int64
@@ -147,7 +147,7 @@ func (u *UserServer) List(data system.SearchUser) (res magic.PageResult, err err
 	err = db.Limit(limit).Offset(offset).Find(&list).Error
 
 	// 组合返回数据
-	res = magic.PageResult{
+	res = model.ResPageData{
 		List:     list,
 		Total:    total,
 		Page:     data.Page,

@@ -2,6 +2,7 @@ package system
 
 import (
 	"github.com/jianyuezhexue/MagicAdmin/magic"
+	"github.com/jianyuezhexue/MagicAdmin/model"
 	"github.com/jianyuezhexue/MagicAdmin/model/system"
 )
 
@@ -42,7 +43,7 @@ func (r *RecodeServer) List(data system.SearchRecord) magic.BackData {
 	}
 
 	// 组合返回数据
-	res := magic.PageResult{
+	res := model.ResPageData{
 		List:     list,
 		Total:    total,
 		Page:     data.Page,

@@ -19,14 +19,14 @@ func (r *RecodeCtr) List(c *gin.Context) {
 	var param system.SearchRecord
 	err := c.ShouldBind(&param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadRequest, err.Error(), param)
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), param)
 		return
 	}
 
 	// 逻辑处理
 	res := serviceSystem.RecodeApp.List(param)
 	if err != nil {
-		magic.Fail(c, http.StatusBadGateway, res.Msg, res.Data)
+		magic.HttpFail(c, http.StatusBadGateway, res.Msg, res.Data)
 		return
 	}
 	magic.Success(c, res.Msg, res.Data)
