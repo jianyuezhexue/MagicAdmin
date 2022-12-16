@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/jianyuezhexue/MagicAdmin/api/community"
 	"github.com/jianyuezhexue/MagicAdmin/api/system"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/middle"
@@ -87,6 +88,11 @@ func Routers() *gin.Engine {
 
 		// 系统-查询请求记录
 		PrivateGroup.GET("/recode", system.RecodeApi.List) // 分页查询
+
+		// 社区
+		PrivateGroup.GET("/article", community.Article.List) // 分页查询
+
+		// @to be replease@
 	}
 
 	magic.Logger.Info("router register success")

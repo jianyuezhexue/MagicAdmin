@@ -8,13 +8,13 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"reflect"
 	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
+// ------------------待迁移走开始-------------------
 // Response 返回结构体
 type Response struct {
 	Code     int     `json:"code"`
@@ -62,7 +62,7 @@ func Fail(c *gin.Context, code int, msg string, data any) {
 	costTime, _ := strconv.ParseFloat(fmt.Sprintf("%.5f", (float64(end)-float64(start))/1000000), 64)
 
 	// 返回结果
-	res := Response{Code: 0, Msg: msg, Data: data, CostTime: costTime}
+	res := Response{Code: -1, Msg: msg, Data: data, CostTime: costTime}
 
 	// 预埋操作记录参数
 	c.Set("magicMsg", msg)
@@ -71,6 +71,8 @@ func Fail(c *gin.Context, code int, msg string, data any) {
 
 	c.JSON(http.StatusOK, res)
 }
+
+// ------------------待迁移走结束-------------------
 
 // 调试打印数据
 func Print(data any) {
@@ -88,56 +90,6 @@ func PathExists(path string) (bool, error) {
 		return false, nil
 	}
 	return false, err
-}
-
-// Serialization 序列化
-func Serialization(value interface{}) ([]byte, error) {
-	if bytes, ok := value.([]byte); ok {
-		return bytes, nil
-	}
-
-	switch v := reflect.ValueOf(value); v.Kind() {
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		return []byte(strconv.FormatInt(v.Int(), 10)), nil
-	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		return []byte(strconv.FormatUint(v.Uint(), 10)), nil
-	case reflect.Map:
-	}
-	k, err := json.Marshal(value)
-	return k, err
-}
-
-// Deserialization 反序列化
-func Deserialization(byt []byte, ptr interface{}) (err error) {
-	if bytes, ok := ptr.(*[]byte); ok {
-		*bytes = byt
-		return
-	}
-	if v := reflect.ValueOf(ptr); v.Kind() == reflect.Ptr {
-		switch p := v.Elem(); p.Kind() {
-		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-			var i int64
-			i, err = strconv.ParseInt(string(byt), 10, 64)
-			if err != nil {
-				fmt.Printf("Deserialization: failed to parse int '%s': %s", string(byt), err)
-			} else {
-				p.SetInt(i)
-			}
-			return
-
-		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-			var i uint64
-			i, err = strconv.ParseUint(string(byt), 10, 64)
-			if err != nil {
-				fmt.Printf("Deserialization: failed to parse uint '%s': %s", string(byt), err)
-			} else {
-				p.SetUint(i)
-			}
-			return
-		}
-	}
-	err = json.Unmarshal(byt, &ptr)
-	return
 }
 
 // MD5V md5加密
