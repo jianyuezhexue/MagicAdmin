@@ -22,7 +22,7 @@ func NewRedisCache() RedisClient {
 		IdleTimeout: time.Duration(60) * time.Second, // 空闲连接超时时间|查询:CONFIG GET timeout|设置CONFIG SET timeout 65
 		Wait:        true,                            // 当超过最大连接数 是报错还是等待， true 等待 false 报错
 		Dial: func() (redis.Conn, error) {
-			conn, err := redis.Dial("tcp", redisConfig.Addr, redis.DialDatabase(redisConfig.DB))
+			conn, err := redis.Dial("tcp", redisConfig.Addr, redis.DialDatabase(redisConfig.DB), redis.DialPassword(redisConfig.Password))
 			if err != nil {
 				fmt.Println(err)
 				return nil, err
