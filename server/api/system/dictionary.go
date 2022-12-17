@@ -114,3 +114,18 @@ func (d *DictionaryCtr) Delete(c *gin.Context) {
 
 	magic.Success(c, "删除字典目录成功", "")
 }
+
+// 根据key查找子目录
+func (d *DictionaryCtr) DictionarByKey(c *gin.Context) {
+	// 参数校验
+	var key model.GetByKey
+	err := c.ShouldBindUri(&key)
+	if err != nil {
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), key)
+		return
+	}
+
+	// 逻辑处理
+	res := serviceSystem.DictionaryApp.DictionarByKey(key.Key)
+	magic.HttpSuccess(c, res)
+}

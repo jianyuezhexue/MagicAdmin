@@ -55,11 +55,12 @@ func Routers() *gin.Engine {
 		PrivateGroup.GET("/menuTree", system.MenuApi.MenuTree)      // 权限菜单
 
 		// 系统-字典目录
-		PrivateGroup.POST("/dictionary", system.DictionaryApi.Create)       // 新增字典目录
-		PrivateGroup.GET("/dictionary", system.DictionaryApi.List)          // 分页字典目录
-		PrivateGroup.GET("/dictionary/:id", system.DictionaryApi.Item)      // 查询字典目录
-		PrivateGroup.PUT("/dictionary", system.DictionaryApi.Update)        // 更新字典目录
-		PrivateGroup.DELETE("/dictionary/:id", system.DictionaryApi.Delete) // 删除字典目录
+		PrivateGroup.POST("/dictionary", system.DictionaryApi.Create)                  // 新增字典目录
+		PrivateGroup.GET("/dictionary", system.DictionaryApi.List)                     // 分页字典目录
+		PrivateGroup.GET("/dictionary/:id", system.DictionaryApi.Item)                 // 查询字典目录
+		PrivateGroup.GET("/dictionaryByKey/:key", system.DictionaryApi.DictionarByKey) // 查询字典目录
+		PrivateGroup.PUT("/dictionary", system.DictionaryApi.Update)                   // 更新字典目录
+		PrivateGroup.DELETE("/dictionary/:id", system.DictionaryApi.Delete)            // 删除字典目录
 
 		// 系统-字典详情
 		PrivateGroup.POST("/dictionaryDetail", system.DictionaryDetailApi.Create)       // 新增字典目录

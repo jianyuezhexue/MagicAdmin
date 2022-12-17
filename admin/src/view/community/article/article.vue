@@ -67,8 +67,10 @@
     <!-- 新增编辑 -->
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
       <el-form ref="dialogForm" :model="formData" :rules="rules" :inline="true" size="default" label-width="110px">
-        <el-form-item label="标题" prop="name" style="width:30%">
-          <el-input v-model="formData.name" placeholder="请输入标题" clearable :style="{ width: '100%' }" />
+        <el-form-item label="所属栏目" prop="name" style="width:30%">
+          <el-select v-model="formData.category" placeholder="请选择栏目">
+            <el-option v-for="item in categoryList" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
         </el-form-item>
         <el-form-item label="文章类型" style="width:30%">
           <el-select v-model="formData.type" placeholder="是否在列表隐藏">
@@ -76,17 +78,20 @@
             <el-option :value="2" label="视频" />
           </el-select>
         </el-form-item>
-        <el-form-item label="字典名（英）" prop="type">
-          <el-input v-model="formData.value" placeholder="请输入字典名（英）" clearable :style="{ width: '100%' }" />
+        <el-form-item label="标题" prop="name" style="width:100%">
+          <el-input v-model="formData.name" placeholder="请输入标题" clearable />
         </el-form-item>
-        <el-form-item label="超管权限" prop="super">
-          <el-switch v-model="formData.super" :active-value=1 :inactive-value=2 class="ml-2" />
+        <el-form-item label="文章摘要" prop="type" style="width:100%">
+          <el-input v-model="formData.value" type="textarea" placeholder="请输入文章摘要" />
         </el-form-item>
-        <el-form-item label="排序" prop="sort">
-          <el-input-number v-model="formData.sort" :min="1" :max="100" />
+        <el-form-item label="文章内容" prop="type" style="width:100%">
+          <el-input v-model="formData.value" type="textarea" :rows="4" placeholder="请输入文章内容" />
         </el-form-item>
-        <el-form-item label="描述" prop="desc">
-          <el-input v-model="formData.desc" placeholder="请输入描述" clearable :style="{ width: '100%' }" />
+        <el-form-item label="图片地址" prop="type" style="width:100%">
+          <el-input v-model="formData.value" placeholder="图片地址" />
+        </el-form-item>
+        <el-form-item label="视频地址" prop="type" style="width:100%">
+          <el-input v-model="formData.value" placeholder="视频地址" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -113,14 +118,27 @@ import {
   findDictionary,
   getDictionaryList,
 } from '@/api/dictionary' // 此处请自行替换地址
+import { getDict } from '@/utils/dictionary'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { formatBoolean, formatDate } from '@/utils/format'
 
+// 路由
 const router = useRouter()
 
+// 初始化选项
+var categoryList = ref([])
+var markList = ref([])
+var topicList = ref([])
+var tagList = ref([])
+const initPage = async () => {
+  getDict('category').then((res) => { categoryList = res });
+}
+initPage()
+
+// 表单数据
 const formData = ref({
   pid: 0,
   super: 1,
@@ -129,6 +147,7 @@ const formData = ref({
   value: "",
   sort: 50,
   desc: "",
+  category: []
 })
 const rules = ref({
   name: [

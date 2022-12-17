@@ -1,4 +1,4 @@
-import { findDictionary } from '@/api/Dictionary'
+import { findDictionaryByKey } from '@/api/dictionary'
 
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
@@ -6,34 +6,27 @@ import { ref } from 'vue'
 export const useDictionaryStore = defineStore('dictionary', () => {
   const dictionaryMap = ref({})
 
-  const setDictionaryMap = (dictionaryRes) => {
-    dictionaryMap.value = { ...dictionaryMap.value, ...dictionaryRes }
-  }
-
-  const getDictionary = async(type) => {
-    if (dictionaryMap.value[type] && dictionaryMap.value[type].length) {
-      return dictionaryMap.value[type]
+  // 单个key查找
+  const getDictionary = async (key) => {
+    if (dictionaryMap.value[key] && dictionaryMap.value[key].length) {
+      return dictionaryMap.value[key]
     } else {
-      const res = await findDictionary({ type })
+      const res = await findDictionaryByKey(key)
       if (res.code === 0) {
-        const dictionaryRes = {}
         const dict = []
-        res.data.reDictionary.DictionaryDetails && res.data.reDictionary.DictionaryDetails.forEach(item => {
+        res.data && res.data.forEach(item => {
           dict.push({
-            label: item.label,
-            value: item.value
+            label: item.name,
+            value: item.id
           })
         })
-        dictionaryRes[res.data.reDictionary.type] = dict
-        setDictionaryMap(dictionaryRes)
-        return dictionaryMap.value[type]
+        dictionaryMap.value[key] = dict
+        return dictionaryMap.value[key]
       }
     }
   }
 
   return {
-    dictionaryMap,
-    setDictionaryMap,
     getDictionary
   }
 })

@@ -49,6 +49,11 @@ type GetById struct {
 	Id int `json:"id" uri:"id" form:"id" binding:"required"` // 主键ID
 }
 
+// 根据key查询接参结构
+type GetByKey struct {
+	Key string `json:"key" uri:"key" form:"key" binding:"required"` // 主键ID
+}
+
 // 传ID数组接收餐结构
 type IdArr struct {
 	Data []string `josn:"data" uri:"data" form:"data" binding:"required"`

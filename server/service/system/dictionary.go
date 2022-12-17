@@ -125,3 +125,30 @@ func (d *DictionaryServer) Delete(id model.GetById) (res system.Dictionary, err 
 	err = magic.Orm.Delete(&find).Error
 	return find, err
 }
+
+// 根据key查找子目录
+func (d *DictionaryServer) DictionarByKey(key string) magic.BackData {
+	// 校验key是否存在
+	var find system.Dictionary
+	err := magic.Orm.Where("value = ?", key).First(&find).Error
+
+	// 如果不存在
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return magic.Back(21520, "当前key查询不存在，请检查", err.Error())
+	}
+
+	// 异常报错
+	if err != nil {
+		return magic.Back(21522, "系统繁忙，请稍后再试！", err.Error())
+	}
+
+	// 查询字典详情
+	var dictionaryDetail []system.DictionaryDetail
+	err = magic.Orm.Where("pid = ?", find.Id).Find(&dictionaryDetail).Error
+	if err != nil {
+		return magic.Back(21524, "系统繁忙，请稍后再试！", err.Error())
+	}
+
+	// 返回结果
+	return magic.Back(0, "根据key查找子目录成功", dictionaryDetail)
+}

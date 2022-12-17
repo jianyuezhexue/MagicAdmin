@@ -42,3 +42,11 @@ export const findDictionary = (id) => {
     method: 'GET'
   })
 }
+
+// 根据key查找字典
+export const findDictionaryByKey = (key) => {
+  return service({
+    url: `/dictionaryByKey/${key}`,
+    method: 'GET'
+  })
+}

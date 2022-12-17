@@ -50,6 +50,9 @@ func HttpSuccess(c *gin.Context, res BackData) {
 
 // 接口返回失败
 func HttpFail(c *gin.Context, code int, msg string, data any) {
+	_, _, line, _ := runtime.Caller(1)
+	msg = msg + "[" + strconv.Itoa(line) + "]"
+
 	// 获取开始时间
 	start := c.GetInt64("magicStartTime")
 
