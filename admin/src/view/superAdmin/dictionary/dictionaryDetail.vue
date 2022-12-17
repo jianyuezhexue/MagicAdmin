@@ -32,7 +32,7 @@
         <el-table-column align="left" label="父级栏目" width="120">
           <template #default="scope">{{ parentName }}</template>
         </el-table-column>
-        <el-table-column align="left" label="展示值" prop="name" width="120" />
+        <el-table-column align="left" label="展示值" prop="name" width="160" />
         <el-table-column align="left" label="字典值" prop="value" width="120" />
         <el-table-column align="left" label="超管权限" prop="super" width="120">
           <template #default="scope">{{ formatBoolean(scope.row.super) }}</template>

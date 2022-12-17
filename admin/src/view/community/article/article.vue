@@ -67,31 +67,46 @@
     <!-- 新增编辑 -->
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
       <el-form ref="dialogForm" :model="formData" :rules="rules" :inline="true" size="default" label-width="110px">
-        <el-form-item label="所属栏目" prop="name" style="width:30%">
+        <el-form-item label="所属栏目" prop="name" style="width:25%">
           <el-select v-model="formData.category" placeholder="请选择栏目">
             <el-option v-for="item in categoryList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="文章类型" style="width:30%">
+        <el-form-item label="文章类型" style="width:25%">
           <el-select v-model="formData.type" placeholder="是否在列表隐藏">
             <el-option :value="1" label="图文" />
             <el-option :value="2" label="视频" />
           </el-select>
         </el-form-item>
-        <el-form-item label="标题" prop="name" style="width:100%">
+        <el-form-item label="文章标记" prop="name" style="width:40%">
+          <el-select v-model="formData.mark" multiple collapse-tags placeholder="请选择栏目">
+            <el-option v-for="item in markList" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="文章标题" prop="name" style="width:100%">
           <el-input v-model="formData.name" placeholder="请输入标题" clearable />
         </el-form-item>
         <el-form-item label="文章摘要" prop="type" style="width:100%">
           <el-input v-model="formData.value" type="textarea" placeholder="请输入文章摘要" />
         </el-form-item>
         <el-form-item label="文章内容" prop="type" style="width:100%">
-          <el-input v-model="formData.value" type="textarea" :rows="4" placeholder="请输入文章内容" />
+          <el-input v-model="formData.value" type="textarea" :rows="3" placeholder="请输入文章内容" />
         </el-form-item>
         <el-form-item label="图片地址" prop="type" style="width:100%">
           <el-input v-model="formData.value" placeholder="图片地址" />
         </el-form-item>
         <el-form-item label="视频地址" prop="type" style="width:100%">
           <el-input v-model="formData.value" placeholder="视频地址" />
+        </el-form-item>
+        <el-form-item label="文章话题" prop="type" style="width:100%">
+          <el-select v-model="formData.topic" multiple placeholder="请选择话题" style="width: 750px">
+            <el-option v-for="item in topicList" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="文章标签" prop="type" style="width:100%">
+          <el-select v-model="formData.tag" multiple placeholder="请选择标签" style="width: 750px">
+            <el-option v-for="item in tagList" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -135,6 +150,9 @@ var topicList = ref([])
 var tagList = ref([])
 const initPage = async () => {
   getDict('category').then((res) => { categoryList = res });
+  getDict('mark').then((res) => { markList = res });
+  getDict('topic').then((res) => { topicList = res });
+  getDict('tag').then((res) => { tagList = res });
 }
 initPage()
 
@@ -147,7 +165,10 @@ const formData = ref({
   value: "",
   sort: 50,
   desc: "",
-  category: []
+  category: "",
+  mark: "",
+  topic: [],
+  tag: []
 })
 const rules = ref({
   name: [
