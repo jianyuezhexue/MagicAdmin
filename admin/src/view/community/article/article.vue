@@ -127,12 +127,12 @@ export default {
   
 <script setup>
 import {
-  createDictionary,
-  deleteDictionary,
-  updateDictionary,
-  findDictionary,
-  getDictionaryList,
-} from '@/api/dictionary' // 此处请自行替换地址
+  createArticle,
+  // deleteDictionary,
+  // updateDictionary,
+  // findDictionary,
+  // getDictionaryList,
+} from '@/api/article' // 此处请自行替换地址
 import { getDict } from '@/utils/dictionary'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
@@ -240,7 +240,7 @@ const getTableData = async () => {
   }
 }
 
-getTableData()
+// getTableData()
 
 // 打开详情页
 const toDetail = (row) => {
@@ -295,13 +295,13 @@ const enterDialog = async () => {
     let res
     switch (type.value) {
       case 'create':
-        res = await createDictionary(formData.value)
+        res = await createArticle(formData.value)
         break
       case 'update':
         res = await updateDictionary(formData.value)
         break
       default:
-        res = await createDictionary(formData.value)
+        res = await createArticle(formData.value)
         break
     }
     if (res.code === 0) {

@@ -22,7 +22,7 @@ func (a *ArticleCtr) List(c *gin.Context) {
 func (a *ArticleCtr) Create(c *gin.Context) {
 	// 接收参数
 	var param community.Article
-	err := c.ShouldBind(param)
+	err := c.ShouldBind(&param)
 	if err != nil {
 		magic.HttpFail(c, http.StatusBadRequest, err.Error(), param)
 		return
