@@ -67,8 +67,8 @@
     <!-- 新增编辑 -->
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
       <el-form ref="dialogForm" :model="formData" :rules="rules" :inline="true" size="default" label-width="110px">
-        <el-form-item label="所属栏目" prop="name" style="width:25%">
-          <el-select v-model="formData.category" placeholder="请选择栏目">
+        <el-form-item label="所属栏目" prop="categoryList" style="width:25%">
+          <el-select v-model="formData.categoryList" placeholder="请选择栏目">
             <el-option v-for="item in categoryList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
@@ -78,33 +78,33 @@
             <el-option :value="2" label="视频" />
           </el-select>
         </el-form-item>
-        <el-form-item label="文章标记" prop="name" style="width:40%">
-          <el-select v-model="formData.mark" multiple collapse-tags placeholder="请选择栏目">
+        <el-form-item label="文章标记" prop="markList" style="width:40%">
+          <el-select v-model="formData.markList" multiple collapse-tags placeholder="请选择栏目">
             <el-option v-for="item in markList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="文章标题" prop="name" style="width:100%">
-          <el-input v-model="formData.name" placeholder="请输入标题" clearable />
+        <el-form-item label="文章标题" prop="title" style="width:100%">
+          <el-input v-model="formData.title" placeholder="请输入标题" clearable />
         </el-form-item>
-        <el-form-item label="文章摘要" prop="type" style="width:100%">
-          <el-input v-model="formData.value" type="textarea" placeholder="请输入文章摘要" />
+        <el-form-item label="文章摘要" prop="summary" style="width:100%">
+          <el-input v-model="formData.summary" type="textarea" placeholder="请输入文章摘要" />
         </el-form-item>
-        <el-form-item label="文章内容" prop="type" style="width:100%">
-          <el-input v-model="formData.value" type="textarea" :rows="3" placeholder="请输入文章内容" />
+        <el-form-item label="文章内容" prop="content" style="width:100%">
+          <el-input v-model="formData.content" type="textarea" :rows="3" placeholder="请输入文章内容" />
         </el-form-item>
-        <el-form-item label="图片地址" prop="type" style="width:100%">
-          <el-input v-model="formData.value" placeholder="图片地址" />
+        <el-form-item label="图片地址" prop="picList" style="width:100%">
+          <el-input v-model="formData.picList" placeholder="图片地址" />
         </el-form-item>
-        <el-form-item label="视频地址" prop="type" style="width:100%">
-          <el-input v-model="formData.value" placeholder="视频地址" />
+        <el-form-item label="视频地址" prop="videoList" style="width:100%">
+          <el-input v-model="formData.videoList" placeholder="视频地址" />
         </el-form-item>
-        <el-form-item label="文章话题" prop="type" style="width:100%">
-          <el-select v-model="formData.topic" multiple placeholder="请选择话题" style="width: 750px">
+        <el-form-item label="文章话题" prop="topicList" style="width:100%">
+          <el-select v-model="formData.topicList" multiple placeholder="请选择话题" style="width: 750px">
             <el-option v-for="item in topicList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="文章标签" prop="type" style="width:100%">
-          <el-select v-model="formData.tag" multiple placeholder="请选择标签" style="width: 750px">
+        <el-form-item label="文章标签" prop="tagList" style="width:100%">
+          <el-select v-model="formData.tagList" multiple placeholder="请选择标签" style="width: 750px">
             <el-option v-for="item in tagList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
@@ -158,40 +158,39 @@ initPage()
 
 // 表单数据
 const formData = ref({
-  pid: 0,
-  super: 1,
-  name: "",
+  title: "",
+  summary: "",
+  content: "",
   type: 1,
-  value: "",
-  sort: 50,
-  desc: "",
-  category: "",
-  mark: "",
-  topic: [],
-  tag: []
+  picList: "",
+  videoList: "",
+  categoryList: "",
+  markList: "",
+  topicList: [],
+  tagList: []
 })
 const rules = ref({
-  name: [
-    {
-      required: true,
-      message: '请输入字典名（中）',
-      trigger: 'blur',
-    },
-  ],
-  value: [
-    {
-      required: true,
-      message: '请输入字典名（英）',
-      trigger: 'blur',
-    },
-  ],
-  desc: [
-    {
-      required: true,
-      message: '请输入描述',
-      trigger: 'blur',
-    },
-  ],
+  // name: [
+  //   {
+  //     required: true,
+  //     message: '请输入字典名（中）',
+  //     trigger: 'blur',
+  //   },
+  // ],
+  // value: [
+  //   {
+  //     required: true,
+  //     message: '请输入字典名（英）',
+  //     trigger: 'blur',
+  //   },
+  // ],
+  // desc: [
+  //   {
+  //     required: true,
+  //     message: '请输入描述',
+  //     trigger: 'blur',
+  //   },
+  // ],
 })
 
 const page = ref(1)

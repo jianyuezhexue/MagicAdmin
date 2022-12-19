@@ -16,8 +16,8 @@ export const useDictionaryStore = defineStore('dictionary', () => {
         const dict = []
         res.data && res.data.forEach(item => {
           dict.push({
-            label: item.name,
-            value: item.id
+            label: String(item.name),
+            value: String(item.id)
           })
         })
         dictionaryMap.value[key] = dict
