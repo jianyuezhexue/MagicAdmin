@@ -28,6 +28,12 @@ func (a *ArticleCtr) Create(c *gin.Context) {
 		return
 	}
 
+	// 补全|uuid,作者，IP地址
+	tokenInfo := magic.TokenInfo(c)
+	param.Uuid = tokenInfo.UUID.String()
+	param.AuthName = tokenInfo.NickName
+	param.IpAddress = c.ClientIP()
+
 	// 逻辑处理
 	res := communityService.ArticleApp.Create(param)
 	magic.HttpSuccess(c, res)

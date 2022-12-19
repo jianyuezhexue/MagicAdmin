@@ -18,7 +18,7 @@ func (a *ArticleService) List() {
 func (a *ArticleService) Create(data community.Article) magic.BackData {
 
 	// 保存数据
-	err := magic.Orm.Debug().Create(&data).Error
+	err := magic.Orm.Create(&data).Error
 	if err != nil {
 		return magic.Back(2100, err.Error(), data)
 	}
