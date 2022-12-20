@@ -144,7 +144,7 @@ func (d *DictionaryServer) DictionarByKey(key string) magic.BackData {
 
 	// 查询字典详情
 	var dictionaryDetail []system.DictionaryDetail
-	err = magic.Orm.Where("pid = ?", find.Id).Find(&dictionaryDetail).Error
+	err = magic.Orm.Select([]string{"id", "name"}).Where("pid = ?", find.Id).Find(&dictionaryDetail).Error
 	if err != nil {
 		return magic.Back(21524, "系统繁忙，请稍后再试！", err.Error())
 	}
