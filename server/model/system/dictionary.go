@@ -37,3 +37,8 @@ type SearchDictionaryDetail struct {
 	model.PageInfo
 	DictionaryDetail
 }
+
+// 根绝keys查找字典
+type Keys struct {
+	Keys string `json:"keys" form:"keys"`
+}

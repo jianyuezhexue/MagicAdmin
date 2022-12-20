@@ -3,6 +3,7 @@ package system
 import (
 	"errors"
 	"strconv"
+	"strings"
 
 	"github.com/jianyuezhexue/MagicAdmin/magic"
 	"github.com/jianyuezhexue/MagicAdmin/model"
@@ -121,13 +122,13 @@ func (d *DictionaryServer) Delete(id model.GetById) (res system.Dictionary, err 
 		return res, errors.New("删除的目标不存在")
 	}
 
-	// 更新数据
+	// 删除数据
 	err = magic.Orm.Delete(&find).Error
 	return find, err
 }
 
 // 根据key查找子目录
-func (d *DictionaryServer) DictionarByKey(key string) magic.BackData {
+func (d *DictionaryServer) DictionaryByKey(key string) magic.BackData {
 	// 校验key是否存在
 	var find system.Dictionary
 	err := magic.Orm.Where("value = ?", key).First(&find).Error
@@ -151,4 +152,48 @@ func (d *DictionaryServer) DictionarByKey(key string) magic.BackData {
 
 	// 返回结果
 	return magic.Back(0, "根据key查找子目录成功", dictionaryDetail)
+}
+
+// 根据key查找子目录
+func (d *DictionaryServer) DictionaryByKeys(keys string) magic.BackData {
+
+	// 查询keys是否存在
+	var Dictionarys []system.Dictionary
+	slice := strings.Split(keys, ",")
+
+	err := magic.Orm.Where("value IN ?", slice).Find(&Dictionarys).Error
+	if err != nil {
+		return magic.Back(21526, "系统繁忙，请稍后再试！", err.Error())
+	}
+
+	// 校验key是否正确
+	if len(Dictionarys) != len(slice) {
+		return magic.Back(21528, "系统繁忙，请稍后再试！", nil)
+	}
+
+	// 组合pid
+	pids := make([]int, 0)
+	for _, item := range Dictionarys {
+		pids = append(pids, int(item.Id))
+	}
+
+	// 查询字典详情
+	var dictionaryDetails []system.DictionaryDetail
+	err = magic.Orm.Where("pid IN ?", pids).Find(&dictionaryDetails).Error
+	if err != nil {
+		return magic.Back(21530, "系统繁忙，请稍后再试！", err.Error())
+	}
+
+	// 组合结果
+	res := make(map[string][]system.DictionaryDetail, 0)
+	for _, value := range dictionaryDetails {
+		for _, item := range Dictionarys {
+			if value.Pid == int(item.Id) {
+				res[item.Value] = append(res[item.Value], value)
+			}
+		}
+	}
+
+	// 返回结果
+	return magic.Back(0, "根据key查找子目录成功", res)
 }
