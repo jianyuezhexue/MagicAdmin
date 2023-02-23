@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jianyuezhexue/MagicAdmin/magic"
+	"github.com/jianyuezhexue/MagicAdmin/model"
 	"github.com/jianyuezhexue/MagicAdmin/model/community"
 	communityService "github.com/jianyuezhexue/MagicAdmin/service/community"
 )
@@ -15,7 +16,17 @@ var Article = new(ArticleCtr)
 
 // 文章列表
 func (a *ArticleCtr) List(c *gin.Context) {
+	// 接收参数
+	var param community.SearchArticle
+	err := c.ShouldBind(&param)
+	if err != nil {
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), param)
+		return
+	}
 
+	// 逻辑处理
+	res := communityService.ArticleApp.List(param)
+	magic.HttpSuccess(c, res)
 }
 
 // 新建文章
@@ -36,6 +47,21 @@ func (a *ArticleCtr) Create(c *gin.Context) {
 
 	// 逻辑处理
 	res := communityService.ArticleApp.Create(param)
+	magic.HttpSuccess(c, res)
+}
+
+// 查找文章
+func (a *ArticleCtr) Find(c *gin.Context) {
+	// 接收参数
+	var id model.GetById
+	err := c.ShouldBindUri(&id)
+	if err != nil {
+		magic.HttpFail(c, http.StatusBadRequest, err.Error(), id)
+		return
+	}
+
+	// 逻辑处理
+	res := communityService.ArticleApp.Find(id)
 	magic.HttpSuccess(c, res)
 }
 

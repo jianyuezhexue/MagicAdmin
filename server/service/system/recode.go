@@ -12,6 +12,7 @@ var RecodeApp = new(RecodeServer)
 
 // 保存记录
 func (r *RecodeServer) Create(data system.Record) (err error) {
+	// 存储数据
 	err = magic.Orm.Create(&data).Error
 	if err != nil {
 		return err

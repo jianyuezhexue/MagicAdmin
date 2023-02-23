@@ -32,12 +32,15 @@
       </div>
       <el-table ref="multipleTable" :data="tableData" style="width: 100%" tooltip-effect="dark" row-key="ID">
         <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="字典名（中）" prop="name" width="160" />
-        <el-table-column align="left" label="字典名（英）" prop="value" width="120" />
-        <el-table-column align="left" label="超管权限" prop="status" width="120">
-          <template #default="scope">{{ formatBoolean(scope.row.super) }}</template>
+        <el-table-column align="left" label="标题" prop="title" width="120" />
+        <el-table-column align="left" label="摘要" prop="summary" width="120" />
+        <el-table-column align="left" label="点赞数" prop="likeNum" width="100" />
+        <el-table-column align="left" label="评论数" prop="commontNum" width="100" />
+        <el-table-column align="left" label="收藏数" prop="collectNum" width="100" />
+        <el-table-column align="left" label="热度值" prop="hotNum" width="100" />
+        <el-table-column align="left" label="图文/视频" prop="type" width="120">
+          <template #default="scope">{{ formatTypt(scope.row.type) }}</template>
         </el-table-column>
-        <el-table-column align="left" label="描述" prop="desc" width="280" />
         <el-table-column align="left" label="按钮组">
           <template #default="scope">
             <el-button size="small" icon="document" type="primary" link @click="toDetail(scope.row)">详情</el-button>
@@ -130,8 +133,8 @@ import {
   createArticle,
   // deleteDictionary,
   // updateDictionary,
-  // findDictionary,
-  // getDictionaryList,
+  findArticle,
+  getArticleList,
 } from '@/api/article' // 此处请自行替换地址
 import { getDict } from '@/utils/dictionary'
 import WarningBar from '@/components/warningBar/warningBar.vue'
@@ -156,6 +159,15 @@ const initPage = async () => {
 }
 initPage()
 
+// 格式化文章类型
+const formatTypt = function (type) {
+  if (type == 1) {
+    return "图文"
+  } else {
+    return "视频"
+  }
+}
+
 // 表单数据
 const formData = ref({
   title: "",
@@ -170,13 +182,13 @@ const formData = ref({
   tagList: []
 })
 const rules = ref({
-  // name: [
-  //   {
-  //     required: true,
-  //     message: '请输入字典名（中）',
-  //     trigger: 'blur',
-  //   },
-  // ],
+  title: [
+    {
+      required: true,
+      message: '请输入文章标题',
+      trigger: 'blur',
+    },
+  ],
   // value: [
   //   {
   //     required: true,
@@ -226,7 +238,7 @@ const handleCurrentChange = (val) => {
 
 // 查询
 const getTableData = async () => {
-  const table = await getDictionaryList({
+  const table = await getArticleList({
     page: page.value,
     pageSize: pageSize.value,
     ...searchInfo.value,
@@ -239,16 +251,17 @@ const getTableData = async () => {
   }
 }
 
-// getTableData()
+getTableData()
 
 // 打开详情页
-const toDetail = (row) => {
-  router.push({
-    name: 'dictionaryDetail',
-    params: {
-      id: row.id,
-    },
-  })
+const toDetail = async (row) => {
+  const table = await getArticleList(row.id)
+  // router.push({
+  //   name: 'dictionaryDetail',
+  //   params: {
+  //     id: row.id,
+  //   },
+  // })
 }
 
 const dialogFormVisible = ref(false)
@@ -264,12 +277,16 @@ const updateDictionaryFunc = async (row) => {
 const closeDialog = () => {
   dialogFormVisible.value = false
   formData.value = {
-    pid: 0,
-    super: 0,
-    name: "",
-    value: "",
-    sort: 50,
-    desc: "",
+    title: "",
+    summary: "",
+    content: "",
+    type: 1,
+    picList: "",
+    videoList: "",
+    categoryList: "",
+    markList: "",
+    topicList: [],
+    tagList: []
   }
 }
 const deleteDictionaryFunc = async (row) => {
@@ -316,7 +333,5 @@ const openDialog = () => {
 }
 </script>
   
-<style>
-
-</style>
+<style></style>
   

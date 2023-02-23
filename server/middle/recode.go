@@ -44,6 +44,17 @@ func Record() gin.HandlerFunc {
 		record.CostTime = costTime             // 接口耗时
 		record.Resp = c.GetString("magicResp") // 接口返回
 
+		// 长度限制截断
+		if len(record.Msg) > 10000 {
+			record.Msg = record.Msg[0:10000]
+		}
+		if len(record.Params) > 10000 {
+			record.Params = record.Params[0:10000]
+		}
+		if len(record.Resp) > 10000 {
+			record.Resp = record.Resp[0:10000]
+		}
+
 		// 删除记录
 		c.Set("magicMsg", "")
 		c.Set("magicResp", "")

@@ -92,8 +92,9 @@ func Routers() *gin.Engine {
 		PrivateGroup.GET("/recode", system.RecodeApi.List) // 分页查询
 
 		// 社区
-		PrivateGroup.GET("/article", community.Article.List)    // 分页查询
-		PrivateGroup.POST("/article", community.Article.Create) // 分页查询
+		PrivateGroup.GET("/article", community.Article.List)     // 分页查询
+		PrivateGroup.POST("/article", community.Article.Create)  // 创建文章
+		PrivateGroup.GET("/article/:id", community.Article.Find) // 创建文章
 	}
 
 	magic.Logger.Info("router register success")
