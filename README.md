@@ -34,7 +34,7 @@
  - redis
  - eleastric search
 
-## :cake: 运行调试
+## :cake: 本地运行调试
 ```
 // 配置文件修改
 server/config/config.yaml
@@ -49,4 +49,7 @@ npm run serve
 
 ```
 
-## :cake: 运行调试
+## :cake: docker运行调试
+```bash
+# 参考 docker文件夹
+```
