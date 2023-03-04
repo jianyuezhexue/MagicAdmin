@@ -32,8 +32,8 @@
       </div>
       <el-table ref="multipleTable" :data="tableData" style="width: 100%" tooltip-effect="dark" row-key="ID">
         <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="标题" prop="title" width="120" />
-        <el-table-column align="left" label="摘要" prop="summary" width="120" />
+        <el-table-column align="left" label="标题" prop="title" :formatter="stateFormat" width="150" />
+        <el-table-column align="left" label="摘要" prop="summary" :formatter="stateFormat" width="150" />
         <el-table-column align="left" label="点赞数" prop="likeNum" width="100" />
         <el-table-column align="left" label="评论数" prop="commontNum" width="100" />
         <el-table-column align="left" label="收藏数" prop="collectNum" width="100" />
@@ -331,6 +331,17 @@ const openDialog = () => {
   type.value = 'create'
   dialogFormVisible.value = true
 }
+
+// 格式化表格内容
+const stateFormat = (row, column, cellValue) => {
+  if (!cellValue) return "";
+  if (cellValue.length > 9) {
+    // 最多显示20个字符
+    return cellValue.slice(0, 7) + "...";
+  }
+  return cellValue;
+}
+
 </script>
   
 <style></style>

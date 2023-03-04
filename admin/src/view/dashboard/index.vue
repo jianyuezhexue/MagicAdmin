@@ -33,7 +33,7 @@
               </el-col>
             </el-row>
           </div>
-          <div>
+          <!-- <div>
             <div class="gva-top-card-left-item">
               使用教学：
               <a
@@ -50,7 +50,7 @@
                 href="https://github.com/flipped-aurora/gva-plugins"
               >https://github.com/flipped-aurora/gva-plugins</a>
             </div>
-          </div>
+          </div> -->
         </div>
         <img src="@/assets/dashboard.png" class="gva-top-card-right" alt>
       </div>
