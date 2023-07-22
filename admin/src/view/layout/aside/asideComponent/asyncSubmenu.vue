@@ -77,9 +77,9 @@ watch(() => props.theme, () => {
       flex:1;
       height: 100%;
       line-height: 44px;
-      background: v-bind(activeBackground) !important;
-      border-radius: 4px;
-      box-shadow: 0 0 2px 1px v-bind(activeBackground) !important;
+      // background: v-bind(activeBackground) !important;
+      // border-radius: 4px;
+      // box-shadow: 0 0 2px 1px v-bind(activeBackground) !important;
       i{
         color: v-bind(activeText);
       }
