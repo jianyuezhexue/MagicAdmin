@@ -22,3 +22,4 @@ docker/mysql/logs/
 docker/mysql/data
 docker/redis/data/
 docker/redis/logs/
+.vscode/
