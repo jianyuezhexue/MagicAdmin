@@ -96,14 +96,11 @@ watch(() => props.theme, () => {
 
 .el-menu-item.is-active{
   .gva-menu-item{
-    background: v-bind(activeBackground) !important;
-    border-radius: 4px;
-    box-shadow: 0 0 2px 1px v-bind(activeBackground) !important;
     i{
-      color: v-bind(activeText);
+      color: v-bind(activeBackground);
     }
     span{
-      color: v-bind(activeText);
+      color: v-bind(activeBackground);
     }
   }
 }
