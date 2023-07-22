@@ -64,8 +64,7 @@ func initGorm() *gorm.DB {
 	// 链接数据库
 	db, err := gorm.Open(mysql.New(mysqlConfig), ormConfig)
 	if err != nil {
-		Print("链接数据库失败")
-		return nil
+		panic("数据库连接失败")
 	}
 	Print("链接数据库成功")
 
